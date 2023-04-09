@@ -30,12 +30,10 @@ const User = sequelize.define('User', {
         allowNull: false
     },
     birthday:{
-        type: DataTypes.DATE,
-        
+        type: DataTypes.DATE,     
     },
     fb:{
         type: DataTypes.STRING,
-
     },
     google:{
         type: DataTypes.STRING,
