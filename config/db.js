@@ -1,5 +1,5 @@
 const { Sequelize } = require('sequelize');
-require('dotenv').config();
+require('dotenv').config({path:"./config.env"});
 
 const db = {};
 
@@ -24,7 +24,7 @@ const connectDb = async () => {
 
 db.syncDb = async () => {
     try {
-        await sequelize.sync({ force: false,alter: true});
+        await sequelize.sync({ force: false, alter: true});
         console.log('Database synced successfully.');
     } catch (error) {
         console.error('Unable to sync the database: ', error);
