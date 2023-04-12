@@ -24,6 +24,8 @@ app.get("/",(req,res) => {
 
 app.use("/api", require("./routes"));
 
+app.use("/api/admin", require("./routes/admin/admin.routes"));
+
 
 
 // global error handler
