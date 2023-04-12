@@ -14,7 +14,7 @@ app.use(cors())
 
 // connect DB
 db.connectDb()
-// db.syncDb()
+db.syncDb()
 
 
 // routes
@@ -22,7 +22,7 @@ app.get("/",(req,res) => {
     res.send("Hello World")
 })
 
-app.use("/api/user", require("./routes/user.routes"));
+app.use("/api", require("./routes"));
 
 
 

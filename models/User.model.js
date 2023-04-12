@@ -1,7 +1,7 @@
-const {Sequelize, DataTypes} = require('sequelize');
-const db = require('../config/db');
+const { DataTypes} = require('sequelize');
+const { sequelize } = require('../sequelize');
 
-const sequelize = db.sequelize;
+
 
 const User = sequelize.define('User', {
     id: {
@@ -43,6 +43,8 @@ const User = sequelize.define('User', {
         values: ['user', 'admin'],
         defaultValue: 'user'
     }
+
+
 
 },{
     timestamps: true,

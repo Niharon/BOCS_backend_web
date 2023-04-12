@@ -1,17 +1,9 @@
-const { Sequelize } = require('sequelize');
-require('dotenv').config({path:"./config.env"});
+const { sequelize } = require('../sequelize');
+
 
 const db = {};
 
-const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
-    host: 'localhost',
-    dialect: 'mysql',
-    timestamps: true,
-    // logging: false,
-    define: {
-        freezeTableName: true
-    }
-});
+
 
 const connectDb = async () => {
     try {
@@ -31,7 +23,7 @@ db.syncDb = async () => {
     }
 }
 
-db.sequelize = sequelize;
+
 db.connectDb = connectDb;
 
 module.exports =  db ;
