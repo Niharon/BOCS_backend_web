@@ -4,37 +4,49 @@ const jwt = require("jsonwebtoken");
 require('dotenv').config({path:"./config.env"});
 
 
-exports.createUser = async (req, res) => {
+exports.createUser = async (req, res,next) => {
     try {
+        const {  email, deviceId,password } = req.body;
+
         const salt = await bcrypt.genSalt(10);
-        const hashedPass = await bcrypt.hash(req.body.password, salt);
-        const { name, email, phone, deviceId, birthday, fb, google, role } = req.body;
-        const user = await User.create({ name, email, phone, password: hashedPass, deviceId, birthday, fb, google, role });
+        const hashedPass = await bcrypt.hash(password, salt);
+        
+        const user = await User.create({ email, password: hashedPass, deviceId});
+        
         const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY, { expiresIn: '1h' }); // generate JWT token
+        
         res.status(201).json({ message: 'User created successfully', token: token }); // send token in response
+
     } catch (error) {
-        res.status(401).send(error);
+        res.status(400).json(error);
     }
 };
 
 
 exports.login = async (req, res) => {
     try {
-        const email = req.body.email;
-        const password = req.body.password;
+        const {email,password ,deviceId} = req.body;
+
         const user = await User.findOne({ where: { email } });
+
         if (!user) {
             throw new Error('User not found');
         } else {
+
+            //  first check if the device is same or not
+            if (user.deviceId !== deviceId) {
+                throw new Error('Device not matched or deviceId not provided');
+            }
+            //  now check password
             const isPasswordValid = await bcrypt.compare(password, user.password);
             if (!isPasswordValid) {
-                throw new Error('Incorrect password');
+                throw new Error('Invalid Credentials');
             }
             const token = jwt.sign({ id: user.id },process.env.SECRET_KEY, { expiresIn: '1h' }); 
             res.status(200).json({ message: 'Login successful', token: token });
         }
     } catch (error) {
-        res.status(400).json({ message: 'Login failed', error: error.message });
+        res.status(400).json({ message: 'Login failed', error: error?.message });
     }
 };
 
