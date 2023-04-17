@@ -1,8 +1,6 @@
 const { DataTypes} = require('sequelize');
 const { sequelize } = require('../sequelize');
 
-
-
 const Lessons = sequelize.define('Lessons', {
     id: {
         type: DataTypes.INTEGER,
