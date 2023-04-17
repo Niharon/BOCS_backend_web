@@ -20,6 +20,9 @@ const Courses = sequelize.define('Courses', {
             isUrl: true
         }
     },
+    course_thumbnail:{
+        type: DataTypes.STRING,
+    },
     description:{
         type: DataTypes.STRING,
     },
