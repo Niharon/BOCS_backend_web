@@ -6,7 +6,7 @@ require('dotenv').config({path:"./config.env"});
 
 exports.createUser = async (req, res,next) => {
     try {
-        const {  email, deviceId,password } = req.body;
+        const {  email, deviceId, password } = req.body;
 
         const salt = await bcrypt.genSalt(10);
         const hashedPass = await bcrypt.hash(password, salt);
