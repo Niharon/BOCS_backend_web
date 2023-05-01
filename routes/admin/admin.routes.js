@@ -6,6 +6,8 @@ const courseController = require("../../controller/admin/course.controller");
 const lessonController = require("../../controller/admin/lesson.controller");
 const courseRequestController = require("../../controller/admin/courseRequestController");
 const topicsController = require("../../controller/admin/topic.controller");
+const userCourseController = require('../../controller/userCourse.controller');
+
 
 //course
 router.post("/course/create", courseController.create);
@@ -34,7 +36,11 @@ router.patch('/topics/:id', topicsController.updateTopicById);
 router.delete('/topics/:id', topicsController.deleteTopicById);
 
 
-
+// UserCourse
+router.post('/user-course/create', userCourseController.createUserCourse);
+router.get('/user-course/:id', userCourseController.getUserCourse);
+router.patch('/user-course/:id', userCourseController.updateUserCourse);
+router.delete('/user-course/:id', userCourseController.deleteUserCourse);
 
 
 module.exports = router;
