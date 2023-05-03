@@ -1,6 +1,7 @@
 const CourseRequest = require("../../models/CourseRequest.model");
 
 const courseRequestController = {
+  
   async getAllCourseRequests(req, res) {
     try {
       const courseRequests = await CourseRequest.findAll();
