@@ -1,6 +1,23 @@
 const Courses = require("../../models/Course.model");
 
 const courseController = {
+    getCourseDetailsByID: async (req, res, next) => {
+        const {id} = req.params;
+        try {
+            const course = await Courses.findOne({where: {id}, include: ['topics']});
+            if(course){
+                res.status(200).json({success:true,message: 'Course fetched successfully', course});
+
+            }
+            else{
+                res.status(400).json({success:false,message: 'Course not found'});
+            }
+        } catch (error) {
+            res.status(400).json(error);
+        }
+
+
+    },
     create: async (req, res, next) => {
         const {title, intro_video, description, price, access_duration} = req.body;
         try {

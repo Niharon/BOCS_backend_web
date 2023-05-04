@@ -1,5 +1,6 @@
 const { DataTypes} = require('sequelize');
 const { sequelize } = require('../sequelize');
+const Topics = require('./Topic.model');
 
 
 
@@ -45,5 +46,18 @@ const Courses = sequelize.define('Courses', {
     updatedAt: 'updated_at',
     tableName: 'Courses'
 })
+
+// model associations with topic and lesson
+
+
+Courses.hasMany(Topics, {
+    as: 'topics',
+    foreignKey: 'course_id',
+    onDelete: 'CASCADE'
+});
+
+Topics.belongsTo(Courses);
+
+
 
 module.exports = Courses;
