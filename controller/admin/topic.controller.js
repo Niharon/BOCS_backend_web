@@ -49,16 +49,17 @@ const getTopicById = async (req, res) => {
 // Update an existing topic by ID
 const updateTopicById = async (req, res) => {
   const { id } = req.params;
-  const { title, course_id } = req.body;
+  const { title } = req.body;
+  // console.log(req.body)
   try {
     const topic = await Topics.findByPk(id);
     if (!topic) throw new Error('Topic not found');
     topic.title = title;
-    topic.course_id = course_id;
+
     await topic.save();
-    res.status(200).json(topic);
+    res.status(200).json({success:true,message: 'Topic updated successfully', topic});
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({success:false, error: error.message });
   }
 };
 

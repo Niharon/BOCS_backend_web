@@ -37,7 +37,7 @@ const courseController = {
 
     },
     update: async (req, res, next) => {
-        console.log(req.body)
+        // console.log(req.body)
         // update api for course
         const {id} = req.params;
         try {

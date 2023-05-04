@@ -16,6 +16,15 @@ router.post("/course", courseController.create);
 router.patch("/course/:id", courseController.update);
 router.delete("/course/:id", courseController.delete);
 
+
+//topics
+router.get('/topics', topicsController.getAllTopics);
+router.get('/topics/:id', topicsController.getTopicById);
+router.post('/topic', topicsController.createTopic);
+router.post('/topics', topicsController.createBulkTopic);
+router.patch('/topic/:id', topicsController.updateTopicById);
+router.delete('/topic/:id', topicsController.deleteTopicById);
+
 //lesson
 router.post('/lesson/create', lessonController.createLesson);
 router.get('/lesson/total-lessions', lessonController.getAllLessons);
@@ -30,13 +39,7 @@ router.post('/course-request/create', courseRequestController.createCourseReques
 router.patch('/course-request/:id', courseRequestController.updateCourseRequest);
 
 
-//topics
-router.get('/topics', topicsController.getAllTopics);
-router.get('/topics/:id', topicsController.getTopicById);
-router.post('/topic', topicsController.createTopic);
-router.post('/topics', topicsController.createBulkTopic);
-router.patch('/topic/:id', topicsController.updateTopicById);
-router.delete('/topic/:id', topicsController.deleteTopicById);
+
 
 
 // UserCourse

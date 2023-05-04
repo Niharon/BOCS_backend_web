@@ -7,7 +7,7 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, pr
     dialect: 'mysql',
     timestamps: true,
     port: 3306,
-    // logging: false,
+    logging: false,
     define: {
         freezeTableName: true
     }

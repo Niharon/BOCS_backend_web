@@ -1,74 +1,80 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { CourseContext } from "../../App";
 import { useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
-import { postSingleTopic } from "../../api/topicApi";
+import { deleteTopicById, postSingleTopic, updateTopicApi } from "../../api/topicApi";
+import { FaTrash } from "react-icons/fa";
+import { deleteCourseById } from "../../api/courseApi";
+import { toast } from "react-hot-toast";
 
-const CourseTopicForm = () => {
+const CourseTopicForm = ({refetch}) => {
   const { id } = useParams();
-  const [newTopics, setnewTopics] = useState([]);
+  const [allTopics, setallTopics] = useState([]);
 
   const { courseContext, setcourseContext, } = useContext(CourseContext);
   const { topics } = courseContext.currentCourse;
 
-  const queryClient = useQueryClient();
-  console.log(topics)
+
+  // console.log(topics)
   const appendNewTopic = () => {
-    setnewTopics([...newTopics, { title: "New Topic", course_id: id }]);
+    setallTopics([...allTopics, { title: "New Topic", course_id: id }]);
   };
+
+  useEffect(()=>{
+    setallTopics(topics)
+  },[topics])
+
+  const deleteTopicQuery = useMutation((id) => deleteTopicById(id), {
+    onSuccess: () => {
+      console.log("deleted")
+      toast.success("Topic Deleted Successfully");
+      refetch();
+    },  
+  });
 
   const createSingleTopicQuery = useMutation({
     mutationFn: postSingleTopic,
     onSuccess: (data, variable) => {
       console.log("success");
-      
-      queryClient.invalidateQueries({ queryKey: ['courses'],refetchType:'all' })
-      
+      toast.success("Topic Created");
+      refetch()
+            
     }
   });
 
-  const createSingleTopic = ()=>{
-    createSingleTopicQuery.mutate(newTopics[newTopics.length-1]);
+  const updateTopicQuery = useMutation({
+    mutationFn: updateTopicApi,
+    onSuccess: (data, variable) => {
+      // console.log("success");
+      toast.success("Topic Updated");
+      refetch()
+    }
+  });
+
+  const createSingleTopic = (index)=>{
+    createSingleTopicQuery.mutate(allTopics[index]);
 
   }
 
-  const createAllTopic = () => {
-    if(newTopics.length ==0) return alert("Add new Topic First to Save");
-    console.log(newTopics);
-  };
+  const updateTopic = (id)=>{
+    const data = allTopics.find((t)=>t.id === id)
+    console.log(data)
+    updateTopicQuery.mutate({id,data});
+  }
+
+  const deleteTopic = (id)=>{
+    const yes = window.confirm("Are you sure you want to delete this Topic? All Lessons under this topic will be Deleted")
+    if(yes){
+      deleteTopicQuery.mutate(id);
+    }
+  }
   return (
     <>
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <form onSubmit={(e)=>e.preventDefault()}>
           <div className="p-6.5">
 
-            {topics.map((topic, index) => {
-              return (
-                <div key={topic?.id} className="mb-4.5">
-                  {/* <label className="mb-2.5 block text-black dark:text-white">
-                   {index+1}. Topic Title
-                  </label> */}
-                  <div className="flex">
-                    <input
-                      value={topic?.title}
-                      onChange={(e) => {
-                        const nT = [...newTopics];
-                        nT[index].title = e.target.value;
-                        setnewTopics(nT);
-                      }}
-                      type="text"
-                      placeholder="Topic Title"
-                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-2 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                    />
-                    <button className="flex w-1/5 items-center justify-center rounded bg-primary p-1 font-medium text-gray">
-                      Update
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
-
-            {newTopics.map((topic, index) => {
+            {allTopics.map((topic, index) => {
               return (
                 <div key={index} className="mb-4.5">
                   {/* <label className="mb-2.5 block text-black dark:text-white">
@@ -78,32 +84,50 @@ const CourseTopicForm = () => {
                     <input
                       value={topic?.title}
                       onChange={(e) => {
-                        const nT = [...newTopics];
+                        const nT = [...allTopics];
                         nT[index].title = e.target.value;
-                        setnewTopics(nT);
+                        setallTopics(nT);
                       }}
                       type="text"
                       placeholder="Topic Title"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-2 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
-                    <button onClick={createSingleTopic} className="flex w-1/5 items-center justify-center rounded bg-primary p-1 font-medium text-gray">
+
+                    {
+                      topic.id ?
+                      <div className="flex gap-2">
+                      <button onClick={()=>updateTopic(topic?.id)} className="flex  items-center justify-center rounded bg-primary p-2 font-medium text-gray">
+                        Update
+                      </button>
+                      <button onClick={()=>deleteTopic(topic?.id)} className="flex  items-center justify-center rounded bg-danger p-2 font-medium text-gray">
+                        <FaTrash/>
+                      </button>
+  
+                      </div>
+                      :
+                      <button onClick={()=>createSingleTopic(index)} className="flex w-1/5 items-center justify-center rounded bg-primary p-1 font-medium text-gray">
                       Save
                     </button>
+
+                    }
+
                   </div>
                 </div>
               );
             })}
+
+        
           </div>
         </form>
       </div>
 
       <div className="mt-4 flex justify-end gap-3">
-        <button
+        {/* <button
           onClick={createAllTopic}
           className=" flex w-1/5 items-center justify-center rounded bg-success p-2 font-medium text-gray"
         >
           Save All
-        </button>
+        </button> */}
         <button
           onClick={appendNewTopic}
           className=" flex w-1/5 items-center justify-center rounded bg-primary p-2 font-medium text-gray"

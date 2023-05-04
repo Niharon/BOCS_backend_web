@@ -33,10 +33,11 @@ const EditCourse = () => {
     label: "Basic Info",
     component: <CourseDetailsEditForm refetch={refetch}/>,
     },
+  
     {
-        label: "Topics",
-        component: <CourseTopicForm />,
-    }
+      label: "Topics",
+      component: <CourseTopicForm refetch={refetch} />,
+  },
 ];
 
 
