@@ -20,7 +20,7 @@ const CourseDetailsForm = () => {
     onSuccess: (data, variable, context) => {
       console.log("success");
       if(data?.data?.course.id){
-        navigate(`/course/edit/${data.data.course.id}`)
+        navigate(`/courses/edit/${data.data.course.id}`)
       }
       
     },

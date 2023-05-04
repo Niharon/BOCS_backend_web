@@ -12,7 +12,7 @@ const userCourseController = require('../../controller/userCourse.controller');
 //course
 router.get("/courses", courseController.getAllCourse);
 router.get("/course/:id", courseController.getCourseDetailsByID);
-router.post("/course/create", courseController.create);
+router.post("/course", courseController.create);
 router.patch("/course/:id", courseController.update);
 router.delete("/course/:id", courseController.delete);
 
@@ -33,9 +33,10 @@ router.patch('/course-request/:id', courseRequestController.updateCourseRequest)
 //topics
 router.get('/topics', topicsController.getAllTopics);
 router.get('/topics/:id', topicsController.getTopicById);
-router.post('/topics', topicsController.createTopic);
-router.patch('/topics/:id', topicsController.updateTopicById);
-router.delete('/topics/:id', topicsController.deleteTopicById);
+router.post('/topic', topicsController.createTopic);
+router.post('/topics', topicsController.createBulkTopic);
+router.patch('/topic/:id', topicsController.updateTopicById);
+router.delete('/topic/:id', topicsController.deleteTopicById);
 
 
 // UserCourse

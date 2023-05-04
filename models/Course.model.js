@@ -56,7 +56,10 @@ Courses.hasMany(Topics, {
     onDelete: 'CASCADE'
 });
 
-Topics.belongsTo(Courses);
+Topics.belongsTo(Courses,{
+    as: 'course',
+    foreignKey: 'course_id'
+});
 
 
 

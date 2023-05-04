@@ -26,7 +26,7 @@ function App() {
     setTimeout(() => {
       preloader.style.display = "none";
       setLoading(false);
-    }, 2000);
+    }, 1000);
   }
 
   useEffect(() => {
@@ -45,7 +45,7 @@ function App() {
           <Route path="/courses" element={<AllCourses />} />
           <Route path="/courses/all" element={<AllCourses />} />
           <Route path="/courses/add" element={<AddNewCourse />} />
-          <Route path="/course/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:id" element={<EditCourse />} />
         </Routes>
       </QueryClientProvider>
     </CourseContext.Provider>

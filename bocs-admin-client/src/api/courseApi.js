@@ -9,7 +9,17 @@ export const getCourseById = async (id) => {
     return response;
 }
 
+export const deleteCourseById = async (id) => {
+    const response = await axiosInstance.delete(`/course/${id}`);
+    return response;
+}
+
 export const postCourse = async (data) => {
-    const res = await axiosInstance.post('/course/create', data);
+    const res = await axiosInstance.post('/course', data);
+    return res;
+}
+
+export const updateCourseApi = async ({id, data}) => {
+    const res = await axiosInstance.patch(`/course/${id}`, data);
     return res;
 }

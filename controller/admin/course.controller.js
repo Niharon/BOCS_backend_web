@@ -3,7 +3,7 @@ const Courses = require("../../models/Course.model");
 const courseController = {
     getAllCourse: async (req, res, next) => {
         try {
-            const courses = await Courses.findAll({include: ['topics']});
+            const courses = await Courses.findAll({include: ['topics'], order: [['created_at', 'DESC']]});
             res.status(200).json({success:true,message: 'Courses fetched successfully', courses});
         } catch (error) {
             res.status(400).json(error);
@@ -37,6 +37,7 @@ const courseController = {
 
     },
     update: async (req, res, next) => {
+        console.log(req.body)
         // update api for course
         const {id} = req.params;
         try {
@@ -48,7 +49,7 @@ const courseController = {
             });
             if(course){
                 const updatedCourse = await Courses.findOne({where: {id}});
-                return res.status(200).json({message: 'Course updated successfully', course: updatedCourse});
+                return res.status(200).json({success:true,message: 'Course updated successfully', course: updatedCourse});
             }
             else{
                 return res.status(400).json({message: 'Could not Update Course'});
@@ -67,7 +68,7 @@ const courseController = {
                     id
                 }
             });
-            res.status(200).json({message: 'Course deleted successfully', course});
+            res.status(200).json({success:true,message: 'Course deleted successfully', course});
         } catch (error) {
             res.status(400).json(error);
         }

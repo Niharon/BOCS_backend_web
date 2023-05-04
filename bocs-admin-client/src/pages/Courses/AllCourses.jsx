@@ -4,19 +4,24 @@ import Breadcrumb from "../../components/Breadcrumb";
 import { Link } from "react-router-dom";
 import { FaEdit } from 'react-icons/fa';
 import ProductTwo from '../../images/product/product-02.png';
-import { getAllCourses } from "../../api/courseApi";
-import { useQuery } from "@tanstack/react-query";
+import { deleteCourseById, getAllCourses } from "../../api/courseApi";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CourseContext } from "../../App";
 
 const AllCourses = () => {
-  const { data, isLoading, isSuccess, isError } = useQuery(
-    ["courses"],
-    getAllCourses,
-    {
-        refetchOnWindowFocus: false,
 
-    }
-  );
+  const queryClient = useQueryClient();
+
+  const { data, isLoading, isSuccess, isError,refetch } = useQuery(["courses"],getAllCourses,{refetchOnWindowFocus: false,});
+
+  const deleteQuery = useMutation((id) => deleteCourseById(id), {
+    onSuccess: () => {
+      console.log("deleted")
+      refetch();
+    },  
+  });
+
+
   const {courseContext, setcourseContext} = useContext(CourseContext);
   const {courses} = courseContext;
 
@@ -32,6 +37,17 @@ const AllCourses = () => {
       console.log(data);
     }
   }, [isSuccess, isLoading, isError, data]);
+
+
+  const deleteCourse=(id)=>{
+
+    const yes = window.confirm("Are you sure you want to delete this course?")
+    if(yes){
+      deleteQuery.mutate(id);
+    }
+
+  }
+
 
   return (
     <DefaultLayout>
@@ -76,6 +92,7 @@ const AllCourses = () => {
                         <img src={ProductTwo} alt="Product" />
                       </div>
                       <p className="text-sm text-black dark:text-white">
+                        {course?.id}
                         {course?.title}
                         <br />
                         <span className="text-sm">{course?.price} BDT</span>
@@ -111,10 +128,10 @@ const AllCourses = () => {
                           />
                         </svg>
                       </button>
-                      <Link to={`/course/edit/${course?.id}`} className="hover:text-primary">
+                      <Link to={`/courses/edit/${course?.id}`} className="hover:text-primary">
                         <FaEdit />
                       </Link>
-                      <button className="hover:text-primary">
+                      <button onClick={()=>deleteCourse(course?.id)} className="hover:text-primary">
                         <svg
                           className="fill-current"
                           width="18"

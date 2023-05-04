@@ -4,6 +4,17 @@ const Topics = require('../../models/Topic.model')
 const createTopic = async (req, res) => {
     const { title, course_id } = req.body;
     try {
+      const topic = await Topics.create({ title, course_id });
+      res.status(201).json({success:true,message: 'Topic created successfully', topic});
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  };
+
+// Create Bulk Topic
+const createBulkTopic = async (req, res) => {
+    const { title, course_id } = req.body;
+    try {
       const newTopic = await Topics.create({ title, course_id });
       res.status(201).json(newTopic);
     } catch (error) {
@@ -69,5 +80,6 @@ module.exports = {
   getTopicById,
   createTopic,
   updateTopicById,
-  deleteTopicById
+  deleteTopicById,
+  createBulkTopic
 };

@@ -5,9 +5,11 @@ import { useMutation } from "@tanstack/react-query";
 import { useContext, useEffect } from "react";
 import LoadingButton from "../LoadingButton";
 import { CourseContext } from "../../App";
-import { getCourseById, postCourse } from "../../api/courseApi";
+import { getCourseById, postCourse, updateCourseApi } from "../../api/courseApi";
+import { dirtyValues } from "../../utils/dirtyFields";
+import { toast } from "react-hot-toast";
 
-const CourseDetailsEditForm = () => {
+const CourseDetailsEditForm = ({refetch}) => {
 
 
 
@@ -16,8 +18,10 @@ const CourseDetailsEditForm = () => {
   const {
     register,
     setValue,
-    formState: { errors },
+    formState: { isDirty, dirtyFields },
     handleSubmit,
+    watch,
+    
   } = useForm();
 
 
@@ -39,23 +43,23 @@ const CourseDetailsEditForm = () => {
     isError,
     isSuccess,
   } = useMutation({
-    mutationFn: postCourse,
-    onSuccess: (data, variable, context) => {
-      console.log("success");
-      if(data?.data?.course.id){
-        navigate(`/course/edit/${data.data.course.id}`)
-      }
-      
+    mutationFn: updateCourseApi,
+    onSuccess: async (data, variable, context) => {
+      await refetch();
+      toast.success("Course Updated Successfully");
     },
     onError(error, variables, context) {
       console.log(error);
      
     },
+    
   });
 
   const onSubmit = (data) => {
-    console.log(data);
-    // mutate(data);
+
+    const modifiedData = dirtyValues(dirtyFields,data)
+    // console.log(data);
+    mutate({id:currentCourse.id,data:modifiedData});
     // navigate("/course/edit/1");
   };
  
