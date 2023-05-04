@@ -1,6 +1,14 @@
 const Courses = require("../../models/Course.model");
 
 const courseController = {
+    getAllCourse: async (req, res, next) => {
+        try {
+            const courses = await Courses.findAll({include: ['topics']});
+            res.status(200).json({success:true,message: 'Courses fetched successfully', courses});
+        } catch (error) {
+            res.status(400).json(error);
+        }
+    },
     getCourseDetailsByID: async (req, res, next) => {
         const {id} = req.params;
         try {

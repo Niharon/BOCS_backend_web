@@ -10,6 +10,7 @@ const userCourseController = require('../../controller/userCourse.controller');
 
 
 //course
+router.get("/courses", courseController.getAllCourse);
 router.get("/course/:id", courseController.getCourseDetailsByID);
 router.post("/course/create", courseController.create);
 router.patch("/course/:id", courseController.update);

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -8,7 +8,14 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import AddNewCourse from "./pages/Courses/AddNewCourse";
 import EditCourse from "./pages/Courses/EditCourse";
 
+export const CourseContext = createContext(null);
+
 function App() {
+  const [courseContext, setcourseContext] = useState({
+    courses: [],
+    currentCourse: null,
+  });
+
   const queryClient = new QueryClient();
 
   const [loading, setLoading] = useState(true);
@@ -29,20 +36,19 @@ function App() {
   return loading ? (
     <p className=" text-center text-danger">Failed to lead app</p>
   ) : (
-    <QueryClientProvider client={queryClient}>
-      <Routes>
+    <CourseContext.Provider value={{ courseContext, setcourseContext }}>
+      <QueryClientProvider client={queryClient}>
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
 
-      <Route path="/" element={<Dashboard />} />
-
-      {/* <Route path="/dashboard" element={<Analytics />} /> */}
-      <Route path="/courses" element={<AllCourses />} />
-      <Route path="/courses/all" element={<AllCourses />} />
-      <Route path="/courses/add" element={<AddNewCourse />} />
-      <Route path="/course/edit/:id" element={<EditCourse />} />
-
-
-      </Routes>
-    </QueryClientProvider>
+          {/* <Route path="/dashboard" element={<Analytics />} /> */}
+          <Route path="/courses" element={<AllCourses />} />
+          <Route path="/courses/all" element={<AllCourses />} />
+          <Route path="/courses/add" element={<AddNewCourse />} />
+          <Route path="/course/edit/:id" element={<EditCourse />} />
+        </Routes>
+      </QueryClientProvider>
+    </CourseContext.Provider>
   );
 }
 

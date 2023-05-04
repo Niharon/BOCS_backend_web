@@ -1,14 +1,37 @@
 import { useForm } from "react-hook-form";
 import Input from "../../components/Input";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import LoadingButton from "../LoadingButton";
-import { postCourse } from "../../api/courseApi";
+import { CourseContext } from "../../App";
+import { getCourseById, postCourse } from "../../api/courseApi";
 
-const CourseDetailsForm = () => {
-  const navigate = useNavigate();
+const CourseDetailsEditForm = () => {
 
+
+
+  const { courseContext, setcourseContext } = useContext(CourseContext);
+  const { currentCourse } = courseContext;
+  const {
+    register,
+    setValue,
+    formState: { errors },
+    handleSubmit,
+  } = useForm();
+
+
+  useEffect(()=>{
+    function updateInputField(){
+        setValue("title", currentCourse?.title);
+        setValue("description", currentCourse?.description);
+        setValue("price", currentCourse?.price);
+        setValue("access_duration", currentCourse?.access_duration);
+        setValue("intro_video", currentCourse?.intro_video);
+        setValue("course_thumbnail", currentCourse?.course_thumbnail);
+    }
+    updateInputField();
+  },[currentCourse])
   const {
     mutate,
     isLoading,
@@ -26,21 +49,16 @@ const CourseDetailsForm = () => {
     },
     onError(error, variables, context) {
       console.log(error);
-      console.log(variables);
-      console.log(context);
+     
     },
   });
 
   const onSubmit = (data) => {
-    // console.log(data);
-    mutate(data);
+    console.log(data);
+    // mutate(data);
     // navigate("/course/edit/1");
   };
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-  } = useForm();
+ 
 
 
   return (
@@ -51,6 +69,7 @@ const CourseDetailsForm = () => {
             <div className="mb-4.5 flex flex-col gap-6 md:flex-row">
               <div className="w-full xl:w-1/2">
                 <Input
+                  value={currentCourse?.title}
                   register={register}
                   label="Course Title"
                   isRequied={true}
@@ -60,6 +79,8 @@ const CourseDetailsForm = () => {
               </div>
               <div className="w-full xl:w-1/2">
                 <Input
+                 value={currentCourse?.price}
+
                   register={register}
                   label="Course Price"
                   isRequied={true}
@@ -71,6 +92,7 @@ const CourseDetailsForm = () => {
             <div className="mb-4.5 flex flex-col gap-6 md:flex-row">
               <div className="w-full xl:w-1/2">
                 <Input
+                  value={currentCourse?.intro_video}
                   register={register}
                   label="Intro Video Link"
                   isRequied={true}
@@ -80,6 +102,7 @@ const CourseDetailsForm = () => {
               </div>
               <div className="w-full xl:w-1/2">
                 <Input
+                value={currentCourse?.access_duration}
                   register={register}
                   label="Access Duration (in days)"
                   isRequied={true}
@@ -90,6 +113,7 @@ const CourseDetailsForm = () => {
             </div>
             <div className="mb-6">
               <Input
+              value={currentCourse?.course_thumbnail}
                 register={register}
                 label="Course Thumbnail"
                 type="string"
@@ -99,6 +123,7 @@ const CourseDetailsForm = () => {
 
             <div className="mb-6">
               <Input
+              value={currentCourse?.description}
                 register={register}
                 label="Description"
                 type="textarea"
@@ -115,7 +140,7 @@ const CourseDetailsForm = () => {
                 type="submit"
                 className="m-auto flex w-1/4  justify-center rounded bg-primary p-2 font-medium text-gray"
               >
-                Submit
+                Update
               </button>
             }
        
@@ -127,4 +152,4 @@ const CourseDetailsForm = () => {
   );
 };
 
-export default CourseDetailsForm;
+export default CourseDetailsEditForm;

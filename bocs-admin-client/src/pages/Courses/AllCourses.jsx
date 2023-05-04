@@ -1,11 +1,38 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import DefaultLayout from "../../layout/DefaultLayout";
 import Breadcrumb from "../../components/Breadcrumb";
 import { Link } from "react-router-dom";
 import { FaEdit } from 'react-icons/fa';
 import ProductTwo from '../../images/product/product-02.png';
+import { getAllCourses } from "../../api/courseApi";
+import { useQuery } from "@tanstack/react-query";
+import { CourseContext } from "../../App";
 
 const AllCourses = () => {
+  const { data, isLoading, isSuccess, isError } = useQuery(
+    ["courses"],
+    getAllCourses,
+    {
+        refetchOnWindowFocus: false,
+
+    }
+  );
+  const {courseContext, setcourseContext} = useContext(CourseContext);
+  const {courses} = courseContext;
+
+  useEffect(() => {
+    if (isSuccess) {
+      // console.log(data);
+      setcourseContext({
+        ...courseContext,
+        courses: data.data.courses,
+      })
+    }
+    if (isError) {
+      console.log(data);
+    }
+  }, [isSuccess, isLoading, isError, data]);
+
   return (
     <DefaultLayout>
       <Breadcrumb pageName="All Courses" />
@@ -28,10 +55,10 @@ const AllCourses = () => {
                     Course
                   </th>
                   <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
-                    Invoice date
+                    Created date
                   </th>
                   <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
-                    Status
+                    Access Duration
                   </th>
                   <th className="px-4 py-4 font-medium text-black dark:text-white">
                     Actions
@@ -39,25 +66,28 @@ const AllCourses = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
+              {
+                courses.map((course, index) => 
+                (
+                  <tr key={course?.id}>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark xl:pl-5">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                       <div className="h-12.5 w-15 rounded-md">
                         <img src={ProductTwo} alt="Product" />
                       </div>
                       <p className="text-sm text-black dark:text-white">
-                        Course Name
+                        {course?.title}
                         <br />
-                        <span className="text-sm">$0.00</span>
+                        <span className="text-sm">{course?.price} BDT</span>
                       </p>
                     </div>
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                    <p className="text-black dark:text-white">Jan 13,2023</p>
+                    <p className="text-black dark:text-white">{new Date().toDateString(course?.created_at)}</p>
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <p className="inline-flex rounded-full bg-success bg-opacity-10 px-3 py-1 text-sm font-medium text-success">
-                      Paid
+                      {course?.access_duration} Days
                     </p>
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
@@ -81,7 +111,7 @@ const AllCourses = () => {
                           />
                         </svg>
                       </button>
-                      <Link to="/course/edit/1" className="hover:text-primary">
+                      <Link to={`/course/edit/${course?.id}`} className="hover:text-primary">
                         <FaEdit />
                       </Link>
                       <button className="hover:text-primary">
@@ -114,6 +144,10 @@ const AllCourses = () => {
                     </div>
                   </td>
                 </tr>
+                )
+                )
+
+              }
               </tbody>
             </table>
           </div>
