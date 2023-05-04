@@ -24,6 +24,6 @@
     "sequelizemm": "^1.2.2"
   },
   "devDependencies": {
-    "sequelize-cli": "^6.6.0"
+    
   }
 }
