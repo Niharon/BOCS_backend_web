@@ -7,6 +7,8 @@ import { Route, Routes } from "react-router-dom";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import AddNewCourse from "./pages/Courses/AddNewCourse";
 import EditCourse from "./pages/Courses/EditCourse";
+import CourseRequest from "./pages/CourseRequest/CourseRequest";
+import Users from "./pages/users/Users";
 
 export const CourseContext = createContext(null);
 
@@ -46,6 +48,8 @@ function App() {
           <Route path="/courses/all" element={<AllCourses />} />
           <Route path="/courses/add" element={<AddNewCourse />} />
           <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/course-request" element={<CourseRequest />} />
+          <Route path="/users" element={<Users />} />
         </Routes>
       </QueryClientProvider>
     </CourseContext.Provider>

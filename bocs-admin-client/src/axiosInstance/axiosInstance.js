@@ -2,7 +2,7 @@ import axios from "axios";
 
 // create a axios instance
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:5000/api/admin/',
+    baseURL: 'http://localhost:9000/api/admin/',
   
    
 });

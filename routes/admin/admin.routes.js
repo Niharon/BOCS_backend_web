@@ -39,9 +39,6 @@ router.post('/course-request/create', courseRequestController.createCourseReques
 router.patch('/course-request/:id', courseRequestController.updateCourseRequest);
 
 
-
-
-
 // UserCourse
 router.post('/user-course/create', userCourseController.createUserCourse);
 router.get('/user-course/:id', userCourseController.getUserCourse);

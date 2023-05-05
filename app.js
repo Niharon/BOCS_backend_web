@@ -14,7 +14,7 @@ app.use(cors())
 
 // connect DB
 db.connectDb()
-// db.syncDb()
+//db.syncDb()
 
 
 // routes

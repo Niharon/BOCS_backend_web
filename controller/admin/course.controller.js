@@ -27,9 +27,8 @@ const courseController = {
 
     },
     create: async (req, res, next) => {
-        const {title, intro_video, description, price, access_duration} = req.body;
         try {
-            const course = await Courses.create({title, intro_video, description, price, access_duration});
+            const course = await Courses.create({...req.body});
             res.status(201).json({message: 'Course created successfully', course});
         } catch (error) {
             res.status(400).json(error);

@@ -4,6 +4,9 @@ import { NavLink, useLocation } from 'react-router-dom';
 import SidebarLinkGroup from './SidebarLinkGroup';
 import { AiOutlineBars } from 'react-icons/ai';
 import { IoBookSharp } from 'react-icons/io5';
+import { FaUsers } from 'react-icons/fa';
+import { TbStatusChange } from 'react-icons/tb';
+
 import * as React from 'react';
 
 
@@ -31,35 +34,39 @@ const sidebarMenuItems = [
       {
         title: 'Add Course',
         path: '/courses/add',
-      },
-      {
-        title: 'Course Request',
-        path: '/courses/request',
-      },
-    ],
+      }],
+  },{
+    title: 'Course Request',
+    icon: <TbStatusChange/>,
+    path: '/course-request',
+  },
+  {
+    title: 'Users',
+    icon: <FaUsers/>,
+    path: '/users',
   },
  
-  {
-    title: 'Forms',
-    icon: <IoBookSharp/>,
-    path: '/forms',
-    children: [
-      {
-        title: 'form Elements',
-        path: '/forms/form-elements',
-      },
-      {
-        title: 'Form Layout',
-        path: '/forms/form-layout',
-      },
-    ],
-  },
-  {
-    title: 'Tables',
-    icon: <IoBookSharp/>,
-    path: '/tables',
+  // {
+  //   title: 'Forms',
+  //   icon: <IoBookSharp/>,
+  //   path: '/forms',
+  //   children: [
+  //     {
+  //       title: 'form Elements',
+  //       path: '/forms/form-elements',
+  //     },
+  //     {
+  //       title: 'Form Layout',
+  //       path: '/forms/form-layout',
+  //     },
+  //   ],
+  // },
+  // {
+  //   title: 'Tables',
+  //   icon: <IoBookSharp/>,
+  //   path: '/tables',
   
-  }
+  // }
 ];
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
