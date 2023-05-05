@@ -1,7 +1,7 @@
 const { DataTypes} = require('sequelize');
 const { sequelize } = require('../sequelize');
 const Topics = require('./Topic.model');
-
+const Lessons = require('./Lesson.model');
 
 
 const Courses = sequelize.define('Courses', {
@@ -60,7 +60,25 @@ Topics.belongsTo(Courses,{
     as: 'course',
     foreignKey: 'course_id'
 });
+Topics.hasMany(Lessons,{
+    as: 'lessons',
+    foreignKey: 'topic_id',
+    onDelete: 'CASCADE'
+});
 
+Courses.hasMany(Lessons,{
+    as: 'lessons',
+    foreignKey: 'course_id',
+    onDelete: 'CASCADE'
+})
 
+Lessons.belongsTo(Courses,{
+    as: 'course',
+    foreignKey: 'course_id'
+})
+Lessons.belongsTo(Topics,{
+    as: 'topic',
+    foreignKey: 'topic_id'
+})
 
 module.exports = Courses;

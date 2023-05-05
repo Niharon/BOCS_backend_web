@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom";
 import LoadingScreen from "../../components/LoadingScreen";
 import { CourseContext } from "../../App";
 import CourseTopicForm from "../../components/forms/CourseTopicForm";
+import CourseLessonForm from "../../components/forms/CourseLessonForm";
 
   
 
@@ -37,6 +38,10 @@ const EditCourse = () => {
     {
       label: "Topics",
       component: <CourseTopicForm refetch={refetch} />,
+  },
+    {
+      label: "Lessons",
+      component: <CourseLessonForm refetch={refetch} />,
   },
 ];
 

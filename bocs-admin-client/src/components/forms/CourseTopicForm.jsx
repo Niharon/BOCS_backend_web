@@ -73,7 +73,9 @@ const CourseTopicForm = ({refetch}) => {
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <form onSubmit={(e)=>e.preventDefault()}>
           <div className="p-6.5">
-
+             {
+              allTopics.length === 0 && <p className="text-center text-meta-1">No Topics Added, Add Now</p>
+             }
             {allTopics.map((topic, index) => {
               return (
                 <div key={index} className="mb-4.5">
