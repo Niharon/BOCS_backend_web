@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import AddNewCourse from "./pages/Courses/AddNewCourse";
 import EditCourse from "./pages/Courses/EditCourse";
 import CourseRequest from "./pages/CourseRequest/CourseRequest";
+import CourseRequestEdit from "./pages/CourseRequest/CourseRequestEdit";
 import Users from "./pages/users/Users";
 
 export const CourseContext = createContext(null);
@@ -47,6 +48,7 @@ function App() {
           <Route path="/courses/add" element={<AddNewCourse />} />
           <Route path="/courses/edit/:id" element={<EditCourse />} />
           <Route path="/course-request" element={<CourseRequest />} />
+          <Route path="/course-request/edit/:id" element={<CourseRequestEdit />} />
           <Route path="/users" element={<Users />} />
         </Routes>
       </QueryClientProvider>

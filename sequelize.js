@@ -7,11 +7,12 @@ const sequelize = new Sequelize(
   process.env.DB_USERNAME,
   process.env.DB_PASSWORD,
   {
-    host: "server22.swiftlyserver.com",
+    // host: "server22.swiftlyserver.com",
+    host: "localhost",
     dialect: "mysql",
     timestamps: true,
     port: 3306,
-    // logging: false,
+    logging: false,
     define: {
       freezeTableName: true,
 
