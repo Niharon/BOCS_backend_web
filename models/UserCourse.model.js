@@ -12,18 +12,12 @@ const UserCourse = sequelize.define('UserCourse', {
     course_id:{
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
-            model: 'Courses',
-            key: 'id'
-        }
+    
     },
     user_id:{
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
-            model: 'Users',
-            key: 'id'
-        }
+    
     },
     progress:{
         type: DataTypes.FLOAT,

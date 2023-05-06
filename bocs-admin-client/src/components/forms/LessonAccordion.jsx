@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Accordion,
   AccordionSummary,
@@ -9,15 +9,93 @@ import {
 import { FaExpandAlt, FaExpandArrowsAlt } from "react-icons/fa";
 import Input from "../Input";
 import { useForm } from "react-hook-form";
+import { createLessonApi, updateLessonApi } from "../../api/lessonApi";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-hot-toast";
+import { dirtyValues } from "../../utils/dirtyFields";
 // import a icon from react-icons
 
-const LessonAccordion = ({lesson}) => {
+const LessonAccordion = ({ lesson, topics,course_id,refetch }) => {
+  
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors,dirtyFields,isDirty },
+    setValue,
   } = useForm();
 
+  const {mutate:createLessonQuery,isLoading,isSuccess} = useMutation({
+    mutationKey: "createLesson",
+
+    mutationFn: createLessonApi,
+    onSuccess: (data) => {
+      console.log("success");
+      toast.success("Lesson Created Successfully");
+      refetch()
+    },
+    
+    onError(error, variables, context) {
+      console.log(error);
+
+    }
+  })
+
+  const updateLessonQuery = useMutation({
+    mutationFn:updateLessonApi,
+    onSuccess:(data)=>{
+      refetch()
+      toast.dismiss();
+      toast.success("Updated Successfully");
+    },
+    onError:(error)=>{
+      console.log(error)
+    },
+    onMutate:()=>{
+      toast.loading("updating..")
+    }
+
+  })
+
+  const onSubmit = (data) => {
+
+    console.log(data);
+    createLessonQuery({...data,course_id});
+  };
+
+  const onUpdate = (data) => {
+
+    if(Object.keys(dirtyFields).length>0){
+
+      const modifiedData = dirtyValues(dirtyFields,data)
+      
+      updateLessonQuery.mutate({id:lesson.id,data:modifiedData});
+    }else{
+      toast.error("Change something first to update");
+    }
+
+  }
+
+  useEffect(()=>{
+    function updateInputField(){
+      setValue("id", lesson?.id);
+      setValue("title", lesson?.title);
+      setValue("description", lesson?.description);
+      setValue("video", lesson?.video);
+      setValue("pdf", lesson?.pdf);
+      setValue("topic_id", lesson?.topic_id);
+    }
+    updateInputField();
+  },[])
+
+  useEffect(()=>{
+    if(isLoading){
+      toast.loading("Creating Lesson");
+    }
+    if(isSuccess){
+      toast.dismiss();
+      toast.success("Lesson Created Successfully")
+    }
+  },[isLoading,isSuccess])
   return (
     <Accordion>
       <AccordionSummary
@@ -26,12 +104,11 @@ const LessonAccordion = ({lesson}) => {
             p: ".4rem",
           },
         }}
-        
         expandIcon={<FaExpandArrowsAlt />}
         aria-controls="panel1a-content"
         id="panel1a-header"
       >
-        <Typography>Lesson Title 1</Typography>
+        <Typography>{lesson?.title}</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <Box
@@ -39,71 +116,76 @@ const LessonAccordion = ({lesson}) => {
             px: "1rem",
           }}
         >
-          <div className="mb-5">
- 
-              <h3 className="font-medium text-black dark:text-white">
-                Select Topic
-              </h3>
-       
-            <div className="flex flex-col gap-5.5 pt-5">
-              <div>
-              
-                <div className="relative z-20 bg-white dark:bg-form-input">
-                
-                  <select {...register("topic_id")} required className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-6 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input">
-                    <option value="">Select Topic</option>
-                    <option value="1">Topic 1</option>
-                    <option value="2">Topic 2</option>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="block w-full  md:gap-5 md:flex">
+              <div className="mb-2 w-full">
+                <label className="mb-2.5 block text-black dark:text-white">
+                  Select Topic
+                  <span className="text-meta-1">*</span>
+                </label>
+                <select
+                  {...register("topic_id")}
+                  defaultValue={lesson.topic_id}
+                  required
+                  className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-6 py-2 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input"
+                >
+                  <option value="">Select Topic</option>
+                  {topics.map((topic, index) => {
+                    return (
+                      <option
+                        key={index}
+                        value={topic.id}
                
-            
-             
-                  </select>
-                  <span className="absolute top-1/2 right-4 z-10 -translate-y-1/2">
-                    <svg
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <g opacity="0.8">
-                        <path
-                          fillRule="evenodd"
-                          clipRule="evenodd"
-                          d="M5.29289 8.29289C5.68342 7.90237 6.31658 7.90237 6.70711 8.29289L12 13.5858L17.2929 8.29289C17.6834 7.90237 18.3166 7.90237 18.7071 8.29289C19.0976 8.68342 19.0976 9.31658 18.7071 9.70711L12.7071 15.7071C12.3166 16.0976 11.6834 16.0976 11.2929 15.7071L5.29289 9.70711C4.90237 9.31658 4.90237 8.68342 5.29289 8.29289Z"
-                          fill="#637381"
-                        ></path>
-                      </g>
-                    </svg>
-                  </span>
-                </div>
+                      >
+                        {topic.title}
+                      </option>
+                    );
+                  })}
+                </select>
               </div>
 
-          
+              <div className="mb-2 w-full">
+                <Input
+                  label="Lesson Title"
+                  register={register}
+                  registerText="title"
+                  isRequied={true}
+                />
+              </div>
             </div>
-          </div>
+            <div className="block w-full md:gap-5 md:flex">
+              <div className="mb-2 w-full">
+                <Input
+                  label="Video Link"
+                  register={register}
+                  registerText="video"
+                />
+              </div>
+              <div className="mb-2 w-full">
+                <Input
+                  label="Pdf Link"
+                  register={register}
+                  registerText="pdf"
+                />
+              </div>
+            </div>
+            <div className="mb-2">
+              <Input
+                label="Description"
+                register={register}
+                registerText="description"
+                type="textarea"
+              />
+            </div>
 
-          <div className="mb-5">
-            <Input
-              label="Lesson Name"
-              register={register}
-              registerText="title"
-              isRequied={true}
-            />
-          </div>
-          <div className="mb-5">
-            <Input
-              label="Video Link"
-              register={register}
-              registerText="video"
-            />
-          </div>
-          <div className="mb-5">
-            <Input label="Pdf Link" register={register} registerText="pdf" />
-          </div>
-          <div className="mb-5">
-            <Input label="Description" register={register} registerText="description" type="textarea" />
-          </div>
+            <div className="flex justify-end">
+              {
+                lesson.id ? <button role="update" onClick={handleSubmit(onUpdate)} className="rounded bg-success p-2 px-5 font-medium text-gray">Update</button> : <button type="submit" className="rounded bg-primary p-2 px-5 font-medium text-gray">
+                Save
+              </button>
+              }
+            </div>
+          </form>
         </Box>
       </AccordionDetails>
     </Accordion>

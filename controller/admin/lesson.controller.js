@@ -48,16 +48,11 @@ async function getLessonById(req, res) {
 // Controller for updating a lesson by ID
 async function updateLessonById(req, res) {
   try {
-    const { title, course_id, topic_id, video, pdf, description } = req.body;
+
     const lesson = await Lessons.findByPk(req.params.id);
     if (lesson) {
       await lesson.update({
-        title: title || lesson.title,
-        course_id: course_id || lesson.course_id,
-        topic_id: topic_id || lesson.topic_id,
-        video: video || lesson.video,
-        pdf: pdf || lesson.pdf,
-        description: description || lesson.description
+        ...req.body
       });
       res.status(200).json({ message: 'Lesson updated successfully', lesson });
     } else {

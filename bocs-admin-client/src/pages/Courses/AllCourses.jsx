@@ -7,12 +7,16 @@ import ProductTwo from '../../images/product/product-02.png';
 import { deleteCourseById, getAllCourses } from "../../api/courseApi";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CourseContext } from "../../App";
+import LoadingScreen from "../../components/LoadingScreen";
 
 const AllCourses = () => {
 
   const queryClient = useQueryClient();
 
-  const { data, isLoading, isSuccess, isError,refetch } = useQuery(["courses"],getAllCourses,{refetchOnWindowFocus: false,});
+  const { data, isLoading, isSuccess, isError,refetch } = useQuery(["courses"],getAllCourses,{
+    refetchOnWindowFocus: false,
+    refetchOnMount:false
+  });
 
   const deleteQuery = useMutation((id) => deleteCourseById(id), {
     onSuccess: () => {
@@ -48,7 +52,11 @@ const AllCourses = () => {
 
   }
 
+  if(isLoading){
+    return <LoadingScreen/>
+  }
 
+ 
   return (
     <DefaultLayout>
       <Breadcrumb pageName="All Courses" />
@@ -172,6 +180,7 @@ const AllCourses = () => {
 
               }
               </tbody>
+             
             </table>
           </div>
         </div>

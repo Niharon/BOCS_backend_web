@@ -15,6 +15,7 @@ const courseController = {
           {
             model: Lessons,
             as: "lessons",
+
           },
         ],
         order: [["created_at", "DESC"]],
@@ -43,8 +44,10 @@ const courseController = {
           },
           {
             model: Lessons,
-            as: "lessons"
-          }
+            as: "lessons",
+          
+          },
+        
         ],
       });
       if (course) {
@@ -63,15 +66,10 @@ const courseController = {
     }
   },
   create: async (req, res, next) => {
-    const { title, intro_video, description, price, access_duration } =
-      req.body;
+  
     try {
       const course = await Courses.create({
-        title,
-        intro_video,
-        description,
-        price,
-        access_duration,
+        ...req.body
       });
       res.status(201).json({ message: "Course created successfully", course });
     } catch (error) {

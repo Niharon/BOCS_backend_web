@@ -28,7 +28,7 @@ const Input = (props) => {
                     {...register(registerText)}
                     required={isRequied}
                     type={type}
-           
+                
                     placeholder={label}
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-2 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                 />

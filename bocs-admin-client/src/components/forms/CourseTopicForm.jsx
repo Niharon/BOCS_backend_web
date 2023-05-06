@@ -1,45 +1,57 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { CourseContext } from "../../App";
-import { useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
-import { deleteTopicById, postSingleTopic, updateTopicApi } from "../../api/topicApi";
+import {
+  useMutation,
+  useQueries,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import {
+  deleteTopicById,
+  postSingleTopic,
+  updateTopicApi,
+} from "../../api/topicApi";
 import { FaTrash } from "react-icons/fa";
 import { deleteCourseById } from "../../api/courseApi";
 import { toast } from "react-hot-toast";
+import LoadingButton from "../LoadingButton";
 
-const CourseTopicForm = ({refetch}) => {
+const CourseTopicForm = ({ refetch }) => {
   const { id } = useParams();
   const [allTopics, setallTopics] = useState([]);
 
-  const { courseContext, setcourseContext, } = useContext(CourseContext);
+  const { courseContext, setcourseContext } = useContext(CourseContext);
   const { topics } = courseContext.currentCourse;
-
 
   // console.log(topics)
   const appendNewTopic = () => {
     setallTopics([...allTopics, { title: "New Topic", course_id: id }]);
   };
 
-  useEffect(()=>{
-    setallTopics(topics)
-  },[topics])
+  useEffect(() => {
+    setallTopics(topics);
+  }, [topics]);
 
   const deleteTopicQuery = useMutation((id) => deleteTopicById(id), {
     onSuccess: () => {
-      console.log("deleted")
+      console.log("deleted");
       toast.success("Topic Deleted Successfully");
       refetch();
-    },  
+    },
   });
 
-  const createSingleTopicQuery = useMutation({
+  const {
+    mutate: createSingleTopicQuery,
+    isLoading,
+    isSuccess,
+  } = useMutation({
     mutationFn: postSingleTopic,
     onSuccess: (data, variable) => {
       console.log("success");
       toast.success("Topic Created");
-      refetch()
-            
-    }
+      refetch();
+    },
   });
 
   const updateTopicQuery = useMutation({
@@ -47,35 +59,48 @@ const CourseTopicForm = ({refetch}) => {
     onSuccess: (data, variable) => {
       // console.log("success");
       toast.success("Topic Updated");
-      refetch()
-    }
+      refetch();
+    },
   });
 
-  const createSingleTopic = (index)=>{
-    createSingleTopicQuery.mutate(allTopics[index]);
+  const createSingleTopic = (index) => {
+    createSingleTopicQuery(allTopics[index]);
+  };
 
-  }
+  const updateTopic = (id) => {
+    const data = allTopics.find((t) => t.id === id);
+    console.log(data);
+    updateTopicQuery.mutate({ id, data });
+  };
 
-  const updateTopic = (id)=>{
-    const data = allTopics.find((t)=>t.id === id)
-    console.log(data)
-    updateTopicQuery.mutate({id,data});
-  }
-
-  const deleteTopic = (id)=>{
-    const yes = window.confirm("Are you sure you want to delete this Topic? All Lessons under this topic will be Deleted")
-    if(yes){
+  const deleteTopic = (id) => {
+    const yes = window.confirm(
+      "Are you sure you want to delete this Topic? All Lessons under this topic will be Deleted"
+    );
+    if (yes) {
       deleteTopicQuery.mutate(id);
     }
-  }
+  };
+
+  useEffect(() => {
+    if (isLoading) {
+      toast.loading("Updating...");
+    }
+    if (isSuccess) {
+      toast.dismiss();
+      toast.success("Updated");
+    }
+  }, [isLoading, isSuccess]);
   return (
     <>
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-        <form onSubmit={(e)=>e.preventDefault()}>
+        <form onSubmit={(e) => e.preventDefault()}>
           <div className="p-6.5">
-             {
-              allTopics.length === 0 && <p className="text-center text-meta-1">No Topics Added, Add Now</p>
-             }
+            {allTopics.length === 0 && (
+              <p className="text-center text-meta-1">
+                No Topics Added, Add Now
+              </p>
+            )}
             {allTopics.map((topic, index) => {
               return (
                 <div key={index} className="mb-4.5">
@@ -95,30 +120,39 @@ const CourseTopicForm = ({refetch}) => {
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-2 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
 
-                    {
-                      topic.id ?
+                    {topic.id ? (
                       <div className="flex gap-2">
-                      <button onClick={()=>updateTopic(topic?.id)} className="flex  items-center justify-center rounded bg-primary p-2 font-medium text-gray">
-                        Update
-                      </button>
-                      <button onClick={()=>deleteTopic(topic?.id)} className="flex  items-center justify-center rounded bg-danger p-2 font-medium text-gray">
-                        <FaTrash/>
-                      </button>
-  
+                        <button
+                          onClick={() => updateTopic(topic?.id)}
+                          className="flex  items-center justify-center rounded bg-primary p-2 font-medium text-gray"
+                        >
+                          Update
+                        </button>
+                        <button
+                          onClick={() => deleteTopic(topic?.id)}
+                          className="flex  items-center justify-center rounded bg-danger p-2 font-medium text-gray"
+                        >
+                          <FaTrash />
+                        </button>
                       </div>
-                      :
-                      <button onClick={()=>createSingleTopic(index)} className="flex w-1/5 items-center justify-center rounded bg-primary p-1 font-medium text-gray">
-                      Save
-                    </button>
-
-                    }
-
+                    ) : (
+                      <>
+                        {isLoading ? (
+                          <LoadingButton />
+                        ) : (
+                          <button
+                            onClick={() => createSingleTopic(index)}
+                            className="flex w-1/5 items-center justify-center rounded bg-primary p-1 font-medium text-gray"
+                          >
+                            Save
+                          </button>
+                        )}
+                      </>
+                    )}
                   </div>
                 </div>
               );
             })}
-
-        
           </div>
         </form>
       </div>

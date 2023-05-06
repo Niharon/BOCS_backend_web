@@ -26,7 +26,7 @@ router.patch('/topic/:id', topicsController.updateTopicById);
 router.delete('/topic/:id', topicsController.deleteTopicById);
 
 //lesson
-router.post('/lesson/create', lessonController.createLesson);
+router.post('/lesson', lessonController.createLesson);
 router.get('/lesson/total-lessions', lessonController.getAllLessons);
 router.get('/lesson/:id', lessonController.getLessonById);
 router.patch('/lesson/:id', lessonController.updateLessonById);
