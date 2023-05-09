@@ -105,8 +105,7 @@ const AllCourses = () => {
                         <img src={ProductTwo} alt="Product" />
                       </div>
                       <p className="text-sm text-black dark:text-white">
-                        {course?.id}
-                        {course?.title}
+                        {course?.id} - {course?.title}
                         <br />
                         <span className="text-sm">{course?.price} BDT</span>
                       </p>

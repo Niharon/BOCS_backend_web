@@ -7,6 +7,7 @@ const lessonController = require("../../controller/admin/lesson.controller");
 const courseRequestController = require("../../controller/admin/courseRequestController");
 const topicsController = require("../../controller/admin/topic.controller");
 const userCourseController = require('../../controller/userCourse.controller');
+const quizController = require("../../controller/admin/quiz.controller");
 
 
 //course
@@ -31,6 +32,9 @@ router.get('/lesson/total-lessions', lessonController.getAllLessons);
 router.get('/lesson/:id', lessonController.getLessonById);
 router.patch('/lesson/:id', lessonController.updateLessonById);
 router.delete('/lesson/:id', lessonController.deleteLessonById);
+
+//quizes
+router.post('/quiz',quizController.createQuiz);
 
 
 //course-requests

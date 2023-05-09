@@ -2,6 +2,7 @@ const { DataTypes} = require('sequelize');
 const { sequelize } = require('../sequelize');
 const Topics = require('./Topic.model');
 const Lessons = require('./Lesson.model');
+const Quizes = require('./Quiz.model');
 
 
 const Courses = sequelize.define('Courses', {
@@ -79,6 +80,18 @@ Lessons.belongsTo(Courses,{
 Lessons.belongsTo(Topics,{
     as: 'topic',
     foreignKey: 'topic_id'
+})
+
+
+// QUIZ LESSON ASSOCIATION
+Lessons.hasMany(Quizes,{
+    as: 'quizes',
+    foreignKey: 'lesson_id',
+})
+
+Quizes.belongsTo(Lessons,{
+    as: 'lesson',
+    foreignKey: 'lesson_id'
 })
 
 module.exports = Courses;

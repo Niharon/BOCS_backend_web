@@ -1,6 +1,5 @@
 const { DataTypes} = require('sequelize');
 const { sequelize } = require('../sequelize');
-const e = require('express');
 
 const Quizes = sequelize.define('Quizes', {
     id: {
@@ -8,50 +7,33 @@ const Quizes = sequelize.define('Quizes', {
         primaryKey: true,
         autoIncrement: true
     },
-    question:{
+    title:{
         type: DataTypes.STRING,
    
     },
-    type:{
-        // type should be single or multiple
+    numOptions:{
+        type: DataTypes.INTEGER,
+    },
+    questionType:{
+
         type: DataTypes.STRING,
         allowNull: false,
         enum: ['single', 'multiple'],
         defaultValue: 'single'
     },
     options:{
-        type: DataTypes.ARRAY(DataTypes.STRING),
+        type: DataTypes.JSON,
         allowNull: false
     },
     course_id:{
         type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    topic_id:{
-        type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
     },
     lesson_id:{
         type: DataTypes.INTEGER,
         allowNull: false
-    },
-    video:{
-        type: DataTypes.STRING,
-        validator:{
-            isUrl: true
-        }
-    },
-    pdf:{
-        type: DataTypes.STRING,
-        validator:{
-            isUrl: true
-        }
-    },
-    description:{
-        type: DataTypes.STRING,
-    },
+    }
   
-   
 
 },{
     timestamps: true,
@@ -59,5 +41,8 @@ const Quizes = sequelize.define('Quizes', {
     updatedAt: 'updated_at',
     tableName: 'Quizes'
 })
+
+
+
 
 module.exports = Quizes;

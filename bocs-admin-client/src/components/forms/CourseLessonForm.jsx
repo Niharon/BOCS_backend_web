@@ -58,12 +58,7 @@ const CourseLessonForm = ({ refetch }) => {
         ))}
 
         <div className="mt-4 flex justify-end gap-3">
-          {/* <button
-          onClick={createAllTopic}
-          className=" flex w-1/5 items-center justify-center rounded bg-success p-2 font-medium text-gray"
-        >
-          Save All
-        </button> */}
+  
           <button
             disabled={currentCourse.topics.length == 0}
             onClick={addNewLessonToAdd}

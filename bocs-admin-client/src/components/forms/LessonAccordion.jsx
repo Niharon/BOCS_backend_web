@@ -13,6 +13,7 @@ import { createLessonApi, updateLessonApi } from "../../api/lessonApi";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import { dirtyValues } from "../../utils/dirtyFields";
+import { Link } from "react-router-dom";
 // import a icon from react-icons
 
 const LessonAccordion = ({ lesson, topics,course_id,refetch }) => {
@@ -96,6 +97,8 @@ const LessonAccordion = ({ lesson, topics,course_id,refetch }) => {
       toast.success("Lesson Created Successfully")
     }
   },[isLoading,isSuccess])
+
+  
   return (
     <Accordion>
       <AccordionSummary
@@ -178,9 +181,12 @@ const LessonAccordion = ({ lesson, topics,course_id,refetch }) => {
               />
             </div>
 
-            <div className="flex justify-end">
+            <div className="flex justify-end gap-3">
               {
-                lesson.id ? <button role="update" onClick={handleSubmit(onUpdate)} className="rounded bg-success p-2 px-5 font-medium text-gray">Update</button> : <button type="submit" className="rounded bg-primary p-2 px-5 font-medium text-gray">
+                lesson.id ? <>
+                <Link to={`/courses/edit/${course_id}/lesson/${lesson.id}`} className="rounded bg-secondary p-2 px-5 font-medium text-gray">Add Quiz</Link>
+                <button role="update" onClick={handleSubmit(onUpdate)} className="rounded bg-success p-2 px-5 font-medium text-gray">Update</button>
+                </> : <button type="submit" className="rounded bg-primary p-2 px-5 font-medium text-gray">
                 Save
               </button>
               }

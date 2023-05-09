@@ -9,6 +9,7 @@ import CourseRequest from "./pages/CourseRequest/CourseRequest";
 import CourseRequestEdit from "./pages/CourseRequest/CourseRequestEdit";
 import Users from "./pages/users/Users";
 import NotFoundPage from "./pages/NotFoundPage";
+import AddQuizes from "./pages/Courses/AddQuizes";
 
 export const CourseContext = createContext(null);
 
@@ -48,6 +49,11 @@ function App() {
           <Route path="/courses/all" element={<AllCourses />} />
           <Route path="/courses/add" element={<AddNewCourse />} />
           <Route path="/courses/edit/:id" element={<EditCourse />} />
+
+          {/* Quiz route */}
+
+          <Route path="/courses/edit/:id/lesson/:lessonid" element={<AddQuizes/>}/>
+
           <Route path="/course-request" element={<CourseRequest />} />
           <Route path="/course-request/edit/:id" element={<CourseRequestEdit />} />
           <Route path="/users" element={<Users />} />

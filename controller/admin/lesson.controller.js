@@ -31,17 +31,28 @@ async function getAllLessons(req, res) {
 }
 
 // Controller for retrieving a single lesson by ID
-async function getLessonById(req, res) {
+async function getLessonById(req, res,next) {
   try {
-    const lesson = await Lessons.findByPk(req.params.id);
+    const lesson = await Lessons.findByPk(req.params.id,{
+      include: "quizes",
+      
+    });
+
     if (lesson) {
-      res.status(200).json({ lesson });
+      let data = lesson.toJSON();
+      if(data.quizes.length>0){
+        for (let i = 0; i < data.quizes.length; i++) {
+          data.quizes[i].options = JSON.parse(data.quizes[i].options)
+        }
+      }
+      // console.log(data)
+      // const parsedLesson = {...data,quizes:JSON.parse(data.quizes)}
+      res.status(200).json({ success: true, lesson:data, message: 'Lesson retrieved successfully' });
     } else {
-      res.status(404).json({ message: 'Lesson not found' });
+      next(new Error("Lesson not found"))
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
+    next(error);
   }
 }
 
