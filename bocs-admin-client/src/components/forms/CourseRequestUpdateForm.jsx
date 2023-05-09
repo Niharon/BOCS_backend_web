@@ -14,28 +14,69 @@ const CourseRequestUpdateForm = () => {
         }}
       >
         <form>
-          <div className="block w-full  md:gap-5 md:flex">
-            <div className="mb-2 w-full">
-              <label className="mb-2.5 block text-black dark:text-white">User</label>
-              <input type="text" value={"Abc"} disabled/>
+          <div className="flex flex-col w-full  md:gap-5 md:flex">
+            <div className="block md:gap-5 md:flex">
+              <div className="mb-2 w-full">
+                <label className="mb-2.5 block text-black dark:text-white">Date</label>
+                <input type="text" className="w-full pl-4" value={new Date().toDateString()} disabled />
+              </div>
+              <div className="mb-2 w-full">
+                <label className="mb-2.5 block text-black dark:text-white">Course Name</label>
+                <input type="text" className="w-full pl-4" value={"JavaScript"} disabled />
+              </div>
             </div>
-            <div className="mb-2 w-full">
-              <label className="mb-2.5 block text-black dark:text-white">Payment Status</label>
-              <input type="text" value={"Pending"} disabled/>
+            <div className="block md:gap-5 md:flex">
+              <div className="mb-2 w-full">
+                <label className="mb-2.5 block text-black dark:text-white">User Name</label>
+                <input type="text" className="w-full pl-4" value={"Abc Abc"} disabled />
+              </div>
+              <div className="mb-2 w-full">
+                <label className="mb-2.5 block text-black dark:text-white">User Number</label>
+                <input type="text" className="w-full pl-4" value={"01521347972"} disabled />
+              </div>
+              <div className="mb-2 w-full">
+                <label className="mb-2.5 block text-black dark:text-white">User Email</label>
+                <input type="email" className="w-full pl-4" value={"abc903@gmai.com"} disabled />
+              </div>
             </div>
-            <div className="mb-2 w-full">
-              <label className="mb-2.5 block text-black dark:text-white">
-                Select Status
-                <span className="text-meta-1">*</span>
-              </label>
-              <select
-                required
-                className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-6 py-2 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input"
-              >
-                <option value="">Status</option>
-                <option value="">Pending</option>
-                <option value="">cancelled</option>
-              </select>
+            <div className="block md:gap-5 md:flex">
+              <div className="mb-2 w-full">
+                <label className="mb-2.5 block text-black dark:text-white">Payment Id</label>
+                <input type="text" className="w-full pl-4" value={"01"} disabled />
+              </div>
+              <div className="mb-2 w-full">
+                <label className="mb-2.5 block text-black dark:text-white">Payment Method</label>
+                <input type="text" className="w-full pl-4" value={"Bkash"} disabled />
+              </div>
+              <div className="mb-2 w-full">
+                <label className="mb-2.5 block text-black dark:text-white">Transacction Id</label>
+                <input type="text" className="w-full pl-4" value={"xksltk10939xtn"} disabled />
+              </div>
+            </div>
+            <div className="block md:gap-5 md:flex">
+              <div className="mb-2 w-full">
+                <label className="mb-2.5 block text-black dark:text-white">Amount</label>
+                <input type="text" className="w-full pl-4" value={"3500Tk"} disabled />
+              </div>
+              <div className="mb-2 w-full">
+                <label className="mb-2.5 block text-black dark:text-white">Payment Status</label>
+                <input type="text" className="w-full pl-4" value={"Pending"} disabled />
+              </div>
+              <div className="mb-2 w-full">
+                <label className="mb-2.5 block text-black dark:text-white">
+                  Status
+                  <span className="text-meta-1">*</span>
+                </label>
+                <select
+                  required
+                  className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-6 py-2 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input"
+                >
+                  <option value="">Status</option>
+                  <option value="">Pending</option>
+                  <option value="">Active</option>
+                  <option value="">cancelled</option>
+                </select>
+              </div>
             </div>
           </div>
           <div className="flex justify-center mt-4">
