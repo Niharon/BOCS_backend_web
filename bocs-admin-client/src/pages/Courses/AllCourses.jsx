@@ -13,9 +13,11 @@ const AllCourses = () => {
 
   const queryClient = useQueryClient();
 
-  const { data, isLoading, isSuccess, isError,refetch } = useQuery(["courses"],getAllCourses,{
+  const { data, isLoading, isSuccess, isError,refetch } = useQuery({
+    queryKey: ["courses"],
+    queryFn: getAllCourses,
     refetchOnWindowFocus: false,
-    refetchOnMount:false
+    refetchOnMount: false,
   });
 
   const deleteQuery = useMutation((id) => deleteCourseById(id), {

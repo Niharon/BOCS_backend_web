@@ -7,6 +7,7 @@ import AddNewCourse from "./pages/Courses/AddNewCourse";
 import EditCourse from "./pages/Courses/EditCourse";
 import CourseRequest from "./pages/CourseRequest/CourseRequest";
 import Users from "./pages/users/Users";
+import NotFoundPage from "./pages/NotFoundPage";
 
 export const CourseContext = createContext(null);
 
@@ -48,6 +49,7 @@ function App() {
           <Route path="/courses/edit/:id" element={<EditCourse />} />
           <Route path="/course-request" element={<CourseRequest />} />
           <Route path="/users" element={<Users />} />
+          <Route path="*" element={<NotFoundPage/>}/>
         </Routes>
       </QueryClientProvider>
     </CourseContext.Provider>
