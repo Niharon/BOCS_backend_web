@@ -17,6 +17,7 @@ const questionData = {
     {text:"",isCorrect:false},
     {text:"",isCorrect:false}
   ],
+  correct_indexes : []
 }
 function QuizForm() {
  
@@ -49,6 +50,7 @@ function QuizForm() {
       // setQuestions(lessonData.quiz);
     }
   },[lessonData])
+
   return (
     <DefaultLayout>
       {

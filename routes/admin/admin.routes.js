@@ -1,5 +1,5 @@
 const express = require("express");
-const router = express.Router();
+const path = require('path');
 
 // import the controller
 const courseController = require("../../controller/admin/course.controller");
@@ -8,13 +8,38 @@ const courseRequestController = require("../../controller/admin/courseRequestCon
 const topicsController = require("../../controller/admin/topic.controller");
 const userCourseController = require('../../controller/userCourse.controller');
 const quizController = require("../../controller/admin/quiz.controller");
+const multer = require("multer");
 
 
+const router = express.Router();
+// multer
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, "uploads/courses/thumbnail");
+    },
+    filename: function (req, file, cb) {
+    
+        const extension = path.extname(file.originalname);
+        
+        // slugify the name
+        let sluggedName = "course-thumbnail";
+        if(req.body.title){
+
+            sluggedName = req.body.title.split(" ").join("-").toLowerCase();
+        }
+
+
+
+      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+      cb(null, sluggedName + "-" + uniqueSuffix+extension);
+    },
+  });
+const upload = multer({ storage: storage })
 //course
 router.get("/courses", courseController.getAllCourse);
 router.get("/course/:id", courseController.getCourseDetailsByID);
-router.post("/course", courseController.create);
-router.patch("/course/:id", courseController.update);
+router.post("/course",upload.single('course_thumbnail'), courseController.create);
+router.patch("/course/:id",upload.single('course_thumbnail'), courseController.update);
 router.delete("/course/:id", courseController.delete);
 
 
@@ -35,6 +60,7 @@ router.delete('/lesson/:id', lessonController.deleteLessonById);
 
 //quizes
 router.post('/quiz',quizController.createQuiz);
+router.patch('/quiz/:id',quizController.updateQuiz);
 
 
 //course-requests

@@ -102,7 +102,7 @@ const AllCourses = () => {
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark xl:pl-5">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                       <div className="h-12.5 w-15 rounded-md">
-                        <img src={ProductTwo} alt="Product" />
+                        <img src={course.course_thumbnail ? import.meta.env.VITE_UPLOAD_URL + course.course_thumbnail : "https://via.placeholder.com/200x200"} alt="Product" />
                       </div>
                       <p className="text-sm text-black dark:text-white">
                         {course?.id} - {course?.title}

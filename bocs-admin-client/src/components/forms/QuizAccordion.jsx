@@ -17,7 +17,7 @@ import {
 import { FaExpandArrowsAlt } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import { useMutation } from "@tanstack/react-query";
-import { createQuizApi } from "../../api/quizApi";
+import { createQuizApi, updateQuizApi } from "../../api/quizApi";
 
 const QuizAccordion = ({ question, index,refetch,course_id,lesson_id }) => {
   const [questionData, setQuestionData] = useState({ ...question });
@@ -35,6 +35,18 @@ const QuizAccordion = ({ question, index,refetch,course_id,lesson_id }) => {
     },
     onError: (error) => {},
   })
+
+  const updateQuizQuery = useMutation({
+    mutationKey: "updateQuiz",
+    mutationFn: updateQuizApi,
+    onSuccess: (data) => {
+      console.log("success");
+      toast.success("Quiz Updated Successfully");
+      refetch()
+    },
+    onError: (error) => {},
+  })
+
   const decrement = () => {
     if (questionData.numOptions > min) {
       const updatedNum = questionData.numOptions - 1;
@@ -112,7 +124,8 @@ const QuizAccordion = ({ question, index,refetch,course_id,lesson_id }) => {
       toast.error("Select atleast one correct answer");
       return;
     }
-    // console.log(questionData);
+    console.log(questionData);
+    updateQuizQuery.mutate({id:questionData.id,data:questionData});
 
   }
   // useEffect(() => {

@@ -59,7 +59,28 @@ const CourseDetailsEditForm = ({refetch}) => {
 
     const modifiedData = dirtyValues(dirtyFields,data)
     // console.log(data);
-    mutate({id:currentCourse.id,data:modifiedData});
+    // if course_thumbnail in modifiedData , make it as a formdata
+    if(modifiedData.course_thumbnail){
+      // console.log("changed the thumbnail")
+      const formdata = new FormData();
+
+      for(let key in modifiedData){
+          if(key === "course_thumbnail"){
+            formdata.append(key,modifiedData[key][0]);
+          }else{
+          formdata.append(key,modifiedData[key]);
+          }
+      }
+      mutate({id:currentCourse.id,data:formdata});
+
+
+    }
+    else{
+
+      mutate({id:currentCourse.id,data:modifiedData});
+    }
+    console.log({id:currentCourse.id,data:modifiedData});
+
     // navigate("/course/edit/1");
   };
  
@@ -115,12 +136,16 @@ const CourseDetailsEditForm = ({refetch}) => {
                 />
               </div>
             </div>
-            <div className="mb-6">
+            <div className="mb-6 md:flex gap-5">
+              {
+                currentCourse?.course_thumbnail && 
+                <img src={!currentCourse?.course_thumbnail ? currentCourse?.course_thumbnail : "https://via.placeholder.com/200x200"} alt="course thumbnail" className="w-1/8 h-1/8" />
+              }
               <Input
               value={currentCourse?.course_thumbnail}
                 register={register}
                 label="Course Thumbnail"
-                type="string"
+                type="image"
                 registerText="course_thumbnail"
               />
             </div>

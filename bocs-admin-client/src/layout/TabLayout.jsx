@@ -28,6 +28,7 @@ function a11yProps(index) {
 
 const TabLayout = ({tabItems}) => {
     const [value, setValue] = React.useState(0);
+    
 
     const handleChange = (event, newValue) => {
       setValue(newValue);

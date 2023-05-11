@@ -23,7 +23,19 @@ const Input = (props) => {
                     placeholder={label}
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                 ></textarea>
-            ) : (
+            ) : type === "image" ? (
+                <input
+                {...register(registerText)}
+                required={isRequied}
+                type="file"
+                
+                accept="image/*"
+            
+                placeholder={label}
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-2 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+            />
+
+            )  : (
                 <input
                     {...register(registerText)}
                     required={isRequied}

@@ -13,6 +13,17 @@ const quizController = {
             
         }
 
+    },
+
+    updateQuiz: async (req, res,next) => {
+        try{
+            const {title,numOptions,questionType,options,course_id,lesson_id} = req.body;
+            const quiz = await Quizes.update({title,numOptions,questionType,options,course_id,lesson_id},{where:{id:req.params.id}})
+            res.status(200).json({success:true,quiz,message:"Quiz updated successfully"})
+
+        }catch(error){
+            next(error)
+        }
     }
 }
 module.exports= quizController

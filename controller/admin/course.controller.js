@@ -66,10 +66,10 @@ const courseController = {
     }
   },
   create: async (req, res, next) => {
-  
+    
     try {
       const course = await Courses.create({
-        ...req.body
+        ...req.body,course_thumbnail:req.file.path
       });
       res.status(201).json({ message: "Course created successfully", course });
     } catch (error) {
@@ -79,16 +79,30 @@ const courseController = {
   update: async (req, res, next) => {
     // console.log(req.body)
     // update api for course
+    // console.log(req.file.path)
     const { id } = req.params;
     try {
-      const [course] = await Courses.update(
-        { ...req.body },
-        {
-          where: {
-            id,
-          },
-        }
-      );
+      // const [course] = await Courses.update(
+      //   { ...req.body },
+      //   {
+      //     where: {
+      //       id,
+      //     },
+      //   }
+      // );
+      const course = await Courses.findByPk(id);
+
+      // If the course doesn't exist, return a 404 response
+      if (!course) {
+        return res.status(404).json({ error: 'Course not found' });
+      }
+
+      if(req.file){
+        req.body.course_thumbnail = req.file.path;
+      }
+      await course.update(req.body);
+
+
       if (course) {
         const updatedCourse = await Courses.findOne({ where: { id } });
         return res

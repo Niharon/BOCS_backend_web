@@ -15,7 +15,11 @@ export const deleteCourseById = async (id) => {
 }
 
 export const postCourse = async (data) => {
-    const res = await axiosInstance.post('/course', data);
+    const res = await axiosInstance.post('/course', data,{
+        headers: {
+            "Content-Type":"multipart/form-data"
+        }
+    });
     return res;
 }
 

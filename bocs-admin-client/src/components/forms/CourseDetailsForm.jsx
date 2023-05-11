@@ -32,8 +32,20 @@ const CourseDetailsForm = () => {
   });
 
   const onSubmit = (data) => {
-    // console.log(data);
-    mutate(data);
+    console.log(data);
+    const formData = new FormData();
+
+    formData.append("title", data.title);
+    formData.append("price", data.price);
+    formData.append("intro_video", data.intro_video);
+    formData.append("access_duration", data.access_duration);
+    formData.append("description", data.description);
+    formData.append("course_thumbnail", data.course_thumbnail[0]);
+
+
+
+
+    mutate(formData);
     // navigate("/course/edit/1");
   };
   const {
@@ -46,7 +58,7 @@ const CourseDetailsForm = () => {
   return (
     <>
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-        <form onSubmit={handleSubmit(onSubmit)} method="post">
+        <form onSubmit={handleSubmit(onSubmit)} method="post" encType="multipart/form-data">
           <div className="p-6.5">
             <div className="mb-4.5 flex flex-col gap-6 md:flex-row">
               <div className="w-full xl:w-1/2">
@@ -92,7 +104,7 @@ const CourseDetailsForm = () => {
               <Input
                 register={register}
                 label="Course Thumbnail"
-                type="string"
+                type="image"
                 registerText="course_thumbnail"
               />
             </div>
