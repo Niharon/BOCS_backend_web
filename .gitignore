@@ -1,6 +1,6 @@
 #db config
 config/
-
+uploads/
 # Logs
 logs
 *.log

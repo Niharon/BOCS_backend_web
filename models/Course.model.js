@@ -5,7 +5,7 @@ const Lessons = require('./Lesson.model');
 const Quizes = require('./Quiz.model');
 
 
-const Courses = sequelize.define('Courses', {
+const Courses = sequelize.define('courses', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -45,7 +45,7 @@ const Courses = sequelize.define('Courses', {
     timestamps: true,
     createdAt: 'created_at',
     updatedAt: 'updated_at',
-    tableName: 'Courses'
+    tableName: 'courses'
 })
 
 // model associations with topic and lesson

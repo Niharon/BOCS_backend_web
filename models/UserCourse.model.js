@@ -3,7 +3,7 @@ const { sequelize } = require('../sequelize');
 
 
 
-const UserCourse = sequelize.define('UserCourse', {
+const UserCourse = sequelize.define('usercourse', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -49,7 +49,7 @@ const UserCourse = sequelize.define('UserCourse', {
     timestamps: true,
     createdAt: 'created_at',
     updatedAt: 'updated_at',
-    tableName: 'UserCourse'
+    tableName: 'usercourse'
 })
 
 module.exports = UserCourse;

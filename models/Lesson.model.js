@@ -1,7 +1,7 @@
 const { DataTypes} = require('sequelize');
 const { sequelize } = require('../sequelize');
 
-const Lessons = sequelize.define('Lessons', {
+const Lessons = sequelize.define('lessons', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -41,7 +41,7 @@ const Lessons = sequelize.define('Lessons', {
     timestamps: true,
     createdAt: 'created_at',
     updatedAt: 'updated_at',
-    tableName: 'Lessons'
+    tableName: 'lessons'
 })
 
 module.exports = Lessons;
