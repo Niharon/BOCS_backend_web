@@ -13,11 +13,14 @@ app.use(express.static('uploads'));
 
 // connect DB
 db.connectDb();
-db.syncDb()
+// db.syncDb()
 
 // routes
 app.get("/", (req, res) => {
-  res.send("Hello World");
+  res.json({
+    message: "Welcome to the e-learning platform",
+    application_mode: process.env.NODE_ENV,
+  });
 });
 
 app.use("/api", require("./routes"));
