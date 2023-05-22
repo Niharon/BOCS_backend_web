@@ -1,5 +1,6 @@
 {
   "name": "bocs-admin-client",
+  "homepage": "https://admin.bocsacademy.com",
   "private": true,
   "version": "0.0.0",
   "type": "module",

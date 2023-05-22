@@ -1,73 +1,115 @@
-const  UserCourse  = require("../models/UserCourse.model");
+const Courses = require("../models/Course.model");
+const CourseRequest = require("../models/CourseRequest.model");
+const Lessons = require("../models/Lesson.model");
+const Topics = require("../models/Topic.model");
 
-const createUserCourse = async (req, res) => {
+const getAllCourses = async (req, res,next) => {
   try {
-    const { course_id, user_id, progress, status, access, access_start, access_end } = req.body;
-    const userCourse = await UserCourse.create({ 
-      course_id,
-      user_id,
-      progress,
-      status,
-      access,
-      access_start,
-      access_end
+    const courses = await Courses.findAll({
+      
+        include: [
+          {
+            model: Topics,
+            as: "topics",
+            include: [{
+              model: Lessons,
+              as: "lessons",
+              attributes: ["id", "title"],
+            }],
+            attributes: ["id", "title"],
+          }
+        ],
+        order: [["created_at", "DESC"]],
+      
     });
-    res.status(201).json({ userCourse });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.json(courses);
+  } catch (err) {
+    next(err)
   }
 };
 
-const getUserCourse = async (req, res) => {
+const getCourseDetailsById = async (req, res,next) => {
   try {
-    const { id } = req.params;
-    const userCourse = await UserCourse.findByPk(id);
-    if (userCourse) {
-      res.status(200).json({ userCourse });
-    } else {
-      res.status(404).json({ error: 'UserCourse not found' });
-    }
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    const course = await Courses.findOne({
+      where: { id: req.params.id },
+      include: [
+        {
+          model: Topics,
+          as: "topics",
+          include: [{
+            model: Lessons,
+            as: "lessons",
+            attributes: ["id", "title"],
+          }],
+          attributes: ["id", "title"],
+        }
+      ],
+    });
+    res.json(course);
+  } catch (err) {
+    next(err)
   }
-};
+}
 
-const updateUserCourse = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { progress, status, access } = req.body;
-    const [updated] = await UserCourse.update(
-      { progress, status, access },
-      { where: { id: id } }
-    );
-    if (updated) {
-      const updatedUserCourse = await UserCourse.findByPk(id);
-      res.status(200).json({ message: "UserCourse Updated" });
-    } else {
-      res.status(404).json({ error: 'UserCourse not found' });
+
+const requestCourse = async (req, res, next) => {
+
+
+
+  try{
+
+    const {id} = req.params;
+    const user = req.user || null;
+    const {payment_amount,payment_method,sender_number,payment_id} = req.body;
+
+    // check if user already requested this course
+    const courseRequestExists = await CourseRequest.findOne({
+      where: {
+        user_id: user.id,
+        course_id: id
+      }
+    })
+
+    if(courseRequestExists){
+    
+      return next(new Error('You already requested this course'))
     }
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
 
-const deleteUserCourse = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const deleted = await UserCourse.destroy({ where: { id: id } });
-    if (deleted) {
-      res.status(204).send('UserCourse deleted');
-    } else {
-      res.status(404).json({ error: 'UserCourse not found' });
+
+    if(user){
+
+
+
+      const courseRequest = await CourseRequest.create({
+        user_id: user.id,
+        course_id: id,
+        status: 'pending',
+        payment_id: payment_id,
+        payment_status: 'pending',
+        payment_method: payment_method,
+        payment_amount: payment_amount,
+        sender_number: sender_number
+
+      })
+
+      res.json({
+        success: true,
+        message: "Course request created successfully",
+        courseRequest,
+      });
     }
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+    else{
+      next(new Error('User not found'))
+    }
 
+
+  }catch(err){
+    next(err)
+  }
+
+}
 module.exports = {
-  createUserCourse,
-  getUserCourse,
-  updateUserCourse,
-  deleteUserCourse
+  getAllCourses,
+  getCourseDetailsById,
+  requestCourse
 };

@@ -30,7 +30,10 @@ const User = sequelize.define('users', {
     },
     deviceId:{
         type: DataTypes.STRING,
-        unique: true,
+        unique: {
+            args: true,
+            msg: 'This device is already registered with another account'
+        },
         allowNull: false
     },
     birthday:{

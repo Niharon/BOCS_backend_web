@@ -1,7 +1,7 @@
 #db config
 
 uploads/
-
+dist/
 # Logs
 logs
 *.log

@@ -1,8 +1,9 @@
 import axios from "axios";
 
+const apiURL = import.meta.env.VITE_BACKEND_URL + "api/admin/";
 // create a axios instance
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:9000/api/admin/',
+    baseURL: apiURL,
   
    
 });

@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const ErrorHandler = require("./middlewares/ErrorHandler");
 const db = require("./config/db");
-
+require("dotenv").config();
 const app = express();
 
 // middlewares
@@ -13,7 +13,7 @@ app.use(express.static('uploads'));
 
 // connect DB
 db.connectDb();
-// db.syncDb()
+db.syncDb()
 
 // routes
 app.get("/", (req, res) => {

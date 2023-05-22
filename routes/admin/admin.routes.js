@@ -70,10 +70,10 @@ router.patch('/course-request/:id', courseRequestController.updateCourseRequest)
 
 
 // UserCourse
-router.post('/user-course/create', userCourseController.createUserCourse);
-router.get('/user-course/:id', userCourseController.getUserCourse);
-router.patch('/user-course/:id', userCourseController.updateUserCourse);
-router.delete('/user-course/:id', userCourseController.deleteUserCourse);
+// router.post('/user-course/create', userCourseController.createUserCourse);
+// router.get('/user-course/:id', userCourseController.getUserCourse);
+// router.patch('/user-course/:id', userCourseController.updateUserCourse);
+// router.delete('/user-course/:id', userCourseController.deleteUserCourse);
 
 
 module.exports = router;

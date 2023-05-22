@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import AllCourses from "./pages/Courses/AllCourses";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import AddNewCourse from "./pages/Courses/AddNewCourse";
 import EditCourse from "./pages/Courses/EditCourse";
@@ -10,14 +10,22 @@ import CourseRequestEdit from "./pages/CourseRequest/CourseRequestEdit";
 import Users from "./pages/users/Users";
 import NotFoundPage from "./pages/NotFoundPage";
 import AddQuizes from "./pages/Courses/AddQuizes";
+import Login from "./pages/Login/Login";
 
 export const CourseContext = createContext(null);
+export const UserContext = createContext(null);
 
 function App() {
   const [courseContext, setcourseContext] = useState({
     courses: [],
     currentCourse: null,
   });
+
+  const [userContext, setuserContext] = useState({
+    user:null,
+    token:null,
+    role:null
+  })
 
   const queryClient = new QueryClient();
 
@@ -42,7 +50,10 @@ function App() {
     <CourseContext.Provider value={{ courseContext, setcourseContext }}>
       <QueryClientProvider client={queryClient}>
         <Routes>
-          <Route path="/" element={<Dashboard />} />
+
+
+          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/login" element={<Login />} />
 
           {/* <Route path="/dashboard" element={<Analytics />} /> */}
           <Route path="/courses" element={<AllCourses />} />

@@ -15,7 +15,7 @@ exports.createUser = async (req, res,next) => {
         
     const user = await User.create({ email, password: hashedPass, deviceId });
         
-    const token = jwt.sign({ id: user.id }, secretKey, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user.id,role:user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
         
     res.status(201).json({ message: 'User created successfully', token: token });
   } catch (error) {
@@ -24,7 +24,7 @@ exports.createUser = async (req, res,next) => {
 };
 
 
-exports.login = async (req, res) => {
+exports.login = async (req, res,next) => {
     try {
       const { email, password, deviceId } = req.body;
   
@@ -42,15 +42,16 @@ exports.login = async (req, res) => {
       if (!isPasswordValid) {
         throw new Error('Invalid Credentials');
       }
-  
+      
+      // console.log(process.env.JWT_SECRET)
       let token;
       if (req.headers.authorization) {
         token = req.headers.authorization.split(' ')[1];
       } else {
-        token = jwt.sign({ id: user.id }, secretKey, { expiresIn: '1h' });
+        token = jwt.sign({ id: user.id,role:user.role }, process.env.JWT_SECRET, { expiresIn: '1m' });
       }
   
-      const decoded = jwt.verify(token, secretKey);
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
   
       if (decoded.id !== user.id) {
         throw new Error('Invalid token');
@@ -58,7 +59,7 @@ exports.login = async (req, res) => {
   
       res.status(200).json({ message: 'Login successful', token: token });
     } catch (error) {
-      res.status(400).json({ message: 'Login failed', error: error?.message });
+      next(error);
     }
   };
   

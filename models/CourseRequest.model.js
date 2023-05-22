@@ -28,6 +28,10 @@ const CourseRequest = sequelize.define('courserequest', {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    sender_number:{
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
     payment_status:{
         type: DataTypes.ENUM,
         values: ['pending', 'completed'],
