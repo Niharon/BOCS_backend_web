@@ -1,13 +1,16 @@
-import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useContext, useEffect, useRef, useState } from 'react';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 import UserOne from '../images/user/user-01.png';
+import { UserContext } from '../App';
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
+  const navigate = useNavigate();
   const trigger = useRef(null);
   const dropdown = useRef(null);
+
+  const {userContext,setuserContext} = useContext(UserContext)
 
   // close on click outside
   useEffect(() => {
@@ -25,6 +28,18 @@ const DropdownUser = () => {
     return () => document.removeEventListener('click', clickHandler);
   });
 
+
+  const signOut = ()=>{
+    console.log("clicked")
+    setuserContext({
+      ...userContext,
+      user: null,
+      token:null
+    })
+    localStorage.removeItem("token");
+
+    navigate("/login")
+  }
   // close if the esc key is pressed
   useEffect(() => {
     const keyHandler = ({ keyCode }) => {
@@ -155,7 +170,7 @@ const DropdownUser = () => {
             </Link>
           </li>
         </ul>
-        <button className="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+        <button onClick={signOut} className="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
           <svg
             className="fill-current"
             width="22"

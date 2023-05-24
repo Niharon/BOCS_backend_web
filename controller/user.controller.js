@@ -4,7 +4,6 @@ const jwt = require("jsonwebtoken");
 const crypto = require('crypto');
 
 // Generate a random 256-bit (32-byte) secret key
-const secretKey = crypto.randomBytes(32).toString('hex');
 
 exports.createUser = async (req, res,next) => {
   try {
@@ -15,9 +14,10 @@ exports.createUser = async (req, res,next) => {
         
     const user = await User.create({ email, password: hashedPass, deviceId });
         
-    const token = jwt.sign({ id: user.id,role:user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user.id,role:user.role }, process.env.JWT_SECRET, { expiresIn: '1d' });
         
-    res.status(201).json({ message: 'User created successfully', token: token });
+    res.status(201).json({ message: 'User created successfully', token: token, role:"user" });
+
   } catch (error) {
     res.status(400).json(error);
   }
@@ -44,20 +44,10 @@ exports.login = async (req, res,next) => {
       }
       
       // console.log(process.env.JWT_SECRET)
-      let token;
-      if (req.headers.authorization) {
-        token = req.headers.authorization.split(' ')[1];
-      } else {
-        token = jwt.sign({ id: user.id,role:user.role }, process.env.JWT_SECRET, { expiresIn: '1m' });
-      }
+      
+      const token = jwt.sign({ id: user.id,role:user.role }, process.env.JWT_SECRET, { expiresIn: '1d' });
   
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-  
-      if (decoded.id !== user.id) {
-        throw new Error('Invalid token');
-      }
-  
-      res.status(200).json({ message: 'Login successful', token: token });
+      res.status(200).json({ message: 'Login successful', token: token, role: user.role });
     } catch (error) {
       next(error);
     }

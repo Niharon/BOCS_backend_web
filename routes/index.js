@@ -8,12 +8,20 @@ router.use("/user", require("./user.routes"));
 
 router.use("/courses", require("./course.routes"));
 
+
 router.get("/", (req, res) => {
-    res.send("Hello World");
+
+    res.json({
+        routes:
+        router.stack.map((r) => {
+            console.log("gi")
+            if (r.route && r.route.path) {
+                return r;
+            }
+        })
+    })
+    
 });
-
-
-
 
 
 module.exports = router;

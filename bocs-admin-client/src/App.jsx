@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 import AllCourses from "./pages/Courses/AllCourses";
 import { Route, Routes, Navigate } from "react-router-dom";
 import Dashboard from "./pages/Dashboard/Dashboard";
@@ -22,10 +22,12 @@ function App() {
   });
 
   const [userContext, setuserContext] = useState({
-    user:null,
-    token:null,
+
+    token:localStorage.getItem("token") ? localStorage.getItem("token") : null,
     role:null
   })
+
+
 
   const queryClient = new QueryClient();
 
@@ -44,10 +46,12 @@ function App() {
     setTimeout(() => setLoading(false), 1000);
   }, []);
 
+
   return loading ? (
     <p className=" text-center text-danger">Failed to lead app</p>
   ) : (
     <CourseContext.Provider value={{ courseContext, setcourseContext }}>
+    <UserContext.Provider value={{ userContext, setuserContext }}>
       <QueryClientProvider client={queryClient}>
         <Routes>
 
@@ -71,6 +75,7 @@ function App() {
           <Route path="*" element={<NotFoundPage/>}/>
         </Routes>
       </QueryClientProvider>
+    </UserContext.Provider>
     </CourseContext.Provider>
   );
 }

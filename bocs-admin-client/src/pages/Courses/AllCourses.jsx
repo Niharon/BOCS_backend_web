@@ -11,7 +11,6 @@ import LoadingScreen from "../../components/LoadingScreen";
 
 const AllCourses = () => {
 
-  const queryClient = useQueryClient();
 
   const { data, isLoading, isSuccess, isError,refetch } = useQuery({
     queryKey: ["courses"],

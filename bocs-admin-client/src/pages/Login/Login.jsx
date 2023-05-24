@@ -1,11 +1,14 @@
 import { useMutation } from "@tanstack/react-query";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { loginApi } from "../../api/loginApi";
 import LoadingButton from "../../components/LoadingButton";
+import { UserContext } from "../../App";
 
 const Login = () => {
+
+  const {userContext, setuserContext} = useContext(UserContext);
   const {
     register,
     formState: { isSubmitted, errors },
@@ -15,7 +18,20 @@ const Login = () => {
   const { mutate, data, isLoading, isSuccess } = useMutation({
     mutationFn: loginApi,
     onSuccess: (data) => {
-      console.log(data);
+      if(data.data.role === "admin"){
+
+        const {token} = data.data;
+        localStorage.setItem("token",token);
+        setuserContext({
+          ...userContext,
+         
+          token: token,
+          
+        });
+  
+
+      }
+    
       
     },
     onError: (error) => {
@@ -27,6 +43,11 @@ const Login = () => {
     console.log({...data,"deviceId":"adminDevice"});
     mutate({...data,"deviceId":"adminDevice"});
   };
+  console.log(userContext.token)
+  
+  if(userContext.token){
+      return <Navigate to="/dashboard" />
+    }
 
   
 

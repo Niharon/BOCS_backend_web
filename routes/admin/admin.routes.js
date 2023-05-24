@@ -9,13 +9,18 @@ const topicsController = require("../../controller/admin/topic.controller");
 const userCourseController = require('../../controller/userCourse.controller');
 const quizController = require("../../controller/admin/quiz.controller");
 const multer = require("multer");
+const verifyPrevToken = require("../../middlewares/verifyPrevToken");
 
 
 const router = express.Router();
 // multer
+
+// upload dir to public_html of cpanel in multer using path module
+
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, "uploads/courses/thumbnail");
+      cb(null, "/public_html/uploads/courses/thumbnail");
     },
     filename: function (req, file, cb) {
     
@@ -35,6 +40,12 @@ const storage = multer.diskStorage({
     },
   });
 const upload = multer({ storage: storage })
+
+
+// verifytoken
+
+router.post("/verifyToken",verifyPrevToken)
+
 //course
 router.get("/courses", courseController.getAllCourse);
 router.get("/course/:id", courseController.getCourseDetailsByID);
