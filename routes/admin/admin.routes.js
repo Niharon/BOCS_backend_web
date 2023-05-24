@@ -14,13 +14,9 @@ const verifyPrevToken = require("../../middlewares/verifyPrevToken");
 
 const router = express.Router();
 // multer
-
-// upload dir to public_html of cpanel in multer using path module
-
-
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, "/public_html/uploads/courses/thumbnail");
+      cb(null, "uploads/courses/thumbnail");
     },
     filename: function (req, file, cb) {
     

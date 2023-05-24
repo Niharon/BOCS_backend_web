@@ -68,7 +68,7 @@ const CourseDetailsEditForm = ({refetch}) => {
           if(key === "course_thumbnail"){
             formdata.append(key,modifiedData[key][0]);
           }else{
-          formdata.append(key,modifiedData[key]);
+            formdata.append(key,modifiedData[key]);
           }
       }
       mutate({id:currentCourse.id,data:formdata});

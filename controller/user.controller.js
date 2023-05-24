@@ -7,12 +7,12 @@ const crypto = require('crypto');
 
 exports.createUser = async (req, res,next) => {
   try {
-    const { email, deviceId, password } = req.body;
+    const { email, deviceId, password,name } = req.body;
 
     const salt = await bcrypt.genSalt(10);
     const hashedPass = await bcrypt.hash(password, salt);
         
-    const user = await User.create({ email, password: hashedPass, deviceId });
+    const user = await User.create({ email, password: hashedPass, deviceId,name });
         
     const token = jwt.sign({ id: user.id,role:user.role }, process.env.JWT_SECRET, { expiresIn: '1d' });
         

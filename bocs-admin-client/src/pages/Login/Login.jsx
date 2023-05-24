@@ -1,10 +1,11 @@
 import { useMutation } from "@tanstack/react-query";
 import React, { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { loginApi } from "../../api/loginApi";
 import LoadingButton from "../../components/LoadingButton";
 import { UserContext } from "../../App";
+import { toast } from "react-hot-toast";
 
 const Login = () => {
 
@@ -14,42 +15,34 @@ const Login = () => {
     formState: { isSubmitted, errors },
     handleSubmit,
   } = useForm();
+  const navigate = useNavigate();
 
   const { mutate, data, isLoading, isSuccess } = useMutation({
     mutationFn: loginApi,
     onSuccess: (data) => {
-      if(data.data.role === "admin"){
-
-        const {token} = data.data;
-        localStorage.setItem("token",token);
-        setuserContext({
-          ...userContext,
-         
-          token: token,
-          
-        });
-  
-
-      }
-    
+      const {token,role} = data.data;
+      
       
     },
     onError: (error) => {
-      console.log(error.message);
+      // console.log(error);
+      toast.error(error?.response?.data?.message);
     },
   });
 
   const onSubmit = (data) => {
-    console.log({...data,"deviceId":"adminDevice"});
+    // console.log({...data,"deviceId":"adminDevice"});
     mutate({...data,"deviceId":"adminDevice"});
   };
-  console.log(userContext.token)
+  // console.log(userContext.token)
   
-  if(userContext.token){
-      return <Navigate to="/dashboard" />
+  useEffect(()=>{
+    if(isSuccess){
+      localStorage.setItem("token",data.data.token);
+      setuserContext({...userContext,token:data.data.token,role:data.data.role});
+      navigate("/dashboard");
     }
-
-  
+  },[userContext.token,isSuccess,data])
 
   return (
     <div className=" rounded-sm border h-full border-stroke  py-5 ">
