@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 import AllCourses from "./pages/Courses/AllCourses";
 import { Route, Routes, Navigate } from "react-router-dom";
@@ -11,22 +11,10 @@ import Users from "./pages/users/Users";
 import NotFoundPage from "./pages/NotFoundPage";
 import AddQuizes from "./pages/Courses/AddQuizes";
 import Login from "./pages/Login/Login";
+import RequireAuth from "./auth/RequireAuth";
 
-export const CourseContext = createContext(null);
-export const UserContext = createContext(null);
 
 function App() {
-  const [courseContext, setcourseContext] = useState({
-    courses: [],
-    currentCourse: null,
-  });
-
-  const [userContext, setuserContext] = useState({
-
-    token:localStorage.getItem("token") ? localStorage.getItem("token") : null,
-    role:null
-  })
-
 
 
   const queryClient = new QueryClient();
@@ -43,23 +31,26 @@ function App() {
   }
 
   useEffect(() => {
-    setTimeout(() => setLoading(false), 1000);
+    setTimeout(() => setLoading(false), 500);
   }, []);
 
 
   return loading ? (
     <p className=" text-center text-danger">Failed to lead app</p>
   ) : (
-    <CourseContext.Provider value={{ courseContext, setcourseContext }}>
-    <UserContext.Provider value={{ userContext, setuserContext }}>
-      <QueryClientProvider client={queryClient}>
-        <Routes>
+
+    <QueryClientProvider client={queryClient}>
+      <Routes>
 
 
-          <Route path="/" element={<Navigate to="/login" />} />
-          <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/login" element={<Login />} />
 
-          {/* <Route path="/dashboard" element={<Analytics />} /> */}
+
+        <Route element={<RequireAuth />}>
+
+
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/courses" element={<AllCourses />} />
           <Route path="/courses/all" element={<AllCourses />} />
           <Route path="/courses/add" element={<AddNewCourse />} />
@@ -67,16 +58,18 @@ function App() {
 
           {/* Quiz route */}
 
-          <Route path="/courses/edit/:id/lesson/:lessonid" element={<AddQuizes/>}/>
+          <Route path="/courses/edit/:id/lesson/:lessonid" element={<AddQuizes />} />
 
           <Route path="/course-request" element={<CourseRequest />} />
           <Route path="/course-request/edit/:id" element={<CourseRequestEdit />} />
           <Route path="/users" element={<Users />} />
-          <Route path="*" element={<NotFoundPage/>}/>
-        </Routes>
-      </QueryClientProvider>
-    </UserContext.Provider>
-    </CourseContext.Provider>
+
+        </Route>
+        {/* catch all routes */}
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </QueryClientProvider>
+
   );
 }
 

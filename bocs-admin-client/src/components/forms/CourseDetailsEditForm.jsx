@@ -2,18 +2,18 @@ import { useForm } from "react-hook-form";
 import Input from "../../components/Input";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
-import { useContext, useEffect } from "react";
+import {  useEffect } from "react";
 import LoadingButton from "../LoadingButton";
-import { CourseContext } from "../../App";
 import { getCourseById, postCourse, updateCourseApi } from "../../api/courseApi";
 import { dirtyValues } from "../../utils/dirtyFields";
 import { toast } from "react-hot-toast";
+import useCourses from "../../hooks/useCourse";
 
 const CourseDetailsEditForm = ({refetch}) => {
 
 
 
-  const { courseContext, setcourseContext } = useContext(CourseContext);
+  const { courseContext, setcourseContext } = useCourses();
   const { currentCourse } = courseContext;
   const {
     register,
@@ -139,7 +139,7 @@ const CourseDetailsEditForm = ({refetch}) => {
             <div className="mb-6 md:flex gap-5">
               {
                 currentCourse?.course_thumbnail && 
-                <img src={!currentCourse?.course_thumbnail ? currentCourse?.course_thumbnail : "https://via.placeholder.com/200x200"} alt="course thumbnail" className="w-1/8 h-1/8" />
+                <img src={currentCourse?.course_thumbnail ? import.meta.env.VITE_COURSE_THUMBNAIL + currentCourse.course_thumbnail : "https://via.placeholder.com/200x200"} alt="course thumbnail" className="w-20 h-20" />
               }
               <Input
               value={currentCourse?.course_thumbnail}

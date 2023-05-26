@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-const verifyTokenAndUser = async (req, res, next) => {
+const verifyAdmin = async (req, res, next) => {
 
     const token = req.headers.authorization?.split(" ")[1];
     // console.log(token);
@@ -14,6 +14,12 @@ const verifyTokenAndUser = async (req, res, next) => {
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         // console.log(decoded);
+        if(decoded.role !== "admin"){
+            return res.status(401).json({
+                success: false,
+                message: "You are not authorized to access this route",
+            });
+        }
         req.user = decoded;
         next();
 
@@ -31,4 +37,4 @@ const verifyTokenAndUser = async (req, res, next) => {
 
 }
 
-module.exports = verifyTokenAndUser;
+module.exports = verifyAdmin;

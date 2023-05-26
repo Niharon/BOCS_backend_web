@@ -69,7 +69,9 @@ const courseController = {
     
     try {
       const course = await Courses.create({
-        ...req.body,course_thumbnail:req.file.path
+
+        ...req.body,course_thumbnail:req.file.fileName
+
       });
       res.status(201).json({ message: "Course created successfully", course });
     } catch (error) {
@@ -98,7 +100,7 @@ const courseController = {
       }
 
       if(req.file){
-        req.body.course_thumbnail = req.file.path;
+        req.body.course_thumbnail = req.file.fileName;
       }
       await course.update(req.body);
 

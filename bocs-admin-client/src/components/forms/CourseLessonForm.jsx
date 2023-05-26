@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import LessonAccordion from "./LessonAccordion";
 import { Box } from "@mui/material";
-import { CourseContext } from "../../App";
+import useCourses from "../../hooks/useCourse";
 
 const CourseLessonForm = ({ refetch }) => {
-  const { courseContext, setcourseContext } = useContext(CourseContext);
+  const { courseContext, setcourseContext } = useCourses();
   const { currentCourse } = courseContext;
 
   const [allLessons, setAllLessons] = useState([]);

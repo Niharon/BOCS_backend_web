@@ -1,26 +1,35 @@
 import { useMutation } from "@tanstack/react-query";
 import React, { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { loginApi } from "../../api/loginApi";
 import LoadingButton from "../../components/LoadingButton";
-import { UserContext } from "../../App";
 import { toast } from "react-hot-toast";
+import useAuth from "../../hooks/useAuth";
 
 const Login = () => {
 
-  const {userContext, setuserContext} = useContext(UserContext);
+  const {auth,setAuth} = useAuth();
+  // console.log(auth)
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from.pathname || "/dashboard";
+
   const {
     register,
     formState: { isSubmitted, errors },
     handleSubmit,
   } = useForm();
-  const navigate = useNavigate();
 
   const { mutate, data, isLoading, isSuccess } = useMutation({
     mutationFn: loginApi,
     onSuccess: (data) => {
       const {token,role} = data.data;
+      console.log(data.data)
+      localStorage.setItem("token",token);
+      localStorage.setItem("role",role);
+      setAuth({...auth,token:token,role:role});
+      navigate(from,{replace:true});
       
       
     },
@@ -36,14 +45,13 @@ const Login = () => {
   };
   // console.log(userContext.token)
   
-  useEffect(()=>{
-    if(isSuccess){
-      localStorage.setItem("token",data.data.token);
-      setuserContext({...userContext,token:data.data.token,role:data.data.role});
-      navigate("/dashboard");
-    }
-  },[userContext.token,isSuccess,data])
+  
 
+  useEffect(()=>{
+    if(auth.token){
+      navigate("/courses");
+    }
+  },[auth])
   return (
     <div className=" rounded-sm border h-full border-stroke  py-5 ">
       <div className="flex items-center justify-center">

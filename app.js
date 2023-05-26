@@ -2,17 +2,15 @@ const express = require("express");
 const cors = require("cors");
 const ErrorHandler = require("./middlewares/ErrorHandler");
 const db = require("./config/db");
-const verifyTokenAndUser = require("./middlewares/verifyTokenAndUser");
+const verifyAdmin = require("./middlewares/verifyTokenAndUser");
 require("dotenv").config();
 const app = express();
-
-const router = express.Router();
-
+const path = require('path');
 // middlewares
+
 app.use(express.json());
 app.use(cors());
-
-app.use(express.static('uploads'));
+app.use('/public',express.static(path.join(__dirname,'uploads')));
 
 // connect DB
 db.connectDb();
@@ -27,10 +25,20 @@ app.get("/", (req, res) => {
 
   });
 });
+app.get("/test", (req, res) => {
+ 
+  console.log(path.join(__dirname,"..", 'uploads/courses/thumbnail'))
+  res.json({
+    message: "Welcome to the e-learning platform",
+    application_mode: process.env.NODE_ENV,
+
+
+  });
+});
 
 app.use("/api", require("./routes"));
 
-app.use("/api/admin",verifyTokenAndUser, require("./routes/admin/admin.routes"));
+app.use("/api/admin",verifyAdmin, require("./routes/admin/admin.routes"));
 
 // global error handler
 app.use(ErrorHandler);

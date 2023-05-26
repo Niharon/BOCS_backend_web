@@ -1,9 +1,7 @@
-import { ReactNode, useContext, useState } from 'react';
+import { useState } from 'react';
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
-import { Toaster } from 'react-hot-toast';
-import { UserContext } from '../App';
-import { Navigate } from 'react-router-dom';
+
 
 
 
@@ -12,13 +10,12 @@ const DefaultLayout = ({ children }) => {
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const {userContext} = useContext(UserContext)
 
-  if(!userContext.token){
+  // if(!userContext.token){
     
-      return <Navigate to="/login" />
-  }
-  else{
+  //     return <Navigate to="/login" />
+  // }
+  // else{
   
   return (
     <div className="dark:bg-boxdark-2 dark:text-bodydark">
@@ -48,7 +45,7 @@ const DefaultLayout = ({ children }) => {
       {/* <!-- ===== Page Wrapper End ===== --> */}
     </div>
   );
-  }
+
 };
 
 export default DefaultLayout;

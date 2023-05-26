@@ -11,15 +11,10 @@ router.use("/courses", require("./course.routes"));
 
 router.get("/", (req, res) => {
 
-    res.json({
-        routes:
-        router.stack.map((r) => {
-            console.log("gi")
-            if (r.route && r.route.path) {
-                return r;
-            }
-        })
-    })
+   res.json({
+         message: "hello from api root",
+            application_mode: process.env.NODE_ENV,
+   })
     
 });
 

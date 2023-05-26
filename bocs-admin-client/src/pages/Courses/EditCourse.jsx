@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import DefaultLayout from "../../layout/DefaultLayout";
 import Breadcrumb from "../../components/Breadcrumb";
 import TabLayout from "../../layout/TabLayout";
@@ -7,9 +7,9 @@ import {  useQuery } from "@tanstack/react-query";
 import CourseDetailsEditForm from "../../components/forms/CourseDetailsEditForm";
 import { useParams } from "react-router-dom";
 import LoadingScreen from "../../components/LoadingScreen";
-import { CourseContext } from "../../App";
 import CourseTopicForm from "../../components/forms/CourseTopicForm";
 import CourseLessonForm from "../../components/forms/CourseLessonForm";
+import useCourses from "../../hooks/useCourse";
 
   
 
@@ -18,7 +18,7 @@ const EditCourse = () => {
   const { id } = useParams();
 
     // const use courseContext and setcourseContext from App.jsx
-    const { courseContext, setcourseContext } = useContext(CourseContext);
+    const { courseContext, setcourseContext } = useCourses();
     // console.log(courseContext)
   const { data, isLoading, isSuccess, isError,refetch } = useQuery(
     ["currentCourse", id],

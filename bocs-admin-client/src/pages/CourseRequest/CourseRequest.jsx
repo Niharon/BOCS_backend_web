@@ -1,11 +1,8 @@
-import React, { useContext, useEffect } from "react";
+import React from "react";
 import DefaultLayout from "../../layout/DefaultLayout";
 import Breadcrumb from "../../components/Breadcrumb";
 import { Link } from "react-router-dom";
 import { FaEdit } from 'react-icons/fa';
-import { getAllRequest, updateRequestById } from "../../api/courseRequest";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CourseContext } from "../../App";
 
 const CourseRequest = () => {
 

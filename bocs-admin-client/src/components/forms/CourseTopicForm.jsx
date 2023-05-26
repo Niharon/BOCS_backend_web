@@ -1,11 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { CourseContext } from "../../App";
 import {
   useMutation,
-  useQueries,
-  useQuery,
-  useQueryClient,
 } from "@tanstack/react-query";
 import {
   deleteTopicById,
@@ -13,15 +9,15 @@ import {
   updateTopicApi,
 } from "../../api/topicApi";
 import { FaTrash } from "react-icons/fa";
-import { deleteCourseById } from "../../api/courseApi";
 import { toast } from "react-hot-toast";
 import LoadingButton from "../LoadingButton";
+import useCourses from "../../hooks/useCourse";
 
 const CourseTopicForm = ({ refetch }) => {
   const { id } = useParams();
   const [allTopics, setallTopics] = useState([]);
 
-  const { courseContext, setcourseContext } = useContext(CourseContext);
+  const { courseContext, setcourseContext } = useCourses();
   const { topics } = courseContext.currentCourse;
 
   // console.log(topics)

@@ -1,11 +1,15 @@
 import React from 'react'
+import DefaultLayout from '../../layout/DefaultLayout'
 
 const Dashboard = () => {
   return (
-    <div>Dashboard
+    <DefaultLayout>
+
+      <div>Dashboard
 
         <h1 className="text-meta-1">hi</h1>
-    </div>
+      </div>
+    </DefaultLayout>
   )
 }
 

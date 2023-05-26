@@ -1,6 +1,8 @@
 import axiosInstance from "../axiosInstance/axiosInstance"
 
 export const getAllCourses = async () => {
+
+
     const response = await axiosInstance.get("/courses");
     return response;
 }

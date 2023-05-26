@@ -2,15 +2,14 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 import UserOne from '../images/user/user-01.png';
-import { UserContext } from '../App';
+import useAuth from '../hooks/useAuth';
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
   const trigger = useRef(null);
   const dropdown = useRef(null);
-
-  const {userContext,setuserContext} = useContext(UserContext)
+  const {setAuth} = useAuth();
 
   // close on click outside
   useEffect(() => {
@@ -31,8 +30,8 @@ const DropdownUser = () => {
 
   const signOut = ()=>{
     console.log("clicked")
-    setuserContext({
-      ...userContext,
+    setAuth({
+    
       user: null,
       token:null
     })

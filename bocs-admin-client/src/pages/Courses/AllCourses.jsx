@@ -1,13 +1,14 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import DefaultLayout from "../../layout/DefaultLayout";
 import Breadcrumb from "../../components/Breadcrumb";
 import { Link } from "react-router-dom";
 import { FaEdit } from 'react-icons/fa';
 import ProductTwo from '../../images/product/product-02.png';
 import { deleteCourseById, getAllCourses } from "../../api/courseApi";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CourseContext } from "../../App";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import LoadingScreen from "../../components/LoadingScreen";
+import useCourses from "../../hooks/useCourse";
+import { toast } from "react-hot-toast";
 
 const AllCourses = () => {
 
@@ -17,17 +18,22 @@ const AllCourses = () => {
     queryFn: getAllCourses,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
+    onError: (error) => {
+      console.log(error);
+    }
   });
 
   const deleteQuery = useMutation((id) => deleteCourseById(id), {
     onSuccess: () => {
       console.log("deleted")
+
       refetch();
+      toast.success("Course deleted successfully");
     },  
   });
 
 
-  const {courseContext, setcourseContext} = useContext(CourseContext);
+  const {courseContext, setcourseContext} = useCourses();
   const {courses} = courseContext;
 
   useEffect(() => {
@@ -101,7 +107,7 @@ const AllCourses = () => {
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark xl:pl-5">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                       <div className="h-12.5 w-15 rounded-md">
-                        <img src={course.course_thumbnail ? import.meta.env.VITE_UPLOAD_URL + course.course_thumbnail : "https://via.placeholder.com/200x200"} alt="Product" />
+                        <img src={course.course_thumbnail ? import.meta.env.VITE_COURSE_THUMBNAIL + course.course_thumbnail : "https://via.placeholder.com/200x200"} alt="Product" />
                       </div>
                       <p className="text-sm text-black dark:text-white">
                         {course?.id} - {course?.title}
