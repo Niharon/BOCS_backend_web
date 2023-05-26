@@ -17,7 +17,7 @@ let uploadLocation;
 if(process.env.NODE_ENV === 'development'){
   uploadLocation = 'uploads/courses/thumbnail'
 }else{
-  uploadLocation = path.join(__dirname,'..','..','..','public_html','uploads/course/thumbnail')
+  uploadLocation = path.join(__dirname,'..','..','..','public_html','uploads/courses/thumbnail')
 
 }
 
