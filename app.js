@@ -22,7 +22,7 @@ if(process.env.NODE_ENV === 'development'){
 
 // connect DB
 db.connectDb();
-db.syncDb()
+// db.syncDb()
 
 // routes
 app.get("/", (req, res) => {
