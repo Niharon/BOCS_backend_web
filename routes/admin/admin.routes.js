@@ -12,12 +12,19 @@ const multer = require("multer");
 const verifyPrevToken = require("../../middlewares/verifyPrevToken");
 
 
+let uploadLocation;
+
+if(process.env.NODE_ENV === 'development'){
+  uploadLocation = 'uploads/courses/thumbnail'
+}else{
+  uploadLocation = path.join(__dirname,'..','..','..','public_html','uploads/course/thumbnail')
+
+}
+
 const router = express.Router();
 // multer
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, "uploads/courses/thumbnail");
-    },
+    destination: uploadLocation,
     filename: function (req, file, cb) {
     
         const extension = path.extname(file.originalname);

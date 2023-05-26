@@ -11,6 +11,7 @@ const path = require('path');
 app.use(express.json());
 app.use(cors());
 
+
 if(process.env.NODE_ENV === 'development'){
 
   app.use('/public',express.static(path.join(__dirname,'uploads')));
