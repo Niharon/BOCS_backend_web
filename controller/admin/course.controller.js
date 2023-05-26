@@ -70,7 +70,7 @@ const courseController = {
     try {
       const course = await Courses.create({
 
-        ...req.body,course_thumbnail:req.file.fileName
+        ...req.body,course_thumbnail:req.file.filename
 
       });
       res.status(201).json({ message: "Course created successfully", course });
@@ -84,14 +84,7 @@ const courseController = {
     // console.log(req.file.path)
     const { id } = req.params;
     try {
-      // const [course] = await Courses.update(
-      //   { ...req.body },
-      //   {
-      //     where: {
-      //       id,
-      //     },
-      //   }
-      // );
+  
       const course = await Courses.findByPk(id);
 
       // If the course doesn't exist, return a 404 response
@@ -100,7 +93,7 @@ const courseController = {
       }
 
       if(req.file){
-        req.body.course_thumbnail = req.file.fileName;
+        req.body.course_thumbnail = req.file.filename;
       }
       await course.update(req.body);
 

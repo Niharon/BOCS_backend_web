@@ -31,7 +31,7 @@ const storage = multer.diskStorage({
 
 
 
-      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e7);
       cb(null, sluggedName + "-" + uniqueSuffix+extension);
     },
   });

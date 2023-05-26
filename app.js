@@ -10,7 +10,14 @@ const path = require('path');
 
 app.use(express.json());
 app.use(cors());
-app.use('/public',express.static(path.join(__dirname,'uploads')));
+
+if(process.env.NODE_ENV === 'development'){
+
+  app.use('/public',express.static(path.join(__dirname,'uploads')));
+}else{
+
+  app.use('/public',express.static(path.join(__dirname,"..",'public_html/uploads')));
+}
 
 // connect DB
 db.connectDb();

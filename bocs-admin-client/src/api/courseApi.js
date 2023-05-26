@@ -26,6 +26,10 @@ export const postCourse = async (data) => {
 }
 
 export const updateCourseApi = async ({id, data}) => {
-    const res = await axiosInstance.patch(`/course/${id}`, data);
+    const res = await axiosInstance.patch(`/course/${id}`, data,{
+        headers: {
+            "Content-Type":"multipart/form-data"
+        }
+    });
     return res;
 }
