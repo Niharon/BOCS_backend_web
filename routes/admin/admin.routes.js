@@ -8,53 +8,20 @@ const courseRequestController = require("../../controller/admin/courseRequestCon
 const topicsController = require("../../controller/admin/topic.controller");
 const userCourseController = require('../../controller/userCourse.controller');
 const quizController = require("../../controller/admin/quiz.controller");
-const multer = require("multer");
 const verifyPrevToken = require("../../middlewares/verifyPrevToken");
 const instructorController = require("../../controller/admin/instructor.controller");
-
-
-let uploadLocation;
-
-if(process.env.NODE_ENV === 'development'){
-  uploadLocation = 'uploads/courses/thumbnail'
-}else{
-  uploadLocation = path.join(__dirname,'..','..','..','public_html','uploads/courses/thumbnail')
-
-}
-
-const router = express.Router();
-// multer
-const storage = multer.diskStorage({
-    destination: uploadLocation,
-    filename: function (req, file, cb) {
-    
-        const extension = path.extname(file.originalname);
-        
-        // slugify the name
-        let sluggedName = "course-thumbnail";
-        if(req.body.title){
-
-            sluggedName = req.body.title.split(" ").join("-").toLowerCase();
-        }
-
-
-
-      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e7);
-      cb(null, sluggedName + "-" + uniqueSuffix+extension);
-    },
-  });
-const upload = multer({ storage: storage })
-
+const { courseThumbnailUpload, instructorPhotoUpload } = require("../../middlewares/multerConfig");
 
 // verifytoken
+const router = express.Router();
 
 router.post("/verifyToken",verifyPrevToken)
 
 //course
 router.get("/courses", courseController.getAllCourse);
 router.get("/course/:id", courseController.getCourseDetailsByID);
-router.post("/course",upload.single('course_thumbnail'), courseController.create);
-router.patch("/course/:id",upload.single('course_thumbnail'), courseController.update);
+router.post("/course",courseThumbnailUpload.single('course_thumbnail'), courseController.create);
+router.patch("/course/:id",courseThumbnailUpload.single('course_thumbnail'), courseController.update);
 router.delete("/course/:id", courseController.delete);
 
 
@@ -94,7 +61,7 @@ router.patch('/course-request/:id', courseRequestController.updateCourseRequest)
 // instructors
 router.get('/instructors', instructorController.getAllInstructors);
 router.get('/instructors/:id', instructorController.getInstructorById);
-router.post('/instructors/', instructorController.createInstructor);
+router.post('/instructors/',instructorPhotoUpload.single("photo"), instructorController.createInstructor);
 router.patch('/instructors/:id', instructorController.updateInstructor);
 router.delete('/instructors/:id', instructorController.deleteInstructor);
 
