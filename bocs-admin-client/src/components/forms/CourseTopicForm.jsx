@@ -44,7 +44,7 @@ const CourseTopicForm = ({ refetch }) => {
   } = useMutation({
     mutationFn: postSingleTopic,
     onSuccess: (data, variable) => {
-      console.log("success");
+     
       toast.success("Topic Created");
       refetch();
     },
@@ -53,14 +53,14 @@ const CourseTopicForm = ({ refetch }) => {
   const updateTopicQuery = useMutation({
     mutationFn: updateTopicApi,
     onSuccess: (data, variable) => {
-      // console.log("success");
+   
       toast.success("Topic Updated");
       refetch();
     },
   });
 
   const createSingleTopic = (index) => {
-    createSingleTopicQuery(allTopics[index]);
+    createSingleTopicQuery({data:allTopics[index],index});
   };
 
   const updateTopic = (id) => {
@@ -89,69 +89,72 @@ const CourseTopicForm = ({ refetch }) => {
   }, [isLoading, isSuccess]);
   return (
     <>
-      <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-        <form onSubmit={(e) => e.preventDefault()}>
-          <div className="p-6.5">
-            {allTopics.length === 0 && (
+       {allTopics.length === 0 && (
               <p className="text-center text-meta-1">
                 No Topics Added, Add Now
               </p>
             )}
-            {allTopics.map((topic, index) => {
+              
+        {allTopics.map((topic, index) => {
               return (
-                <div key={index} className="mb-4.5">
-                  {/* <label className="mb-2.5 block text-black dark:text-white">
-                   {index+1}. Topic Title
-                  </label> */}
-                  <div className="flex">
-                    <input
-                      value={topic?.title}
-                      onChange={(e) => {
-                        const nT = [...allTopics];
-                        nT[index].title = e.target.value;
-                        setallTopics(nT);
-                      }}
-                      type="text"
-                      placeholder="Topic Title"
-                      className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-2 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                    />
+            <div key={index} className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark mb-4">
+              <form onSubmit={(e) => e.preventDefault()}>
+                <div className="p-4">
+            
+                      <div>
+                        {/* <label className="mb-2.5 block text-black dark:text-white">
+                        {index+1}. Topic Title
+                        </label> */}
+                        <div className="flex">
+                          <input
+                            value={topic?.title}
+                            onChange={(e) => {
+                              const nT = [...allTopics];
+                              nT[index].title = e.target.value;
+                              setallTopics(nT);
+                            }}
+                            type="text"
+                            placeholder="Topic Title"
+                            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-2 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                          />
 
-                    {topic.id ? (
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => updateTopic(topic?.id)}
-                          className="flex  items-center justify-center rounded bg-primary p-2 font-medium text-gray"
-                        >
-                          Update
-                        </button>
-                        <button
-                          onClick={() => deleteTopic(topic?.id)}
-                          className="flex  items-center justify-center rounded bg-danger p-2 font-medium text-gray"
-                        >
-                          <FaTrash />
-                        </button>
+                          {topic.id ? (
+                            <div className="flex gap-2">
+                              <button
+                                onClick={() => updateTopic(topic?.id)}
+                                className="flex  items-center justify-center rounded bg-primary p-2 font-medium text-gray"
+                              >
+                                Update
+                              </button>
+                              <button
+                                onClick={() => deleteTopic(topic?.id)}
+                                className="flex  items-center justify-center rounded bg-danger p-2 font-medium text-gray"
+                              >
+                                <FaTrash />
+                              </button>
+                            </div>
+                          ) : (
+                            <>
+                              {isLoading ? (
+                                <LoadingButton />
+                              ) : (
+                                <button
+                                  onClick={() => createSingleTopic(index)}
+                                  className="flex w-1/5 items-center justify-center rounded bg-primary p-1 font-medium text-gray"
+                                >
+                                  Save
+                                </button>
+                              )}
+                            </>
+                          )}
+                        </div>
                       </div>
-                    ) : (
-                      <>
-                        {isLoading ? (
-                          <LoadingButton />
-                        ) : (
-                          <button
-                            onClick={() => createSingleTopic(index)}
-                            className="flex w-1/5 items-center justify-center rounded bg-primary p-1 font-medium text-gray"
-                          >
-                            Save
-                          </button>
-                        )}
-                      </>
-                    )}
-                  </div>
+                
                 </div>
-              );
-            })}
-          </div>
-        </form>
-      </div>
+              </form>
+            </div>
+         );
+        })}
 
       <div className="mt-4 flex justify-end gap-3">
         {/* <button

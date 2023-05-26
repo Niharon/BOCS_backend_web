@@ -10,6 +10,7 @@ const userCourseController = require('../../controller/userCourse.controller');
 const quizController = require("../../controller/admin/quiz.controller");
 const multer = require("multer");
 const verifyPrevToken = require("../../middlewares/verifyPrevToken");
+const instructorController = require("../../controller/admin/instructor.controller");
 
 
 let uploadLocation;
@@ -88,6 +89,14 @@ router.patch('/course-request/:id', courseRequestController.updateCourseRequest)
 // router.get('/user-course/:id', userCourseController.getUserCourse);
 // router.patch('/user-course/:id', userCourseController.updateUserCourse);
 // router.delete('/user-course/:id', userCourseController.deleteUserCourse);
+
+
+// instructors
+router.get('/instructors', instructorController.getAllInstructors);
+router.get('/instructors/:id', instructorController.getInstructorById);
+router.post('/instructors/', instructorController.createInstructor);
+router.patch('/instructors/:id', instructorController.updateInstructor);
+router.delete('/instructors/:id', instructorController.deleteInstructor);
 
 
 module.exports = router;

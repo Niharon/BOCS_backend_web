@@ -4,7 +4,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import SidebarLinkGroup from './SidebarLinkGroup';
 import { AiOutlineBars } from 'react-icons/ai';
 import { IoBookSharp } from 'react-icons/io5';
-import { FaUsers } from 'react-icons/fa';
+import { FaUserGraduate, FaUsers } from 'react-icons/fa';
 import { TbStatusChange } from 'react-icons/tb';
 
 import * as React from 'react';
@@ -44,6 +44,12 @@ const sidebarMenuItems = [
     title: 'Users',
     icon: <FaUsers/>,
     path: '/users',
+  },
+ 
+  {
+    title: 'Instructors',
+    icon: <FaUserGraduate/>,
+    path: '/instructors',
   },
  
   // {

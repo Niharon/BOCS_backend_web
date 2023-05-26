@@ -14,7 +14,7 @@ const AllCourses = () => {
 
 
   const { data, isLoading, isSuccess, isError,refetch } = useQuery({
-    queryKey: "courses",
+    queryKey: ["courses"],
     queryFn: getAllCourses,
     refetchOnWindowFocus: false,
     refetchOnMount: false,

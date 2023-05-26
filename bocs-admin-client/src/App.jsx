@@ -12,12 +12,23 @@ import NotFoundPage from "./pages/NotFoundPage";
 import AddQuizes from "./pages/Courses/AddQuizes";
 import Login from "./pages/Login/Login";
 import RequireAuth from "./auth/RequireAuth";
+import Instructors from "./pages/Instructors/Instructors";
+import EditInstructor from "./pages/Instructors/EditInstructor";
 
 
 function App() {
 
 
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient(
+    {
+      defaultOptions: {
+        queries: {
+          refetchOnWindowFocus: false,
+          
+        },
+      },
+    }
+  );
 
   const [loading, setLoading] = useState(true);
 
@@ -63,6 +74,12 @@ function App() {
           <Route path="/course-request" element={<CourseRequest />} />
           <Route path="/course-request/edit/:id" element={<CourseRequestEdit />} />
           <Route path="/users" element={<Users />} />
+
+
+          {/* instructors */}
+
+          <Route path="/instructors" element={<Instructors />} />
+          <Route path="/instructors/edit/:id" element={<EditInstructor />} />
 
         </Route>
         {/* catch all routes */}

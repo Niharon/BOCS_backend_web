@@ -2,6 +2,7 @@ const Courses = require("../models/Course.model");
 const CourseRequest = require("../models/CourseRequest.model");
 const Lessons = require("../models/Lesson.model");
 const Topics = require("../models/Topic.model");
+const UserCourse = require("../models/UserCourse.model");
 
 const getAllCourses = async (req, res,next) => {
   try {
@@ -30,6 +31,7 @@ const getAllCourses = async (req, res,next) => {
 
 const getCourseDetailsById = async (req, res,next) => {
   try {
+
     const course = await Courses.findOne({
       where: { id: req.params.id },
       include: [
@@ -45,6 +47,38 @@ const getCourseDetailsById = async (req, res,next) => {
         }
       ],
     });
+
+    // check if course is enrolled by user in userCourse table
+    // console.log(req.user)
+    if(req.user){
+
+      const isEnrolled = await UserCourse.findOne({
+        where: {
+          user_id: req.user.id,
+          course_id: req.params.id
+        }
+      })
+      if(isEnrolled){
+        course.dataValues.isEnrolled = true;
+      }
+      else{
+        const courseRequest = await CourseRequest.findOne({
+          where: {
+            user_id: req.user.id,
+            course_id: req.params.id
+          
+          }
+        })
+  
+        if(courseRequest){
+          course.dataValues.isRequested = true;
+        }
+      }
+
+      
+    }
+    
+
     res.json(course);
   } catch (err) {
     next(err)

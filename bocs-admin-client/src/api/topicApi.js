@@ -1,6 +1,6 @@
 import axiosInstance from "../axiosInstance/axiosInstance"
 
-export const postSingleTopic = async (data) => {
+export const postSingleTopic = async ({data,index}) => {
     const res = await axiosInstance.post('/topic', data);
     return res;
 }

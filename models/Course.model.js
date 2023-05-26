@@ -3,6 +3,7 @@ const { sequelize } = require('../sequelize');
 const Topics = require('./Topic.model');
 const Lessons = require('./Lesson.model');
 const Quizes = require('./Quiz.model');
+const Instructors = require('./Instructor.model');
 
 
 const Courses = sequelize.define('courses', {
@@ -97,5 +98,7 @@ Quizes.belongsTo(Lessons,{
     as: 'lesson',
     foreignKey: 'lesson_id'
 })
+
+
 
 module.exports = Courses;
