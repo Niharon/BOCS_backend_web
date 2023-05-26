@@ -1,14 +1,14 @@
 import { useForm } from "react-hook-form";
 import Input from "../../components/Input";
 import { useNavigate } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import LoadingButton from "../LoadingButton";
 import { postCourse } from "../../api/courseApi";
 
 const CourseDetailsForm = () => {
   const navigate = useNavigate();
-
+  const queryClient = useQueryClient();
   const {
     mutate,
     isLoading,
@@ -17,18 +17,21 @@ const CourseDetailsForm = () => {
     isSuccess,
   } = useMutation({
     mutationFn: postCourse,
-    onSuccess: (data, variable, context) => {
-      console.log("success");
+    onSuccess: async (data, variable, context) => {
+      // console.log("success");
+      await queryClient.refetchQueries("courses");
       if(data?.data?.course.id){
         navigate(`/courses/edit/${data.data.course.id}`)
       }
       
     },
+  
     onError(error, variables, context) {
       console.log(error);
       console.log(variables);
       console.log(context);
     },
+    
   });
 
   const onSubmit = (data) => {

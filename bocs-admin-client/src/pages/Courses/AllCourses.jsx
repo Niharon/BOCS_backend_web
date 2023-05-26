@@ -14,7 +14,7 @@ const AllCourses = () => {
 
 
   const { data, isLoading, isSuccess, isError,refetch } = useQuery({
-    queryKey: ["courses"],
+    queryKey: "courses",
     queryFn: getAllCourses,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
@@ -107,7 +107,7 @@ const AllCourses = () => {
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark xl:pl-5">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                       <div className="h-12.5 w-15 rounded-md">
-                        <img src={course.course_thumbnail ? import.meta.env.VITE_COURSE_THUMBNAIL + course.course_thumbnail : "https://via.placeholder.com/200x200"} alt="Product" />
+                        <img src={course.course_thumbnail ? import.meta.env.VITE_BACKEND_URL + course.course_thumbnail : "https://via.placeholder.com/200x200"} alt="Product" />
                       </div>
                       <p className="text-sm text-black dark:text-white">
                         {course?.id} - {course?.title}

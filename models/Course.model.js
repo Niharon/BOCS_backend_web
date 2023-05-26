@@ -24,6 +24,10 @@ const Courses = sequelize.define('courses', {
     },
     course_thumbnail:{
         type: DataTypes.STRING,
+        get() {
+            const filename = this.getDataValue('course_thumbnail');
+            return filename ? "public/courses/thumbnail/"+filename : null;
+        }
     },
     description:{
         type: DataTypes.STRING,

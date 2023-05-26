@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import Input from "../../components/Input";
 import { useNavigate, useParams } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {  useEffect } from "react";
 import LoadingButton from "../LoadingButton";
 import { getCourseById, postCourse, updateCourseApi } from "../../api/courseApi";
@@ -11,7 +11,7 @@ import useCourses from "../../hooks/useCourse";
 
 const CourseDetailsEditForm = ({refetch}) => {
 
-
+  const queryClient = useQueryClient()
 
   const { courseContext, setcourseContext } = useCourses();
   const { currentCourse } = courseContext;
@@ -36,6 +36,7 @@ const CourseDetailsEditForm = ({refetch}) => {
     }
     updateInputField();
   },[currentCourse])
+
   const {
     mutate,
     isLoading,
@@ -47,6 +48,7 @@ const CourseDetailsEditForm = ({refetch}) => {
     onSuccess: async (data, variable, context) => {
       await refetch();
       toast.success("Course Updated Successfully");
+      queryClient.refetchQueries("courses");
     },
     onError(error, variables, context) {
       console.log(error);
@@ -139,7 +141,7 @@ const CourseDetailsEditForm = ({refetch}) => {
             <div className="mb-6 md:flex gap-5">
               {
                 currentCourse?.course_thumbnail && 
-                <img src={currentCourse?.course_thumbnail ? import.meta.env.VITE_COURSE_THUMBNAIL + currentCourse.course_thumbnail : "https://via.placeholder.com/200x200"} alt="course thumbnail" className="w-20 h-20" />
+                <img src={currentCourse?.course_thumbnail ? import.meta.env.VITE_BACKEND_URL + currentCourse.course_thumbnail : "https://via.placeholder.com/200x200"} alt="course thumbnail" className="w-20 h-20" />
               }
               <Input
               value={currentCourse?.course_thumbnail}
