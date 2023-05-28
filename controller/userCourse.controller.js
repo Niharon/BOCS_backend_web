@@ -94,7 +94,7 @@ const requestCourse = async (req, res, next) => {
 
     const {id} = req.params;
     const user = req.user || null;
-    const {payment_amount,payment_method,sender_number,payment_id} = req.body;
+    const {payment_amount,payment_method,sender_number,payment_id,access} = req.body;
 
     // check if user already requested this course
     const courseRequestExists = await CourseRequest.findOne({
@@ -118,6 +118,7 @@ const requestCourse = async (req, res, next) => {
         user_id: user.id,
         course_id: id,
         status: 'pending',
+        access: access,
         payment_id: payment_id,
         payment_status: 'pending',
         payment_method: payment_method,

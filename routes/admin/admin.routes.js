@@ -62,7 +62,7 @@ router.patch('/course-request/:id', courseRequestController.updateCourseRequest)
 router.get('/instructors', instructorController.getAllInstructors);
 router.get('/instructors/:id', instructorController.getInstructorById);
 router.post('/instructors/',instructorPhotoUpload.single("photo"), instructorController.createInstructor);
-router.patch('/instructors/:id', instructorController.updateInstructor);
+router.patch('/instructors/:id',instructorPhotoUpload.single("photo"), instructorController.updateInstructor);
 router.delete('/instructors/:id', instructorController.deleteInstructor);
 
 

@@ -14,9 +14,9 @@ exports.createUser = async (req, res,next) => {
         
     const user = await User.create({ email, password: hashedPass, deviceId,name });
         
-    const token = jwt.sign({ id: user.id,role:user.role }, process.env.JWT_SECRET, { expiresIn: '1d' });
+    const token = jwt.sign({ id: user.id,role:user.role,name:user.name }, process.env.JWT_SECRET, { expiresIn: '1d' });
         
-    res.status(201).json({ message: 'User created successfully', token: token, role:"user" });
+    res.status(201).json({ message: 'User created successfully', token: token, role:"user",name:user.name });
 
   } catch (error) {
     res.status(400).json(error);
@@ -34,7 +34,7 @@ exports.login = async (req, res,next) => {
         throw new Error('User not found');
       }
       // first check if the device is same or not
-      if (user.deviceId !== deviceId) {
+      if (user.role === "user" && user.deviceId !== deviceId) {
         throw new Error('Device not matched or deviceId not provided');
       }
       // now check password
@@ -45,9 +45,10 @@ exports.login = async (req, res,next) => {
       
       // console.log(process.env.JWT_SECRET)
       
-      const token = jwt.sign({ id: user.id,role:user.role }, process.env.JWT_SECRET, { expiresIn: '1d' });
+      const token = jwt.sign({ id: user.id,role:user.role, name:user.name }, process.env.JWT_SECRET, { expiresIn: '1d' });
   
-      res.status(200).json({ message: 'Login successful', token: token, role: user.role });
+      res.status(200).json({ message: 'Login successful', token: token, role: user.role,name:user.name });
+
     } catch (error) {
       next(error);
     }

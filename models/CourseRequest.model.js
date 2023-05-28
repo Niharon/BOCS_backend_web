@@ -24,6 +24,10 @@ const CourseRequest = sequelize.define('courserequest', {
         values: ['pending', 'cancelled'],
         defaultValue: 'pending'
     },
+    access:{
+        type: DataTypes.ENUM,
+        values: ['half', 'full'],
+    },
     payment_id:{
         type: DataTypes.STRING,
         allowNull: false,

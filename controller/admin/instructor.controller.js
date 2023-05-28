@@ -68,6 +68,7 @@ const instructorController = {
             if (req.file) {
                 req.body.photo = req.file.filename;
             }
+            // console.log(req.body)
             await instructor.update(req.body);
 
 

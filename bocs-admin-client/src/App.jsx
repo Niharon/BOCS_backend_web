@@ -14,6 +14,7 @@ import Login from "./pages/Login/Login";
 import RequireAuth from "./auth/RequireAuth";
 import Instructors from "./pages/Instructors/Instructors";
 import EditInstructor from "./pages/Instructors/EditInstructor";
+import AddInstructor from "./pages/Instructors/AddInstructor";
 
 
 function App() {
@@ -79,6 +80,7 @@ function App() {
           {/* instructors */}
 
           <Route path="/instructors" element={<Instructors />} />
+          <Route path="/instructors/add" element={<AddInstructor />} />
           <Route path="/instructors/edit/:id" element={<EditInstructor />} />
 
         </Route>
