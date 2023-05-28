@@ -2,11 +2,10 @@ const express = require("express");
 const path = require('path');
 
 // import the controller
-const courseController = require("../../controller/admin/course.controller");
+const adminCourseController = require("../../controller/admin/admincourse.controller");
 const lessonController = require("../../controller/admin/lesson.controller");
 const courseRequestController = require("../../controller/admin/courseRequestController");
 const topicsController = require("../../controller/admin/topic.controller");
-const userCourseController = require('../../controller/userCourse.controller');
 const quizController = require("../../controller/admin/quiz.controller");
 const verifyPrevToken = require("../../middlewares/verifyPrevToken");
 const instructorController = require("../../controller/admin/instructor.controller");
@@ -18,11 +17,11 @@ const router = express.Router();
 router.post("/verifyToken",verifyPrevToken)
 
 //course
-router.get("/courses", courseController.getAllCourse);
-router.get("/course/:id", courseController.getCourseDetailsByID);
-router.post("/course",courseThumbnailUpload.single('course_thumbnail'), courseController.create);
-router.patch("/course/:id",courseThumbnailUpload.single('course_thumbnail'), courseController.update);
-router.delete("/course/:id", courseController.delete);
+router.get("/courses", adminCourseController.getAllCourse);
+router.get("/course/:id", adminCourseController.getCourseDetailsByID);
+router.post("/course",courseThumbnailUpload.single('course_thumbnail'), adminCourseController.create);
+router.patch("/course/:id",courseThumbnailUpload.single('course_thumbnail'), adminCourseController.update);
+router.delete("/course/:id", adminCourseController.delete);
 
 
 //topics
