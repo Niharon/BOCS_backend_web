@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const ErrorHandler = require("./middlewares/ErrorHandler");
 const db = require("./config/db");
-const verifyAdmin = require("./middlewares/verifyTokenAndUser");
+const verifyAdmin = require("./middlewares/verifyAdmin");
 require("dotenv").config();
 const app = express();
 const path = require('path');
