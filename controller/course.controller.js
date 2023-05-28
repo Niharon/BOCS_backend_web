@@ -1,27 +1,28 @@
+const { Sequelize } = require("sequelize");
 const Courses = require("../models/Course.model");
 const CourseRequest = require("../models/CourseRequest.model");
 const Lessons = require("../models/Lesson.model");
 const Topics = require("../models/Topic.model");
 const UserCourse = require("../models/UserCourse.model");
 
-const getAllCourses = async (req, res,next) => {
+const getAllCourses = async (req, res, next) => {
   try {
     const courses = await Courses.findAll({
-      
-        include: [
-          {
-            model: Topics,
-            as: "topics",
-            include: [{
-              model: Lessons,
-              as: "lessons",
-              attributes: ["id", "title"],
-            }],
+
+      include: [
+        {
+          model: Topics,
+          as: "topics",
+          include: [{
+            model: Lessons,
+            as: "lessons",
             attributes: ["id", "title"],
-          }
-        ],
-        order: [["created_at", "DESC"]],
-      
+          }],
+          attributes: ["id", "title"],
+        }
+      ],
+      order: [["created_at", "DESC"]],
+
     });
     res.json(courses);
   } catch (err) {
@@ -29,7 +30,7 @@ const getAllCourses = async (req, res,next) => {
   }
 };
 
-const getCourseDetailsById = async (req, res,next) => {
+const getCourseDetailsById = async (req, res, next) => {
   try {
 
     const course = await Courses.findOne({
@@ -50,7 +51,7 @@ const getCourseDetailsById = async (req, res,next) => {
 
     // check if course is enrolled by user in userCourse table
     // console.log(req.user)
-    if(req.user){
+    if (req.user) {
 
       const isEnrolled = await UserCourse.findOne({
         where: {
@@ -58,26 +59,26 @@ const getCourseDetailsById = async (req, res,next) => {
           course_id: req.params.id
         }
       })
-      if(isEnrolled){
+      if (isEnrolled) {
         course.dataValues.isEnrolled = true;
       }
-      else{
+      else {
         const courseRequest = await CourseRequest.findOne({
           where: {
             user_id: req.user.id,
             course_id: req.params.id
-          
+
           }
         })
-  
-        if(courseRequest){
+
+        if (courseRequest) {
           course.dataValues.isRequested = true;
         }
       }
 
-      
+
     }
-    
+
 
     res.json(course);
   } catch (err) {
@@ -90,11 +91,11 @@ const requestCourse = async (req, res, next) => {
 
 
 
-  try{
+  try {
 
-    const {id} = req.params;
+    const { id } = req.params;
     const user = req.user;
-    const {payment_amount,payment_method,sender_number,payment_id,access} = req.body;
+    const { payment_amount, payment_method, sender_number, payment_id, access } = req.body;
 
     // check if user already requested this course
     const courseRequestExists = await CourseRequest.findOne({
@@ -104,13 +105,13 @@ const requestCourse = async (req, res, next) => {
       }
     })
 
-    if(courseRequestExists){
-    
+    if (courseRequestExists) {
+
       return next(new Error('You already requested this course'))
     }
 
 
-    if(user){
+    if (user) {
 
 
 
@@ -133,12 +134,12 @@ const requestCourse = async (req, res, next) => {
         courseRequest,
       });
     }
-    else{
+    else {
       next(new Error('User not found'))
     }
 
 
-  }catch(err){
+  } catch (err) {
     next(err)
   }
 
@@ -146,59 +147,71 @@ const requestCourse = async (req, res, next) => {
 
 
 const getrequestedCourse = async (req, res, next) => {
-  
-    try{
-  
-      const user = req.user;
-  
-      if(user){
-  
-        const courseRequest = await CourseRequest.findAll({
-          where: {
-            user_id: user.id,
-          }
-        })
-  
-        res.json({
-          success: true,
-          data:courseRequest,
-        });
-      }
-      else{
-        next(new Error('User not found'))
-      }
 
-    }catch(err){  
-      next(err)
+  try {
+
+    const user = req.user;
+    // console.log(user)
+    if (user) {
+
+      const courseRequest = await CourseRequest.findAll({
+        where: {
+          user_id: user.id,
+        },
+        include: [
+          {
+            model: Courses,
+          
+          }
+        ],
+      })
+
+      res.json({
+        success: true,
+        data: courseRequest,
+      });
     }
+    else {
+      next(new Error('User not found'))
+    }
+
+  } catch (err) {
+    next(err)
+  }
 
 }
 
 
 const getUserBoughtCourse = async (req, res, next) => {
 
-  try{
+  try {
 
     const user = req.user;
 
-    if(user){
+    if (user) {
 
       const userCourses = await UserCourse.findAll({
         where: {
           user_id: user.id,
-        }
+        },
+        include: [
+          {
+            model: Courses,
+          
+          }
+        ],
       })
 
       res.json({
         success: true,
-        data:userCourses,
+        data: userCourses,
       });
     }
-    else{
+    else {
       next(new Error('User not found'))
     }
 
-  }catch(err){  
+  } catch (err) {
     next(err)
   }
 

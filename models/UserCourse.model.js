@@ -52,4 +52,9 @@ const UserCourse = sequelize.define('usercourse', {
     tableName: 'usercourse'
 })
 
+
+// association with course model and user model
+
+
+
 module.exports = UserCourse;
