@@ -109,7 +109,7 @@ exports.checkOtp = async (req, res, next) => {
     if (!userExist) return res.json({ success: false, message: "User not Found with the email" })
 
     // check otp
-    if (userExist.resetPasswordOTP === otp) {
+    if (userExist.resetPasswordOTP == otp) {
       res.json({
         success: true,
         message: "OTP verified successfully"
