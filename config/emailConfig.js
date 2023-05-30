@@ -5,7 +5,8 @@ module.exports = {
     port: 587,
     secure: false,
     auth: {
-        user: 'bocsacademy1@gmail.com',
-        pass: 'jxheysmduytzkycc',
+        user: process.env.NODEMAILER_EMAIL,
+        pass: process.env.NODEMAILER_EMAIL_APP_PASS,
+       
     },
 };
