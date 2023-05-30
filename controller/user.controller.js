@@ -109,7 +109,7 @@ exports.checkOtp = async (req, res, next) => {
     if (!userExist) return res.json({ success: false, message: "User not Found with the email" })
 
     // check otp
-    if (userExist.resetPasswordOTP == otp) {
+    if (parseInt(userExist.resetPasswordOTP) === otp) {
       res.json({
         success: true,
         message: "OTP verified successfully"
@@ -144,7 +144,7 @@ exports.resetPassword = async (req, res, next) => {
     if (!userExist) return res.json({ success: false, message: "User not Found with the email" })
 
     // check otp
-    if (userExist.resetPasswordOTP === otp) {
+    if (parseInt(userExist.resetPasswordOTP) === otp) {
       // update password
       const salt = await bcrypt.genSalt(10);
       const hashedPass = await bcrypt.hash(password, salt);
