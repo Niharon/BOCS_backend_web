@@ -6,6 +6,6 @@ module.exports = {
     secure: false,
     auth: {
         user: 'bocsacademy1@gmail.com',
-        pass: 'bocsaca1903',
+        pass: 'jxheysmduytzkycc',
     },
 };

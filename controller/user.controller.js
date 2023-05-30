@@ -1,8 +1,8 @@
 const User = require("../models/User.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const crypto = require('crypto');
 const sendMail = require("../utils/sendMail");
+const mailTemplates = require("../utils/mailTemplates");
 
 // Generate a random 256-bit (32-byte) secret key
 
@@ -66,32 +66,103 @@ exports.forgetPass = async (req, res, next) => {
       }
     })
 
-    if (!userExist) return res.json({success:false,message:"User not Found with the email"})
+    if (!userExist) return res.json({ success: false, message: "User not Found with the email" })
 
     // generate random 6 digits OTP;
-    
-    const otp = crypto.randomInt(999999);
+
+    const otp = parseInt(Math.random() * 1000000)
     userExist.resetPasswordOTP = otp;
     await userExist.save();
 
     // send mail to user
-    let msgBody = `
-      <div style="text-align:center">
-       Your Password Reset OTP : ${otp}
-      </div>
-    `
-    const info = await sendMail(email,"Password Reset OTP",msgBody);
-    console.log(info);
-    if(info.messageId){
+    let msgBody = mailTemplates.forgotPassword(otp);
+    const info = await sendMail(email, "Password Reset OTP", msgBody);
+    // console.log(info);
+    if (info.messageId) {
       res.json({
-        success:true,
-        message:"An OTP is sent to the email"
+        success: true,
+        message: "An OTP is sent to the email"
       })
     }
-    else{
-      
+    else {
+
       next(new Error("Something error in sending mail"));
     }
+
+  } catch (e) {
+    next(e)
+  }
+}
+
+exports.checkOtp = async (req, res, next) => {
+
+
+  try {
+    const { email, otp } = req.body;
+
+    const userExist = await User.findOne({
+      where: {
+        email: email,
+      }
+    })
+
+    if (!userExist) return res.json({ success: false, message: "User not Found with the email" })
+
+    // check otp
+    if (userExist.resetPasswordOTP === otp) {
+      res.json({
+        success: true,
+        message: "OTP verified successfully"
+      })
+    }
+    else {
+      res.json({
+        success: false,
+        message: "Invalid OTP"
+      })
+    }
+  }
+  catch (e) {
+    next(e)
+  }
+
+
+}
+
+exports.resetPassword = async (req, res, next) => {
+
+  try {
+
+    const { email, otp, password } = req.body;
+
+    const userExist = await User.findOne({
+      where: {
+        email: email,
+      }
+    })
+
+    if (!userExist) return res.json({ success: false, message: "User not Found with the email" })
+
+    // check otp
+    if (userExist.resetPasswordOTP === otp) {
+      // update password
+      const salt = await bcrypt.genSalt(10);
+      const hashedPass = await bcrypt.hash(password, salt);
+      userExist.password = hashedPass;
+      await userExist.save();
+      userExist.resetPasswordOTP = null;
+      res.json({
+        success: true,
+        message: "Password updated successfully"
+      })
+    }
+    else {
+      res.json({
+        success: false,
+        message: "Invalid OTP"
+      })
+    }
+
 
   } catch (e) {
     next(e)
