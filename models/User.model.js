@@ -1,4 +1,4 @@
-const { DataTypes} = require('sequelize');
+const { DataTypes } = require('sequelize');
 const { sequelize } = require('../sequelize');
 
 
@@ -18,9 +18,9 @@ const User = sequelize.define('users', {
             args: true,
             msg: 'Email address already in use!'
         }
-        
+
     },
-    phone:{
+    phone: {
         type: DataTypes.STRING,
         unique: true
     },
@@ -28,7 +28,7 @@ const User = sequelize.define('users', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    deviceId:{
+    deviceId: {
         type: DataTypes.STRING,
         unique: {
             args: true,
@@ -36,24 +36,29 @@ const User = sequelize.define('users', {
         },
         allowNull: false
     },
-    birthday:{
-        type: DataTypes.DATE,     
+    birthday: {
+        type: DataTypes.DATE,
     },
-    fb:{
+    fb: {
         type: DataTypes.STRING,
     },
-    google:{
+    google: {
         type: DataTypes.STRING,
     },
-    role:{
+    role: {
         type: DataTypes.ENUM,
         values: ['user', 'admin'],
         defaultValue: 'user'
-    }
+    },
+    resetPasswordOTP: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
 
 
 
-},{
+
+}, {
     timestamps: true,
     createdAt: 'created_at',
     updatedAt: 'updated_at',

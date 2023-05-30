@@ -51,6 +51,8 @@ const getCourseDetailsById = async (req, res, next) => {
 
     // check if course is enrolled by user in userCourse table
     // console.log(req.user)
+    course.dataValues.isEnrolled = false;
+    course.dataValues.isRequested = false;
     if (req.user) {
 
       const isEnrolled = await UserCourse.findOne({

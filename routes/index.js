@@ -3,8 +3,7 @@ const verifyToken = require("../middlewares/verifyToken");
 // index of routes
 const router = express.Router();
 
-// import the controller
-
+// authentication routes
 router.use("/user", require("./user.routes"));
 
 // course related all routes
