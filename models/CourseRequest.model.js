@@ -21,7 +21,7 @@ const CourseRequest = sequelize.define('courserequest', {
     },
     status:{
         type: DataTypes.ENUM,
-        values: ['pending', 'cancelled'],
+        values: ['pending','cancelled','confirmed'],
         defaultValue: 'pending'
     },
     access:{

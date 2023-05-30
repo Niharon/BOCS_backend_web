@@ -24,7 +24,7 @@ const getAllCourses = async (req, res, next) => {
       order: [["created_at", "DESC"]],
 
     });
-    res.json(courses);
+    res.json({ success: true, courses });
   } catch (err) {
     next(err)
   }
@@ -51,8 +51,10 @@ const getCourseDetailsById = async (req, res, next) => {
 
     // check if course is enrolled by user in userCourse table
     // console.log(req.user)
-    course.dataValues.isEnrolled = false;
-    course.dataValues.isRequested = false;
+    if (course) {
+      course.dataValues.isEnrolled = false;
+      course.dataValues.isRequested = false;
+    }
     if (req.user) {
 
       const isEnrolled = await UserCourse.findOne({
@@ -82,7 +84,7 @@ const getCourseDetailsById = async (req, res, next) => {
     }
 
 
-    res.json(course);
+    res.json({ success: true, course: course });
   } catch (err) {
     next(err)
   }
@@ -163,7 +165,7 @@ const getrequestedCourse = async (req, res, next) => {
         include: [
           {
             model: Courses,
-          
+
           }
         ],
       })
@@ -199,7 +201,7 @@ const getUserBoughtCourse = async (req, res, next) => {
         include: [
           {
             model: Courses,
-          
+
           }
         ],
       })

@@ -45,9 +45,9 @@ router.patch('/quiz/:id',quizController.updateQuiz);
 
 
 //course-requests
-router.get('/course-request/all-course-requests', courseRequestController.getAllCourseRequests);
-router.post('/course-request/create', courseRequestController.createCourseRequest);
-router.patch('/course-request/:id', courseRequestController.updateCourseRequest);
+router.get('/course-requests', courseRequestController.getAllCourseRequests);
+router.get('/course-requests/:id', courseRequestController.getCourseReuquestDetailsById);
+router.patch('/course-requests/:id', courseRequestController.updateCourseRequest);
 
 
 // UserCourse

@@ -6,6 +6,7 @@ const Quizes = require('./Quiz.model');
 const Instructors = require('./Instructor.model');
 const CourseRequest = require('./CourseRequest.model');
 const UserCourse = require('./UserCourse.model');
+const User = require('./User.model');
 
 
 const Courses = sequelize.define('courses', {
@@ -58,6 +59,8 @@ const Courses = sequelize.define('courses', {
 // model associations with topic and lesson
 
 
+// course topic, lesson , quizes Associations
+// course topic
 Courses.hasMany(Topics, {
     as: 'topics',
     foreignKey: 'course_id',
@@ -68,26 +71,30 @@ Topics.belongsTo(Courses, {
     as: 'course',
     foreignKey: 'course_id'
 });
+
+// topic lesson
 Topics.hasMany(Lessons, {
     as: 'lessons',
     foreignKey: 'topic_id',
     onDelete: 'CASCADE'
 });
 
+Lessons.belongsTo(Topics, {
+    as: 'topic',
+    foreignKey: 'topic_id'
+})
+
+// course lesson
 Courses.hasMany(Lessons, {
     as: 'lessons',
     foreignKey: 'course_id',
     onDelete: 'CASCADE'
 })
-
 Lessons.belongsTo(Courses, {
     as: 'course',
     foreignKey: 'course_id'
 })
-Lessons.belongsTo(Topics, {
-    as: 'topic',
-    foreignKey: 'topic_id'
-})
+
 
 
 // QUIZ LESSON ASSOCIATION
@@ -102,7 +109,7 @@ Quizes.belongsTo(Lessons, {
 })
 
 
-// Course Request Association
+// CourseRequest Association
 
 Courses.hasMany(CourseRequest, {
 
@@ -114,6 +121,15 @@ CourseRequest.belongsTo(Courses, {
     foreignKey: 'course_id'
 })
 
+User.hasMany(CourseRequest, {
+    foreignKey: 'user_id',
+    onDelete: 'CASCADE'
+});
+CourseRequest.belongsTo(User, {
+    foreignKey: 'user_id'
+});
+
+// UerCourse Association
 Courses.hasMany(UserCourse,{
  
     foreignKey: 'course_id',

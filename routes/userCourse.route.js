@@ -1,12 +1,13 @@
 const express = require("express");
+const checkCourseAccess = require("../middlewares/checkCourseAccess");
+const { getCourseAcessDetailsById } = require("../controller/userCourse.controller");
 const router = express.Router();
 
-router.get("/:id",(req,res)=>{
-    res.json({
-        message: "hello from user course route",
-    
-    })
-})
+
+// BASE URL: /api/user-course
+
+
+router.get("/:id", checkCourseAccess, getCourseAcessDetailsById)
 
 
 module.exports = router;

@@ -1,5 +1,6 @@
 const { DataTypes} = require('sequelize');
 const { sequelize } = require('../sequelize');
+const Courses = require('./Course.model');
 
 
 
@@ -26,7 +27,7 @@ const UserCourse = sequelize.define('usercourse', {
     },
     status:{
         type: DataTypes.ENUM,
-        values: ['in-progress', 'completed','expired']
+        values: ['in-progress','completed','expired']
     },
     access:{
         type: DataTypes.ENUM,

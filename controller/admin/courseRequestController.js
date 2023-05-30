@@ -1,14 +1,31 @@
+const Courses = require("../../models/Course.model");
 const CourseRequest = require("../../models/CourseRequest.model");
+const User = require("../../models/User.model");
+const UserCourse = require("../../models/UserCourse.model");
 
 const courseRequestController = {
-  
-  async getAllCourseRequests(req, res) {
+
+  async getAllCourseRequests(req, res,next) {
     try {
-      const courseRequests = await CourseRequest.findAll();
+      const courseRequests = await CourseRequest.findAll({
+        include: [
+          {
+            model: Courses,
+            as: 'course',
+            attributes: ['id', 'title', 'price'],
+
+          },
+          {
+            model: User,
+            as: 'user',
+            attributes: ['id', 'name', 'email', 'phone']
+          }
+        ]
+      });
       res.json(courseRequests);
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Server error' });
+      // console.error(error);
+      next(error);
     }
   },
 
@@ -31,23 +48,85 @@ const courseRequestController = {
     }
   },
 
-  async updateCourseRequest(req, res) {
-    const { id } = req.params;
-    const { status, payment_status } = req.body;
+  async getCourseReuquestDetailsById(req, res) {
+
+
 
     try {
+
+      const { id } = req.params;
+      const courseRequest = await CourseRequest.findByPk(id, {
+        include: [
+          {
+            model: Courses,
+            as: 'course',
+            attributes: ['id', 'title', 'price'],
+          },
+          {
+            model: User,
+            as: 'user',
+            attributes: ['id', 'name', 'email', 'phone']
+          }
+        ]
+      });
+
+      if (!courseRequest) {
+        return res.status(404).json({ message: 'Course request not found' });
+      }
+      res.json(courseRequest);
+
+    }
+    catch (error) {
+
+      console.error(error);
+      res.status(500).json({ message: 'Server error' });
+
+    }
+  },
+
+  async updateCourseRequest(req, res) {
+
+
+    try {
+
+      const { id } = req.params;
+      const { status } = req.body;
       const courseRequest = await CourseRequest.findByPk(id);
 
       if (!courseRequest) {
         return res.status(404).json({ message: 'Course request not found' });
       }
 
-      courseRequest.status = status || courseRequest.status;
-      courseRequest.payment_status = payment_status || courseRequest.payment_status;
+      if (status === 'confirmed') {
+
+        courseRequest.status = status;
+        courseRequest.payment_status = 'completed';
+
+        // create a new usercourse entry
+        const course = await Courses.findByPk(courseRequest.course_id);
+
+        const newCourse = await UserCourse.create({
+          course_id: courseRequest.course_id,
+          user_id: courseRequest.user_id,
+          access: courseRequest.access,
+          access_start: new Date(),
+          access_end: new Date(new Date().getTime() + course.duration * 24 * 60 * 60 * 1000),
+          status: 'in-progress'
+        });
+
+        await newCourse.save();
+      }
+
+      else {
+        courseRequest.status = status;
+      }
 
       await courseRequest.save();
 
-      res.json(courseRequest);
+
+
+      res.json({ success: true, message: 'Course request updated successfully', courseRequest });
+
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Server error' });

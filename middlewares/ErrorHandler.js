@@ -1,5 +1,5 @@
 const ErrorHandler = (err, req, res, next) => {
-    console.log(err?.message)
+    // console.log(err?.message)
     let msg = err?.message || "Something went wrong";
 
     if(err?.name === "SequelizeUniqueConstraintError"){
