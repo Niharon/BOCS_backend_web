@@ -4,8 +4,13 @@ export const getAllCourseRequestsApi = async () => {
     const res = await axiosInstance.get('/course-requests/',);
     return res;
 }
+export const getCourseRequestByIdApi = async (data) => {
+    
+    const res = await axiosInstance.get(`/course-requests/${data.queryKey[1]}`,);
+    return res;
+}
 
-export const updateRequestById = async ({id, data}) => {
-    const res = await axiosInstance.patch(`/course-request/${id}`, data);
+export const updateCourseRequestStatusApi = async ({id, data}) => {
+    const res = await axiosInstance.patch(`/course-requests/${id}`, data);
     return res;
 }

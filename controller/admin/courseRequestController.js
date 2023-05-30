@@ -104,13 +104,13 @@ const courseRequestController = {
 
         // create a new usercourse entry
         const course = await Courses.findByPk(courseRequest.course_id);
-
+       
         const newCourse = await UserCourse.create({
           course_id: courseRequest.course_id,
           user_id: courseRequest.user_id,
           access: courseRequest.access,
           access_start: new Date(),
-          access_end: new Date(new Date().getTime() + course.duration * 24 * 60 * 60 * 1000),
+          access_end: new Date(new Date().getTime() + (course.access_duration * 24 * 60 * 60 * 1000)),
           status: 'in-progress'
         });
 

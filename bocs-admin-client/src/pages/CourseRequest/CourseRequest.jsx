@@ -51,7 +51,7 @@ const CourseRequest = () => {
                     Status
                   </th>
                   <th className="min-w-[80px] px-4 py-4 font-medium text-black dark:text-white">
-                    Payment Status
+                    Date
                   </th>
                   <th className="min-w-[80px] px-4 py-4 font-medium text-black dark:text-white">
                     Actions

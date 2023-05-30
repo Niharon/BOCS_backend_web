@@ -117,7 +117,7 @@ const AllCourses = () => {
                     </div>
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                    <p className="text-black dark:text-white">{new Date().toDateString(course?.created_at)}</p>
+                    <p className="text-black dark:text-white">{new Date(course?.created_at).toDateString()}</p>
                   </td>
                   <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                     <p className="text-black dark:text-white">{course?.topics.length}</p>
