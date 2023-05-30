@@ -33,7 +33,16 @@ app.get("/", (req, res) => {
 
   });
 });
+app.get("/test", (req, res) => {
+ 
+  console.log(path.join(__dirname,"..", 'uploads/courses/thumbnail'))
+  res.json({
+    message: "Welcome to the e-learning platform",
+    application_mode: process.env.NODE_ENV,
 
+
+  });
+});
 
 app.use("/api", require("./routes"));
 
