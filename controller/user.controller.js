@@ -149,8 +149,8 @@ exports.resetPassword = async (req, res, next) => {
       const salt = await bcrypt.genSalt(10);
       const hashedPass = await bcrypt.hash(password, salt);
       userExist.password = hashedPass;
-      await userExist.save();
       userExist.resetPasswordOTP = null;
+      await userExist.save();
       res.json({
         success: true,
         message: "Password updated successfully"
