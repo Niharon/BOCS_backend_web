@@ -54,3 +54,14 @@ exports.getCourseAcessDetailsById = async (req, res, next) => {
         next(err)
     }
 }
+
+exports.getQuizById = async (req,res,next)=>{
+
+    // get quiz of that course
+    const quizOptions = await Quizes.findOne({
+        where:{
+            course_id:req.course_access.course.id
+        }
+    })
+
+}

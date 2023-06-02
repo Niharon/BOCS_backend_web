@@ -8,6 +8,7 @@ const router = express.Router();
 
 
 router.get("/:id", checkCourseAccess, getCourseAcessDetailsById)
+router.get("/:id/quiz" ,checkCourseAccess)
 
 
 module.exports = router;
