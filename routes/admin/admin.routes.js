@@ -11,11 +11,17 @@ const verifyPrevToken = require("../../middlewares/verifyPrevToken");
 const instructorController = require("../../controller/admin/instructor.controller");
 const { courseThumbnailUpload, instructorPhotoUpload } = require("../../middlewares/multerConfig");
 const User = require("../../models/User.model");
+const { getAllUsers } = require("../../controller/user.controller");
 
 // verifytoken
 const router = express.Router();
 
 router.post("/verifyToken",verifyPrevToken)
+
+
+// All users API
+router.get("/users", getAllUsers)
+
 
 //course
 router.get("/courses", adminCourseController.getAllCourse);
@@ -40,11 +46,8 @@ router.get('/lesson/:id', lessonController.getLessonById);
 router.patch('/lesson/:id', lessonController.updateLessonById);
 router.delete('/lesson/:id', lessonController.deleteLessonById);
 
-// test
-router.get("/users", async (req,res)=>{
-    const allusers = await  User.findAll({});
-    res.json({success:true,data:allusers});
-})
+
+
 //quizes
 router.post('/quiz',quizController.createQuiz);
 router.patch('/quiz/:id',quizController.updateQuiz);

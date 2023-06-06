@@ -27,9 +27,9 @@ const CourseDetailsForm = () => {
     },
   
     onError(error, variables, context) {
-      console.log(error);
-      console.log(variables);
-      console.log(context);
+      // console.log(error);
+      // console.log(variables);
+      // console.log(context);
     },
     
   });
@@ -43,6 +43,7 @@ const CourseDetailsForm = () => {
     formData.append("intro_video", data.intro_video);
     formData.append("access_duration", data.access_duration);
     formData.append("description", data.description);
+    formData.append("instructors", data.instructors);
     formData.append("course_thumbnail", data.course_thumbnail[0]);
 
 
@@ -112,6 +113,14 @@ const CourseDetailsForm = () => {
               />
             </div>
 
+            <div className="mb-6">
+              <Input
+                register={register}
+                label="Instructors"
+                type="textarea"
+                registerText="instructors"
+              />
+            </div>
             <div className="mb-6">
               <Input
                 register={register}

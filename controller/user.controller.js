@@ -6,6 +6,19 @@ const mailTemplates = require("../utils/mailTemplates");
 
 // Generate a random 256-bit (32-byte) secret key
 
+
+exports.getAllUsers = async (req, res, next) => {
+  try {
+    const users = await User.findAll({
+      attributes: { exclude: ['password','resetPasswordOTP','fb','google'] }
+    });
+
+    res.status(200).json({ success: true, data: users });
+  } catch (error) {
+    next(error);
+  }
+}
+
 exports.createUser = async (req, res, next) => {
   try {
     const { email, deviceId, password, name } = req.body;

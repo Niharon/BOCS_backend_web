@@ -44,6 +44,10 @@ module.exports = {
       success: '#219653',
       danger: '#D34053',
       warning: '#FFA70B',
+      pending: '#FFBA00',
+      confirmed: '#10B981',
+      cancelled: '#DC3545',
+      // all colors of tail
     },
     screens: {
       '2xsm': '375px',

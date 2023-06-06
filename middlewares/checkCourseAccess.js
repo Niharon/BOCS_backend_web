@@ -13,10 +13,7 @@ const checkCourseAccess = async (req, res, next) => {
             where: {
                 user_id: user.id,
                 course_id: courseId,
-                access_end: {
-                    [Op.gte]: new Date()
-
-                },
+                
             },
             include: [
 
@@ -27,6 +24,7 @@ const checkCourseAccess = async (req, res, next) => {
                         {
                             model: Topics,
                             as: 'topics',
+                            attributes:['id','title']
 
                         }
                     ]
@@ -37,6 +35,21 @@ const checkCourseAccess = async (req, res, next) => {
 
         if (!course) return res.json({ success: false, message: "You are not enrolled in this course" })
 
+        // check if the course is expired or not
+        // access_end: {
+        //     [Op.gte]: new Date()
+
+        // },
+        // covert the date to string and then to date and compare with today's date
+
+        // course.access_end = new Date(course.access_end)
+        // console.log(course.access_end)
+        // console.log(new Date(course.access_end).toISOString())
+        // console.log(new Date());
+
+        const isExpired = course.access_end < new Date();
+        // console.log(isExpired)
+        course.dataValues.course.isExpired = isExpired;
         req.course_access = course;
         next();
 

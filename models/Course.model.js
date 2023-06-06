@@ -46,6 +46,10 @@ const Courses = sequelize.define('courses', {
         comment: 'in days',
         defaultValue: 90,
         allowNull: false
+    },
+    instructors:{
+        type: DataTypes.TEXT('medium'),
+        allowNull: true,
     }
 
 

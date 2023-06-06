@@ -114,6 +114,14 @@ const requestCourse = async (req, res, next) => {
       return next(new Error('You already requested this course'))
     }
 
+    // check if the course exists in Course table
+    const course = await Courses.findOne({
+      where: {
+        id: id
+      }
+    })
+
+    if (!course) return next(new Error('Course not found'))
 
     if (user) {
 
@@ -205,6 +213,17 @@ const getUserBoughtCourse = async (req, res, next) => {
           }
         ],
       })
+
+      // add isExpired property to userCourses by checking the access_end with today's date
+      userCourses.forEach(course => {
+        if (new Date(course.access_end) < new Date()) {
+          course.dataValues.isExpired = true;
+        }
+        else {
+          course.dataValues.isExpired = false;
+        }
+      })
+      
 
       res.json({
         success: true,

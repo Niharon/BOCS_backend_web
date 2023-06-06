@@ -1,6 +1,6 @@
 const express = require("express");
 const checkCourseAccess = require("../middlewares/checkCourseAccess");
-const { getCourseAcessDetailsById } = require("../controller/userCourse.controller");
+const { getCourseAcessDetailsById, getCourseIntroduction, getCourseMaterial, getQuizByTopicAndLessonId } = require("../controller/userCourse.controller");
 const router = express.Router();
 
 
@@ -8,7 +8,9 @@ const router = express.Router();
 
 
 router.get("/:id", checkCourseAccess, getCourseAcessDetailsById)
-router.get("/:id/quiz" ,checkCourseAccess)
+router.get("/:id/introduction", checkCourseAccess, getCourseIntroduction)
+router.get("/:id/material", checkCourseAccess, getCourseMaterial)
+router.get("/:id/:topicId/:lessonId/quiz" ,checkCourseAccess,getQuizByTopicAndLessonId)
 
 
 module.exports = router;

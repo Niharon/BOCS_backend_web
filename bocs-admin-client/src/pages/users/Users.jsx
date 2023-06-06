@@ -5,6 +5,20 @@ import { Link } from "react-router-dom";
 import { FaEdit } from 'react-icons/fa';
 import axiosInstance from "../../axiosInstance/axiosInstance";
 
+
+const columns = [
+  {
+      name: 'Title',
+      selector: row => row.title,
+  },
+  {
+      name: 'Year',
+      selector: row => row.year,
+  },
+];
+
+
+
 const Users = () => {
 
   const [users, setUsers] = useState([])

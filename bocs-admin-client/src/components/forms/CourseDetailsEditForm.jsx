@@ -28,6 +28,7 @@ const CourseDetailsEditForm = ({refetch}) => {
   useEffect(()=>{
     function updateInputField(){
         setValue("title", currentCourse?.title);
+        setValue("instructors", currentCourse?.instructors);
         setValue("description", currentCourse?.description);
         setValue("price", currentCourse?.price);
         setValue("access_duration", currentCourse?.access_duration);
@@ -152,6 +153,15 @@ const CourseDetailsEditForm = ({refetch}) => {
               />
             </div>
 
+            <div className="mb-6">
+              <Input
+              value={currentCourse?.instructors}
+                register={register}
+                label="Instructors"
+                type="textarea"
+                registerText="instructors"
+              />
+            </div>
             <div className="mb-6">
               <Input
               value={currentCourse?.description}

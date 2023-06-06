@@ -20,8 +20,14 @@ const courseRequestController = {
             as: 'user',
             attributes: ['id', 'name', 'email', 'phone']
           }
+        ],
+        order: [
+          ['status', 'ASC'], // Sort by status in ascending order
+          ['created_at', 'DESC'], // Sort by created_at in descending order
         ]
-      });
+      })
+      
+      ;
       res.json(courseRequests);
     } catch (error) {
       // console.error(error);

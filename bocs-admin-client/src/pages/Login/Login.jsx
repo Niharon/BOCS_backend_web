@@ -25,7 +25,7 @@ const Login = () => {
     mutationFn: loginApi,
     onSuccess: (data) => {
       const {token,role} = data.data;
-      console.log(data.data)
+      // console.log(data.data)
       localStorage.setItem("token",token);
       localStorage.setItem("role",role);
       setAuth({...auth,token:token,role:role});
