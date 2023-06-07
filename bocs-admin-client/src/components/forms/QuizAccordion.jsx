@@ -112,6 +112,7 @@ const QuizAccordion = ({ question, index,refetch,course_id,lesson_id }) => {
       return;
     }
     // console.log({...questionData,course_id,lesson_id:lesson_id})
+    console.log(questionData)
     createQuizQuery.mutate({...questionData,course_id,lesson_id:lesson_id});
 
     // console.log(questionData);

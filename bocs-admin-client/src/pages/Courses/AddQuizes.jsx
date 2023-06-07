@@ -6,6 +6,7 @@ import QuizAccordion from "../../components/forms/QuizAccordion";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getLessonByIdApi } from "../../api/lessonApi";
+import LoadingScreen from "../../components/LoadingScreen";
 
 const questionData = {
   title : "Question Text",
@@ -23,10 +24,10 @@ function QuizForm() {
  
   const [questions, setQuestions] = useState([]);
   const {lessonid} = useParams();
-  console.log(lessonid);
+  // console.log(lessonid);
 
   const {data:lessonData,isLoading,isSuccess,refetch} = useQuery({
-    queryKey: ["lessonById"],  
+    queryKey: ["lessonById",lessonid],  
     queryFn: () => getLessonByIdApi(lessonid),
     onSuccess: (data) => {
       setQuestions(data.lesson.quizes);
@@ -46,10 +47,18 @@ function QuizForm() {
 
   useEffect(()=>{
     if(isSuccess){
-      console.log(lessonData);
+      // console.log(lessonData);
       // setQuestions(lessonData.quiz);
     }
   },[lessonData])
+
+  useEffect(()=>{
+    refetch();
+  },[lessonid])
+
+  if(isLoading){
+    return <LoadingScreen/>
+  }
 
   return (
     <DefaultLayout>

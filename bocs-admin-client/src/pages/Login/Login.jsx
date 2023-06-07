@@ -42,6 +42,7 @@ const Login = () => {
   const onSubmit = (data) => {
     // console.log({...data,"deviceId":"adminDevice"});
     mutate({...data,"deviceId":"adminDevice"});
+    console.log("clicked")
   };
   // console.log(userContext.token)
   

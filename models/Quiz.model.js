@@ -32,6 +32,10 @@ const Quizes = sequelize.define('quizes', {
     lesson_id:{
         type: DataTypes.INTEGER,
         allowNull: false
+    },
+    correctAnswers:{
+        type: DataTypes.JSON,
+        allowNull: true
     }
   
 

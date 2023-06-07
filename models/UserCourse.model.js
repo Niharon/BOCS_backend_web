@@ -41,6 +41,10 @@ const UserCourse = sequelize.define('usercourse', {
     access_end:{
         type: DataTypes.DATE,
         allowNull: false,
+    },
+    completed_lessons:{
+        type: DataTypes.JSON,
+        allowNull: true,
     }
   
 
