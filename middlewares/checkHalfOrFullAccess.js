@@ -56,6 +56,7 @@ const checkHalfOrFullAccess = async (req, res, next) => {
                     message: "Topic is Locked, Access Full Course to get Access to this topic"
                 })
             }
+        
             req.filteredTopics = filteredTopics;
             next();
 

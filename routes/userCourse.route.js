@@ -14,7 +14,7 @@ router.get("/:id/introduction", checkCourseAccess, getCourseIntroduction)
 router.get("/:id/material", checkCourseAccess,checkCourseExpiry,checkHalfOrFullAccess, getCourseMaterial)
 router.get("/:id/:topicId/:lessonId/lesson" ,checkCourseAccess,checkCourseExpiry,getLessonAccessById)
 router.get("/:id/:topicId/:lessonId/quiz" ,checkCourseAccess,checkCourseExpiry,checkHalfOrFullAccess,getQuizByTopicAndLessonId)
-router.post("/:id/:topicId/:lessonId/submit-quiz" ,checkCourseAccess,checkCourseExpiry,submitQuiz)
+router.post("/:id/:topicId/:lessonId/submit-quiz" ,checkCourseAccess,checkCourseExpiry,checkHalfOrFullAccess,submitQuiz)
 router.post("/:id/:topicId/:lessonId/test" ,checkCourseAccess,checkCourseExpiry,checkCompletedLessonUpdate)
 
 

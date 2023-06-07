@@ -379,7 +379,8 @@ exports.submitQuiz = async (req, res, next) => {
             // update the progress in UserCourse model
 
             // get the total lessons
-            const totalLessons = filteredTopics.reduce((total, topic) => {
+            // console.log(req.filteredTopics)
+            const totalLessons = req.filteredTopics.reduce((total, topic) => {
                 return total + topic.lessons.length
             }, 0)
             // console.log(lessonId)
