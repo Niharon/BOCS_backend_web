@@ -12,6 +12,7 @@ router.use("/courses", require("./course.routes"));
 router.use("/user-course", verifyToken, require("./userCourse.route"));
 
 
+
 router.use("/instructors", require("./instructor.routes"));
 
 

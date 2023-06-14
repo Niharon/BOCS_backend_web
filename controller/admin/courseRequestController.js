@@ -2,6 +2,7 @@ const Courses = require("../../models/Course.model");
 const CourseRequest = require("../../models/CourseRequest.model");
 const User = require("../../models/User.model");
 const UserCourse = require("../../models/UserCourse.model");
+const { createNotification } = require("../usernotification.controller");
 
 const courseRequestController = {
 
@@ -110,7 +111,7 @@ const courseRequestController = {
 
         // create a new usercourse entry
         const course = await Courses.findByPk(courseRequest.course_id);
-       
+     
         const newCourse = await UserCourse.create({
           course_id: courseRequest.course_id,
           user_id: courseRequest.user_id,
@@ -120,7 +121,12 @@ const courseRequestController = {
           status: 'in-progress'
         });
 
+
         await newCourse.save();
+
+        // covert access end date to string
+        const expiry_date = new Date(newCourse.access_end).toDateString()
+        await createNotification(courseRequest.user_id, `Your course request for ${course?.title} has been confirmed. You need to complete the course within ${expiry_date}`)
       }
 
       else {

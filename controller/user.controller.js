@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const sendMail = require("../utils/sendMail");
 const mailTemplates = require("../utils/mailTemplates");
+const { getAllNotificationsByUser } = require("./usernotification.controller");
 
 // Generate a random 256-bit (32-byte) secret key
 
@@ -10,7 +11,7 @@ const mailTemplates = require("../utils/mailTemplates");
 exports.getAllUsers = async (req, res, next) => {
   try {
     const users = await User.findAll({
-      attributes: { exclude: ['password','resetPasswordOTP','fb','google'] }
+      attributes: { exclude: ['password', 'resetPasswordOTP', 'fb', 'google'] }
     });
 
     res.status(200).json({ success: true, data: users });
@@ -176,6 +177,19 @@ exports.resetPassword = async (req, res, next) => {
       })
     }
 
+
+  } catch (e) {
+    next(e)
+  }
+}
+
+exports.getUserNotifications = async (req, res, next) => {
+  try {
+    const notifications = await getAllNotificationsByUser(req.user.id);
+    return res.status(200).json({
+      success: true,
+      notifications
+    })
 
   } catch (e) {
     next(e)
