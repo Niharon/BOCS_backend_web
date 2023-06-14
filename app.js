@@ -46,7 +46,6 @@ app.get("/test", (req, res) => {
 
 app.use("/api", require("./routes"));
 
-app.use("/api/admin",verifyAdmin, require("./routes/admin/admin.routes"));
 
 // global error handler
 app.use(ErrorHandler);

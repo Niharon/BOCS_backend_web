@@ -1,5 +1,5 @@
 const express = require("express");
-const { createUser, login, forgetPass, checkOtp, resetPassword, getUserNotifications } = require("../controller/user.controller");
+const { createUser, login, forgetPass, checkOtp, resetPassword, getUserNotifications, createRandomUsers } = require("../controller/user.controller");
 const verifyPrevToken = require("../middlewares/verifyPrevToken");
 const verifyToken = require("../middlewares/verifyToken");
 const router = express.Router();
@@ -9,6 +9,11 @@ const router = express.Router();
 
 // BASE URL '/api/user/'
 
+
+
+
+// make a route that will create 50 random users
+// router.get("/create-random-users",createRandomUsers)
 
 router.post("/register", createUser);
 router.post("/login", login);

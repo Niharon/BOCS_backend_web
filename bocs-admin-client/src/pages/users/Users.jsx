@@ -4,16 +4,17 @@ import Breadcrumb from "../../components/Breadcrumb";
 import { Link } from "react-router-dom";
 import { FaEdit } from 'react-icons/fa';
 import axiosInstance from "../../axiosInstance/axiosInstance";
+import LoadingScreen from "../../components/LoadingScreen";
 
 
 const columns = [
   {
-      name: 'Title',
-      selector: row => row.title,
+    name: 'Title',
+    selector: row => row.title,
   },
   {
-      name: 'Year',
-      selector: row => row.year,
+    name: 'Year',
+    selector: row => row.year,
   },
 ];
 
@@ -22,32 +23,47 @@ const columns = [
 const Users = () => {
 
   const [users, setUsers] = useState([])
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [loading,setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true)
     const fetchusers = async () => {
-      const res = await axiosInstance("/users");
-      console.log(res);
+      const res = await axiosInstance(`/users?page=${page+1}`);
+      // console.log(res);
       if (res.data.success) {
-        setUsers(res.data?.data);
+        setUsers(res.data?.data?.rows);
+        setTotalUsers(res.data?.data?.count)
+        setTotalPages(Math.ceil(res.data?.data?.count / 10))
       }
+      setLoading(false)
     }
     fetchusers()
-  }, [])
+  }, [page])
 
-  console.log(users)
+  // console.log(users)
+  // if(loading){
+  //   return <LoadingScreen/>
+  // }
+
   return (
     <DefaultLayout>
+
       <Breadcrumb pageName="All Users" />
-      <div className="flex flex-col gap-10">
-        <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+      <p className="text-sm text-body mb-2">Showing 10 users of total {totalUsers} users</p>
+
+      <div className="flex flex-col gap-8">
+        <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
           <div className="max-w-full overflow-x-auto">
             <table className="w-full table-auto">
               <thead>
                 <tr className="bg-gray-2 text-left dark:bg-meta-4">
-                  <th className="min-w-[50px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
-                    Id
+                  <th className="min-w-[30px] px-4 py-4 font-medium text-black dark:text-white">
+                    #
                   </th>
-                  <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
+                  <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
                     Name
                   </th>
                   <th className="min-w-[80px] px-4 py-4 font-medium text-black dark:text-white">
@@ -55,6 +71,9 @@ const Users = () => {
                   </th>
                   <th className="min-w-[80px] px-4 py-4 font-medium text-black dark:text-white">
                     Phone
+                  </th>
+                  <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
+                    DeviceId
                   </th>
                   <th className="px-4 py-4 font-medium text-black dark:text-white">
                     Role
@@ -65,25 +84,30 @@ const Users = () => {
                 </tr>
               </thead>
               <tbody>
+
+               
                 {
-                  users.map(user => (
+                  users.map((user, i) => (
                     <tr key={user?.id}>
-                      <td className="border-b border-[#eee] px-4 py-5 text-center dark:border-strokedark xl:pl-5">
-                        <p className="text-black dark:text-white">01</p>
+                      <td className="border-b border-[#eee] px-4 py-3 text-sm  dark:border-strokedark">
+                        <p className="text-black dark:text-white">{user.id}</p>
                       </td>
-                      <td className="border-b border-[#eee]  px-4 py-5 dark:border-strokedark">
-                        <p className="text-black dark:text-white">ABC</p>
+                      <td className="border-b border-[#eee]  px-4 py-3 text-sm dark:border-strokedark">
+                        <p className="text-black dark:text-white">{user?.name}</p>
                       </td>
-                      <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                        <p className="text-black dark:text-white">abc@gmail.com</p>
+                      <td className="border-b border-[#eee] px-4 py-3 text-sm dark:border-strokedark">
+                        <p className="text-black dark:text-white">{user?.email}</p>
                       </td>
-                      <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                        <p className="text-black dark:text-white">01521647270</p>
+                      <td className="border-b border-[#eee] px-4 py-3 text-sm dark:border-strokedark">
+                        <p className="text-black dark:text-white">{user?.phone}</p>
                       </td>
-                      <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                        <p className="text-black dark:text-white">Admin</p>
+                      <td className="border-b border-[#eee] px-4 py-3 text-sm dark:border-strokedark">
+                        <p className="text-black dark:text-white">{user?.deviceId}</p>
                       </td>
-                      <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                      <td className="border-b border-[#eee] px-4 py-3 text-sm dark:border-strokedark">
+                        <p className="text-black dark:text-white">{user?.role}</p>
+                      </td>
+                      <td className="border-b border-[#eee] px-4 py-3 text-sm dark:border-strokedark">
                         <div className="flex items-center space-x-3.5">
                           <button className="hover:text-primary">
                             <svg
@@ -142,7 +166,21 @@ const Users = () => {
 
               </tbody>
             </table>
+
+
           </div>
+
+
+
+        </div>
+
+        {/* pagenation buttons */}
+        <div className="text-center">
+          {
+            [...Array(totalPages).keys()].map(x =>
+              <button onClick={() => setPage(x)} key={x} className={`btn py-1 px-3 border-[1px] border-gray-400 rounded-lg mx-1 ${page === x && 'bg-primary text-white'}`}>{x + 1}</button>
+            )
+          }
         </div>
       </div>
     </DefaultLayout>

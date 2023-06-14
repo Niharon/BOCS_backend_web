@@ -8,13 +8,55 @@ const { getAllNotificationsByUser } = require("./usernotification.controller");
 // Generate a random 256-bit (32-byte) secret key
 
 
+// exports.createRandomUsers = async (req, res, next) => {
+//   try {
+//     const { count } = req.query || 50;
+//     const users = [];
+//     for (let i = 1; i <= count; i++) {
+//       const email = `gmail${(i*50)+1}@gmail.com`;
+//       const password = Math.random().toString(36).substring(2, 15);
+//       const salt = await bcrypt.genSalt(10);
+//       const hashedPass = await bcrypt.hash(password, salt);
+//       const name = Math.random().toString(36).substring(2, 15);
+//       const deviceId = Math.random().toString(36).substring(2, 15);
+//       const user = await User.create({ email, password: hashedPass, deviceId, name });
+//       users.push(user);
+
+//     }
+//     res.status(201).json({ message: 'Users created successfully', users: users });
+//   } catch (error) {
+//     res.status(400).json(error);
+//   }
+
+
+// }
+
+
+
 exports.getAllUsers = async (req, res, next) => {
   try {
-    const users = await User.findAll({
-      attributes: { exclude: ['password', 'resetPasswordOTP', 'fb', 'google'] }
+
+    // implement pagination
+    const { page = 1, limit = 10 } = req.query;
+
+    // console.log("limit ", limit)
+    const offset = (page - 1) * limit;
+
+    const users = await User.findAndCountAll({
+      attributes: { exclude: ['password', 'resetPasswordOTP', 'fb', 'google'] },
+      limit: +limit,
+      offset: +offset,
     });
 
     res.status(200).json({ success: true, data: users });
+
+
+
+    // const users = await User.findAll({
+    //   attributes: { exclude: ['password', 'resetPasswordOTP', 'fb', 'google'] }
+    // });
+
+    // res.status(200).json({ success: true, data: users });
   } catch (error) {
     next(error);
   }
