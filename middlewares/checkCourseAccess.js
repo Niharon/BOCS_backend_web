@@ -32,7 +32,7 @@ const checkCourseAccess = async (req, res, next) => {
 
             ]
         })
-
+   
         if (!course) return res.json({ success: false, message: "You are not enrolled in this course" })
 
         // check if the course is expired or not
@@ -51,6 +51,7 @@ const checkCourseAccess = async (req, res, next) => {
         // console.log(isExpired)
         course.dataValues.course.isExpired = isExpired;
         req.course_access = course;
+
         next();
 
     }

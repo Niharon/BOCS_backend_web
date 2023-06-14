@@ -7,6 +7,8 @@ const Instructors = require('./Instructor.model');
 const CourseRequest = require('./CourseRequest.model');
 const UserCourse = require('./UserCourse.model');
 const User = require('./User.model');
+const Discussion = require('./Discussion.model');
+const DiscussionAnswer = require('./DiscussionAnswer.model');
 
 
 const Courses = sequelize.define('courses', {
@@ -47,7 +49,7 @@ const Courses = sequelize.define('courses', {
         defaultValue: 90,
         allowNull: false
     },
-    instructors:{
+    instructors: {
         type: DataTypes.TEXT('medium'),
         allowNull: true,
     }
@@ -134,14 +136,58 @@ CourseRequest.belongsTo(User, {
 });
 
 // UerCourse Association
-Courses.hasMany(UserCourse,{
- 
+Courses.hasMany(UserCourse, {
+
     foreignKey: 'course_id',
     onDelete: 'CASCADE'
 })
-UserCourse.belongsTo(Courses,{
+UserCourse.belongsTo(Courses, {
 
     foreignKey: 'course_id'
 })
+
+// Discussion Association
+Courses.hasMany(Discussion, {
+    as: 'discussions',
+    foreignKey: 'course_id',
+});
+Discussion.belongsTo(Courses, {
+    as: 'course',
+    foreignKey: 'course_id'
+});
+
+// user discussion association
+User.hasMany(Discussion, {
+    as: 'discussions',
+    foreignKey: 'user_id',
+    onDelete: 'CASCADE'
+});
+Discussion.belongsTo(User, {
+    as: 'user',
+    foreignKey: 'user_id'
+});
+
+// user discussion answer association
+User.hasMany(DiscussionAnswer, {
+    as: 'answers',
+    foreignKey: 'user_id',
+    onDelete: 'CASCADE'
+});
+DiscussionAnswer.belongsTo(User, {
+    as: 'user',
+    foreignKey: 'user_id'
+});
+
+
+// discussion answer association
+Discussion.hasMany(DiscussionAnswer, {
+    as: 'answers',
+    foreignKey: 'discussion_id',
+    onDelete: 'CASCADE'
+});
+DiscussionAnswer.belongsTo(Discussion, {
+    as: 'discussion',
+    foreignKey: 'discussion_id'
+});
 
 module.exports = Courses;

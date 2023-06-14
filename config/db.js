@@ -3,8 +3,6 @@ const { sequelize } = require('../sequelize');
 
 const db = {};
 
-
-
 const connectDb = async () => {
     try {
         await sequelize.authenticate();

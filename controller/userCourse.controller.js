@@ -147,17 +147,44 @@ exports.getLessonAccessById = async (req, res, next) => {
     try {
 
         const { id: course_id, topicId, lessonId } = req.params;
-        const { course_access } = req;
-        // console.log(course_access.course.isExpired)
 
+        const lesson = await Lessons.findOne({
+            where: {
+                id: lessonId,
+                course_id: course_id,
 
-        let topicLimit = course_access.course.topics.length;
-        // console.log(course_access.access === "half")
-        if (course_access.access === "half") {
-            topicLimit = Math.ceil(topicLimit / 2)
+            },
+            include: {
+                model: Quizes,
+                as: 'quizes',
+                attributes: ['id', 'title']
+            }
+        })
+        if (!lesson) {
+            return res.json({
+                success: false,
+                message: "Lesson not found"
+            })
         }
-        // console.log(topicLimit)
+        const userCourse = await UserCourse.findOne({
+            where: {
+                user_id: req.user.id,
+                course_id: course_id
+            }
+        })
+        // check if the lesson.id is in the userCourse.completed_lessons or not
+        const isCompleted = userCourse.completed_lessons?.includes(lesson.id) ? true : false;
+        if (isCompleted) {
+            lesson.dataValues.completed = true;
+        }
+        else {
+            lesson.dataValues.completed = false;
+        }
+        res.json({
+            success: true,
+            lesson: lesson
 
+        })
 
     }
     catch (e) {
