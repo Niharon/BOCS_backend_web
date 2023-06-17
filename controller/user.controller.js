@@ -62,6 +62,25 @@ exports.getAllUsers = async (req, res, next) => {
   }
 }
 
+exports.getUserById = async (req, res, next) => {
+  try {
+
+    const { id } = req.params;
+    const user = await User.findOne({
+      where: { id },
+      attributes: { exclude: ['password', 'resetPasswordOTP', 'fb', 'google'] }
+    });
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    res.status(200).json({ success: true, data: user });
+
+  } catch (e) {
+    next(e)
+  }
+}
+
 exports.createUser = async (req, res, next) => {
   try {
     const { email, deviceId, password, name } = req.body;

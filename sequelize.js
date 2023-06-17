@@ -13,6 +13,12 @@ const sequelize = new Sequelize(
     timestamps: true,
     port: 3306,
     logging: false,
+    pool: {
+      max: 5,
+      min: 0,
+      idle: 10000,
+      acquire: 30000,
+    },
     define: {
       freezeTableName: true,
 
@@ -22,7 +28,8 @@ const sequelize = new Sequelize(
       },
       timestamps: true,
     },
-  }
+  },
+
 );
 
 module.exports.sequelize = sequelize;

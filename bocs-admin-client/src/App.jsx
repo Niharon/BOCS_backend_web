@@ -15,6 +15,7 @@ import RequireAuth from "./auth/RequireAuth";
 import Instructors from "./pages/Instructors/Instructors";
 import EditInstructor from "./pages/Instructors/EditInstructor";
 import AddInstructor from "./pages/Instructors/AddInstructor";
+import EditUser from "./pages/users/EditUser";
 
 
 function App() {
@@ -25,7 +26,7 @@ function App() {
       defaultOptions: {
         queries: {
           refetchOnWindowFocus: false,
-          
+
         },
       },
     }
@@ -74,7 +75,10 @@ function App() {
 
           <Route path="/course-request" element={<CourseRequest />} />
           <Route path="/course-request/edit/:id" element={<CourseRequestEdit />} />
+
+          {/* user routes */}
           <Route path="/users" element={<Users />} />
+          <Route path="/users/:id" element={<EditUser />} />
 
 
           {/* instructors */}
@@ -84,6 +88,7 @@ function App() {
           <Route path="/instructors/edit/:id" element={<EditInstructor />} />
 
         </Route>
+
         {/* catch all routes */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

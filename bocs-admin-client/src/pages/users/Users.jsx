@@ -128,7 +128,7 @@ const Users = () => {
                               />
                             </svg>
                           </button>
-                          <Link to='' className="hover:text-primary">
+                          <Link to={`/users/${user?.id}`} className="hover:text-primary">
                             <FaEdit />
                           </Link>
                           <button className="hover:text-primary">
