@@ -241,18 +241,29 @@ async function checkAnswers(quizWithCorrectAnswerArray, quizAnswers) {
     let rightAnswers = 0;
     const userAnswers = [];
 
+    // console.log("New Quiz Submitted")
     // check the answers
     quizWithCorrectAnswerArray.forEach((quiz, index) => {
         const quizAnswer = quizAnswers.find(quizAnswer => quizAnswer.id == quiz.id);
-        // console.log(quizAnswer?.answers)
+     
+        // console.log("UserAnswer ",quizAnswer?.answers)
+        // console.log("RIght Answer ",quiz.correctAnswers)
         if (quizAnswer) {
             userAnswers.push(quizAnswer.answers)
             // console.log(quiz.correctAnswers)
-            const isCorrect = quizAnswer.answers.every(answer => quiz.correctAnswers.includes(answer));
-            if (isCorrect) {
-                // console.log("correct answer")
-                rightAnswers++;
+            
+            const isEqualLength = quizAnswer.answers.length === JSON.parse(quiz.correctAnswers).length;
+         
+            if (isEqualLength) {
+                // console.log("equal Length")
+                const isCorrect = quizAnswer.answers.every(answer => quiz.correctAnswers.includes(answer));
+                if (isCorrect) {
+                    // console.log("correct answer")
+                    rightAnswers++;
+                }
+
             }
+
         }
         else {
             userAnswers.push([])

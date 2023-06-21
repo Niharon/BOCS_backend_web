@@ -25,6 +25,13 @@ db.connectDb();
 // db.syncDb()
 
 // routes
+
+app.get("/privacypolicy",(req,res)=>{
+  res.sendFile(path.join(__dirname,'templates/privacy_policy.html'))
+})
+app.get("/termsandconditions",(req,res)=>{
+  res.sendFile(path.join(__dirname,'templates/terms_and_conditions.html'))
+})
 app.get("/", (req, res) => {
   res.json({
     message: "Welcome to the e-learning platform",

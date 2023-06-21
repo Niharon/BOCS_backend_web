@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 const CourseRequestTableRow = ({ item }) => {
     const { id, user, course, status, payment_status, created_at } = item
     return (
-        <tr className={status === 'pending' && 'bg-red-50'}>
+        <tr className={status === 'pending' ? 'bg-red-50' :''}>
             <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark xl:pl-5">
                 <p className="text-black dark:text-white">{user?.name}</p>
             </td>

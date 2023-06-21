@@ -6,7 +6,7 @@ const { createNotification } = require("../usernotification.controller");
 
 const courseRequestController = {
 
-  async getAllCourseRequests(req, res,next) {
+  async getAllCourseRequests(req, res, next) {
     try {
       const courseRequests = await CourseRequest.findAll({
         include: [
@@ -26,10 +26,11 @@ const courseRequestController = {
           ['status', 'ASC'], // Sort by status in ascending order
           ['created_at', 'DESC'], // Sort by created_at in descending order
         ]
+      });
+      res.status(200).json({
+        success: true,
+        courseRequests
       })
-      
-      ;
-      res.json(courseRequests);
     } catch (error) {
       // console.error(error);
       next(error);
@@ -103,6 +104,10 @@ const courseRequestController = {
       if (!courseRequest) {
         return res.status(404).json({ message: 'Course request not found' });
       }
+      
+      if(courseRequest.status === status){
+        return res.status(400).json({ message: 'Course request status is already updated' });
+      }
 
       if (status === 'confirmed') {
 
@@ -111,7 +116,7 @@ const courseRequestController = {
 
         // create a new usercourse entry
         const course = await Courses.findByPk(courseRequest.course_id);
-     
+
         const newCourse = await UserCourse.create({
           course_id: courseRequest.course_id,
           user_id: courseRequest.user_id,

@@ -17,7 +17,7 @@ const Instructors = () => {
             queryKey: ["instructors"],
             queryFn: getAllInstructorsApi,
             onSuccess:(data)=>{
-                console.log(data.data.instructors);
+                // console.log(data.data.instructors);
                 setInstructors(data.data.instructors)
             },
             onError:(error)=>{

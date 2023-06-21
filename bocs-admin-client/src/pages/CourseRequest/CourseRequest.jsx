@@ -18,7 +18,7 @@ const CourseRequest = () => {
       queryFn: getAllCourseRequestsApi,
       onSuccess: (data) => {
         // console.log(data.data);
-        setCourseRequests(data.data);
+        setCourseRequests(data.data.courseRequests);
       },
       onError: (error) => {
         console.log(error);
@@ -28,8 +28,8 @@ const CourseRequest = () => {
   );
 
   // console.log(courseRequests)
-  if(isLoading){
-    return <LoadingScreen/>
+  if (isLoading) {
+    return <LoadingScreen />
   }
 
   return (
@@ -59,11 +59,20 @@ const CourseRequest = () => {
                 </tr>
               </thead>
               <tbody>
-              {
-                courseRequests.map((courseRequest) => (
-                  <CourseRequestTableRow key={courseRequest.id} item={courseRequest}/>
-                ))
-              }
+                {
+                  courseRequests.length === 0 && (
+                    <tr>
+                      <td colSpan="5" className="text-center py-5">
+                        No course requests found
+                      </td>
+                    </tr>
+                  )
+                }
+                {
+                  courseRequests.map((courseRequest) => (
+                    <CourseRequestTableRow key={courseRequest.id} item={courseRequest} />
+                  ))
+                }
               </tbody>
             </table>
           </div>

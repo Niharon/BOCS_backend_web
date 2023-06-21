@@ -39,6 +39,7 @@ const CourseRequestUpdateForm = () => {
     onSuccess: (data) => {
       console.log(data.data);
       toast.success("Course Request Updated Successfully");
+      setDisabled(true);
       getCourseRequestDetailsQuery.refetch()
     },
     onError: (error) => {
