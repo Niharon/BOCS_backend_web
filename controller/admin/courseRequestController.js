@@ -8,6 +8,14 @@ const courseRequestController = {
 
   async getAllCourseRequests(req, res, next) {
     try {
+
+      // implement pagination here
+
+      const { page = 1, limit = 10 } = req.query;
+
+      // console.log("limit ", limit)
+      const offset = (page - 1) * limit;
+
       const courseRequests = await CourseRequest.findAll({
         include: [
           {
@@ -25,8 +33,12 @@ const courseRequestController = {
         order: [
           ['status', 'ASC'], // Sort by status in ascending order
           ['created_at', 'DESC'], // Sort by created_at in descending order
-        ]
+        ],
+        limit: +limit,
+        offset: +offset,
       });
+
+
       res.status(200).json({
         success: true,
         courseRequests
@@ -104,8 +116,8 @@ const courseRequestController = {
       if (!courseRequest) {
         return res.status(404).json({ message: 'Course request not found' });
       }
-      
-      if(courseRequest.status === status){
+
+      if (courseRequest.status === status) {
         return res.status(400).json({ message: 'Course request status is already updated' });
       }
 

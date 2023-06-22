@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import DefaultLayout from "../../layout/DefaultLayout";
 import Breadcrumb from "../../components/Breadcrumb";
-import { Link } from "react-router-dom";
-import { FaEdit } from 'react-icons/fa';
+import { toast } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import { getAllCourseRequestsApi } from "../../api/courseRequest";
 import LoadingScreen from "../../components/LoadingScreen";

@@ -7,7 +7,7 @@ let instructorPhoto;
 // if (process.env.NODE_ENV === 'development') {
 courseThumbnail = 'uploads/courses/thumbnail'
 instructorPhoto = 'uploads/instructors/'
-
+lessonPdf = 'uploads/lessons/pdf'
 
 
 
@@ -52,10 +52,37 @@ const instructorPhotoStorage = multer.diskStorage({
     },
 });
 
+const lessonPdfStorage = multer.diskStorage({
+    destination: lessonPdf,
+    filename: function (req, file, cb) {
+
+        const extension = path.extname(file.originalname);
+
+        // get the file name and slugify it
+        // console.log(file)
+   
+        let sluggedName = "lesson-pdf";
+        const fileName = file.originalname.split(".pdf")[0];
+        if (fileName) {
+
+            sluggedName = fileName.split(" ").join("-").toLowerCase();
+        }
+        else{
+            sluggedName = req.body.title.split(" ").join("-").toLowerCase();
+        }
+
+        cb(null, sluggedName + extension);
+    },
+});
+
+        
+
+
 const courseThumbnailUpload = multer({ storage: courseThumbnailStorate });
 const instructorPhotoUpload = multer({ storage: instructorPhotoStorage });
-
+const lessonPdfUpload = multer({ storage: lessonPdfStorage });
 module.exports = {
     courseThumbnailUpload,
-    instructorPhotoUpload
+    instructorPhotoUpload,
+    lessonPdfUpload
 }

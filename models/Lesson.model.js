@@ -29,6 +29,10 @@ const Lessons = sequelize.define('lessons', {
         type: DataTypes.STRING,
         validator:{
             isUrl: true
+        },
+        get() {
+            const filename = this.getDataValue('pdf');
+            return filename ? "public/lessons/pdf/" + filename : null;
         }
     },
     description:{

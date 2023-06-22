@@ -22,6 +22,7 @@ const LessonAccordion = ({ lesson, topics,course_id,refetch }) => {
     register,
     handleSubmit,
     formState: { errors,dirtyFields,isDirty },
+    
     setValue,
   } = useForm();
 
@@ -59,8 +60,17 @@ const LessonAccordion = ({ lesson, topics,course_id,refetch }) => {
 
   const onSubmit = (data) => {
 
-    console.log(data);
-    createLessonQuery({...data,course_id});
+    console.log(data.pdf[0]);
+    // convert to formData
+    const formData = new FormData();
+    formData.append("title", data.title);
+    formData.append("description", data.description);
+    formData.append("video", data.video);
+    formData.append("pdf", data.pdf[0]);
+    formData.append("topic_id", data.topic_id);
+    formData.append("course_id", course_id);
+    // console.log(formData);
+    createLessonQuery(formData);
   };
 
   const onUpdate = (data) => {
@@ -68,8 +78,20 @@ const LessonAccordion = ({ lesson, topics,course_id,refetch }) => {
     if(Object.keys(dirtyFields).length>0){
 
       const modifiedData = dirtyValues(dirtyFields,data)
+      // covert to form data dynamically
+      // console.log(modifiedData)
+      const formData = new FormData();
+      for (const key in modifiedData) {
+        if(key==="pdf" && modifiedData[key][0] instanceof File){
+          formData.append(key,modifiedData[key][0])
+        }
+        else{
+          formData.append(key,modifiedData[key])
+        }
+      }
+
       
-      updateLessonQuery.mutate({id:lesson.id,data:modifiedData});
+      updateLessonQuery.mutate({id:lesson.id,data:formData});
     }else{
       toast.error("Change something first to update");
     }
@@ -82,7 +104,6 @@ const LessonAccordion = ({ lesson, topics,course_id,refetch }) => {
       setValue("title", lesson?.title);
       setValue("description", lesson?.description);
       setValue("video", lesson?.video);
-      setValue("pdf", lesson?.pdf);
       setValue("topic_id", lesson?.topic_id);
     }
     updateInputField();
@@ -165,11 +186,16 @@ const LessonAccordion = ({ lesson, topics,course_id,refetch }) => {
                 />
               </div>
               <div className="mb-2 w-full">
+            
                 <Input
                   label="Pdf Link"
                   register={register}
                   registerText="pdf"
+                  type="file"
                 />
+                {
+                  lesson.pdf && <a href={import.meta.env.VITE_BACKEND_URL + lesson.pdf} target="_blank" className="text-primary mt-2 inline-block">Current Pdf: {lesson.pdf}</a>
+                }
               </div>
             </div>
             <div className="mb-2">

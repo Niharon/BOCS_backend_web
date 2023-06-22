@@ -9,7 +9,7 @@ const topicsController = require("../../controller/admin/topic.controller");
 const quizController = require("../../controller/admin/quiz.controller");
 const verifyPrevToken = require("../../middlewares/verifyPrevToken");
 const instructorController = require("../../controller/admin/instructor.controller");
-const { courseThumbnailUpload, instructorPhotoUpload } = require("../../middlewares/multerConfig");
+const { courseThumbnailUpload, instructorPhotoUpload, lessonPdfUpload } = require("../../middlewares/multerConfig");
 const User = require("../../models/User.model");
 const { getAllUsers, getUserById } = require("../../controller/user.controller");
 
@@ -23,7 +23,7 @@ router.post("/verifyToken",verifyPrevToken)
 router.get("/users", getAllUsers)
 router.get("/users/:id", getUserById)
 
-
+ 
 //course
 router.get("/courses", adminCourseController.getAllCourse);
 router.get("/course/:id", adminCourseController.getCourseDetailsByID);
@@ -41,10 +41,10 @@ router.patch('/topic/:id', topicsController.updateTopicById);
 router.delete('/topic/:id', topicsController.deleteTopicById);
 
 //lesson
-router.post('/lesson', lessonController.createLesson);
+router.post('/lesson',lessonPdfUpload.single('pdf'), lessonController.createLesson);
 router.get('/lesson/total-lessions', lessonController.getAllLessons);
 router.get('/lesson/:id', lessonController.getLessonById);
-router.patch('/lesson/:id', lessonController.updateLessonById);
+router.patch('/lesson/:id',lessonPdfUpload.single('pdf'), lessonController.updateLessonById);
 router.delete('/lesson/:id', lessonController.deleteLessonById);
 
 

@@ -51,11 +51,11 @@ const CourseRequestUpdateForm = () => {
     return <LoadingSpinner />
   }
 
-  const { user, course, created_at, sender_number, payment_id, payment_method, payment_status, status, payment_amount } = getCourseRequestDetailsQuery?.data?.data;
+  const { user, course, created_at, sender_number, payment_id, payment_method, payment_status, status, payment_amount, access } = getCourseRequestDetailsQuery?.data?.data;
 
   const updateStatus = (e) => {
     e.preventDefault();
-    console.log(Requeststatus);
+    // console.log(Requeststatus);
     updateStatusMutation.mutate({ id, data: { status: Requeststatus } });
   }
 
@@ -162,6 +162,15 @@ const CourseRequestUpdateForm = () => {
 
 
                 value={payment_status} readOnly />
+            </div>
+            <div className="mb-2 w-full">
+              <label className="mb-2.5 block text-black dark:text-white">Course Access</label>
+              <input type="text"
+
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-2 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+
+
+                value={access} readOnly />
             </div>
             <div className="mb-2 w-full">
               <label className="mb-2.5 block text-black dark:text-white">

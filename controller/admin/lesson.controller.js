@@ -3,7 +3,10 @@ const Lessons = require("../../models/Lesson.model");
 // Controller for creating a new lesson
 async function createLesson(req, res) {
   try {
-    const { title, course_id, topic_id, video, pdf, description } = req.body;
+    const { title, course_id, topic_id, video, description } = req.body;
+    // check if there is any file in req.file or not if there then assign it to pdf
+    // console.log("file from controller ",req.file)
+    let pdf = req.file ? req.file.filename : null;
     const lesson = await Lessons.create({
       title,
       course_id,
@@ -61,6 +64,9 @@ async function updateLessonById(req, res) {
   try {
 
     const lesson = await Lessons.findByPk(req.params.id);
+    if(req.file){
+      req.body.pdf = req.file.filename
+    }
     if (lesson) {
       await lesson.update({
         ...req.body
