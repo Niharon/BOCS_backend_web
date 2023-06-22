@@ -16,7 +16,7 @@ const courseRequestController = {
       // console.log("limit ", limit)
       const offset = (page - 1) * limit;
 
-      const courseRequests = await CourseRequest.findAll({
+      const courseRequests = await CourseRequest.findAndCountAll({
         include: [
           {
             model: Courses,
@@ -41,7 +41,9 @@ const courseRequestController = {
 
       res.status(200).json({
         success: true,
-        courseRequests
+        count: courseRequests.count,
+
+        courseRequests:courseRequests.rows
       })
     } catch (error) {
       // console.error(error);

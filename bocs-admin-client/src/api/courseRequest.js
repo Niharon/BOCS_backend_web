@@ -1,7 +1,8 @@
 import axiosInstance from "../axiosInstance/axiosInstance"
 
-export const getAllCourseRequestsApi = async () => {
-    const res = await axiosInstance.get('/course-requests/',);
+export const getAllCourseRequestsApi = async (param) => {
+    // console.log(param.queryKey[1])
+    const res = await axiosInstance.get(`/course-requests?page=${param.queryKey[1]+1}`,);
     return res;
 }
 export const getCourseRequestByIdApi = async (data) => {

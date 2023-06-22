@@ -36,6 +36,11 @@ const User = sequelize.define('users', {
         },
         allowNull: false
     },
+    device_changable:{
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+        
+    },
     birthday: {
         type: DataTypes.DATE,
     },

@@ -32,6 +32,9 @@ app.get("/privacypolicy",(req,res)=>{
 app.get("/termsandconditions",(req,res)=>{
   res.sendFile(path.join(__dirname,'templates/terms_and_conditions.html'))
 })
+app.get("/account-deletion",(req,res)=>{
+  res.sendFile(path.join(__dirname,'templates/del.html'))
+})
 app.get("/", (req, res) => {
   res.json({
     message: "Welcome to the e-learning platform",

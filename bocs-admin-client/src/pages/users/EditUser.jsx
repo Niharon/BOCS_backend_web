@@ -5,7 +5,8 @@ import axiosInstance from '../../axiosInstance/axiosInstance';
 import { useParams } from 'react-router-dom';
 import DefaultLayout from '../../layout/DefaultLayout';
 import Breadcrumb from '../../components/Breadcrumb';
-import SelectInput from '@mui/material/Select/SelectInput';
+import toast from 'react-hot-toast';
+import { updateUserApi } from '../../api/userApi';
 
 const EditUser = () => {
 
@@ -23,6 +24,7 @@ const EditUser = () => {
                 setValue('email', userData.email);
                 setValue('phone', userData.phone);
                 setValue('deviceId', userData.deviceId);
+                setValue('device_changable', userData.device_changable);
                 setValue('role', userData.role);
             })
             .catch((error) => {
@@ -37,7 +39,7 @@ const EditUser = () => {
 
 
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         const updatedData = {};
 
         // Check if each field has been modified
@@ -50,15 +52,16 @@ const EditUser = () => {
         if (data.phone !== user.phone) {
             updatedData.phone = data.phone;
         }
-        if (data.birthday !== user.birthday) {
-            updatedData.birthday = data.birthday;
-        }
+
         if (data.role !== user.role) {
             updatedData.role = data.role;
         }
+        if (data.device_changable !== user.device_changable) {
+            updatedData.device_changable = data.device_changable;
+        }
 
         // Send the updated data in a PATCH request
-        // fetch(`/users/${user.id}`, {
+        // fetch(`/admin/api/users/${user.id}`, {
         //     method: 'PATCH',
         //     headers: {
         //         'Content-Type': 'application/json',
@@ -72,8 +75,14 @@ const EditUser = () => {
         //     .catch((error) => {
         //         console.error('Error updating user:', error);
         //     });
-
-        console.log(updatedData)
+        if (Object.keys(updatedData).length > 0) {
+            const res = await updateUserApi({ id: user.id, data: updatedData })
+            if(res.success){
+                toast.success('User updated successfully')
+            }
+        }else{
+            alert('No data changed')
+        }
     };
 
 
@@ -111,15 +120,17 @@ const EditUser = () => {
                         />
                     </div>
                     <div>
-                        <label>Device ID <span className="text-xs text-danger"> (Be carefull about changing DeviceID)</span></label>
+                        <label>Device ID <span className="text-xs text-danger"> (You can't change this)</span></label>
                         <TextField
 
                             inputProps={{
                                 ...register('deviceId'),
+                                readOnly: true,
                             }}
                             color='warning'
                             fullWidth
-                       
+
+
                         />
                     </div>
                     <div>
@@ -149,6 +160,23 @@ const EditUser = () => {
                         >
                             <MenuItem value={'user'}>User</MenuItem>
                             <MenuItem value={'admin'}>Admin</MenuItem>
+                        </Select>
+
+                    </div>
+                    <div>
+                        <label>Device Changable</label>
+
+                        <Select
+
+
+                            inputProps={{
+                                ...register('device_changable'),
+                            }}
+                            fullWidth
+                            defaultValue={user.device_changable}
+                        >
+                            <MenuItem value={false}>No</MenuItem>
+                            <MenuItem value={true}>Yes</MenuItem>
                         </Select>
 
                     </div>

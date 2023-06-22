@@ -7,7 +7,12 @@ const UserCourse = require("../models/UserCourse.model");
 
 const getAllCourses = async (req, res, next) => {
   try {
+    // limit the number of courses if limit is provided in query
+    const limit = req.query.limit ? parseInt(req.query.limit) : null;
+
     const courses = await Courses.findAll({
+
+  
 
       include: [
         {
@@ -22,6 +27,7 @@ const getAllCourses = async (req, res, next) => {
         }
       ],
       order: [["created_at", "DESC"]],
+      limit,
 
     });
     res.json({ success: true, courses });

@@ -44,14 +44,15 @@ const Users = () => {
   }, [page])
 
   // console.log(users)
-  // if(loading){
-  //   return <LoadingScreen/>
-  // }
+  if(loading){
+    return <LoadingScreen/>
+  }
 
   return (
     <DefaultLayout>
 
       <Breadcrumb pageName="All Users" />
+      <Link to="/new-users">New Users</Link>
       <p className="text-sm text-body mb-2">Showing 10 users of total {totalUsers} users</p>
 
       <div className="flex flex-col gap-8">

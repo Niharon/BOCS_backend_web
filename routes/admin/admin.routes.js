@@ -11,7 +11,7 @@ const verifyPrevToken = require("../../middlewares/verifyPrevToken");
 const instructorController = require("../../controller/admin/instructor.controller");
 const { courseThumbnailUpload, instructorPhotoUpload, lessonPdfUpload } = require("../../middlewares/multerConfig");
 const User = require("../../models/User.model");
-const { getAllUsers, getUserById } = require("../../controller/user.controller");
+const { getAllUsers, getUserById, updateUser } = require("../../controller/user.controller");
 
 // verifytoken
 const router = express.Router();
@@ -22,6 +22,7 @@ router.post("/verifyToken",verifyPrevToken)
 // All users API
 router.get("/users", getAllUsers)
 router.get("/users/:id", getUserById)
+router.patch("/users/:id", updateUser)
 
  
 //course

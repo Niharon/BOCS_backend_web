@@ -16,6 +16,7 @@ import Instructors from "./pages/Instructors/Instructors";
 import EditInstructor from "./pages/Instructors/EditInstructor";
 import AddInstructor from "./pages/Instructors/AddInstructor";
 import EditUser from "./pages/users/EditUser";
+import AllUsers from "./pages/users/AllUsers";
 
 
 function App() {
@@ -77,7 +78,8 @@ function App() {
           <Route path="/course-request/edit/:id" element={<CourseRequestEdit />} />
 
           {/* user routes */}
-          <Route path="/users" element={<Users />} />
+          <Route path="/users" element={<AllUsers />} />
+          <Route path="/new-users" element={<AllUsers />} />
           <Route path="/users/:id" element={<EditUser />} />
 
 
