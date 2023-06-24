@@ -12,6 +12,7 @@ const instructorController = require("../../controller/admin/instructor.controll
 const { courseThumbnailUpload, instructorPhotoUpload, lessonPdfUpload } = require("../../middlewares/multerConfig");
 const User = require("../../models/User.model");
 const { getAllUsers, getUserById, updateUser } = require("../../controller/user.controller");
+const { getGeneralSettings, updateGeneralSettings } = require("../../controller/admin/generalSettings.controller");
 
 // verifytoken
 const router = express.Router();
@@ -76,6 +77,10 @@ router.patch('/instructors/:id',instructorPhotoUpload.single("photo"), instructo
 router.delete('/instructors/:id', instructorController.deleteInstructor);
 
 
+
+// general settings
+router.get('/general-settings', getGeneralSettings);
+router.get('/update-settings/:id', updateGeneralSettings);
 module.exports = router;
 
 

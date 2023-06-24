@@ -245,15 +245,15 @@ async function checkAnswers(quizWithCorrectAnswerArray, quizAnswers) {
     // check the answers
     quizWithCorrectAnswerArray.forEach((quiz, index) => {
         const quizAnswer = quizAnswers.find(quizAnswer => quizAnswer.id == quiz.id);
-     
+
         // console.log("UserAnswer ",quizAnswer?.answers)
         // console.log("RIght Answer ",quiz.correctAnswers)
         if (quizAnswer) {
             userAnswers.push(quizAnswer.answers)
             // console.log(quiz.correctAnswers)
-            
+
             const isEqualLength = quizAnswer.answers.length === JSON.parse(quiz.correctAnswers).length;
-         
+
             if (isEqualLength) {
                 // console.log("equal Length")
                 const isCorrect = quizAnswer.answers.every(answer => quiz.correctAnswers.includes(answer));
@@ -461,3 +461,90 @@ exports.checkCompletedLessonUpdate = async (req, res, next) => {
     }
 }
 
+exports.getQuizAttemptDetails = async (req, res, next) => {
+    try {
+
+        // get the quiz attempt details of the user
+        const quizAttempt = await UserQuizAttempt.findOne({
+            where: {
+                user_id: req.user.id,
+                lesson_id: req.params.lessonId,
+            },
+            attributes: ["id", "lesson_id", "marks", "userAnswers", "totalMarks"]
+        })
+
+        if (!quizAttempt) {
+            throw new Error("Quiz attempt not found")
+        }
+
+        // check if passed or not 
+        const isPassed = quizAttempt.marks >= (quizAttempt.totalMarks * .4);
+        if (isPassed) {
+
+            // get the quizes of that lesson and answers also
+            let quizes = await Quizes.findAll({
+                where: {
+                    lesson_id: req.params.lessonId,
+                    course_id: req.params.id,
+                },
+                raw: true,
+
+                attributes: [
+                    "id", "lesson_id", "course_id", "title", "options", "correctAnswers", "questionType",
+                ]
+            });
+
+            if (!quizes) {
+                throw new Error("Quiz not found")
+            }
+
+            // const userAnswers = JSON.parse(quizAttempt.userAnswers);
+            // const updatedQuizes = quizes.map((quiz, qIndex) => ({
+            //     ...quiz,
+            //     options: JSON.parse(quiz.options),
+            //     // userAnswers: userAnswers[qIndex]
+            // }));
+            const userAnswers = JSON.parse(quizAttempt.userAnswers);
+            quizes = quizes.map((quiz, qIndex) => ({
+                ...quiz,
+                options: JSON.parse(quiz.options),
+                correctAnswers: JSON.parse(quiz.correctAnswers),
+            }));
+
+            // Iterate over the quizes array
+            quizes.forEach((quiz, index) => {
+              // Get the user's answer for the current quiz
+              const userAnswer = userAnswers[index];
+            //   console.log(userAnswer)
+              // Iterate over the options in the current quiz
+              quiz.options.forEach((option) => {
+                // Set isSelected property to true if the user's answer is correct for this option
+                option.isSelected = userAnswer.includes(quiz.options.indexOf(option));
+               
+              });
+              quiz.userAnswers = userAnswer;
+            });
+            
+
+            // quizes = updatedQuizes;
+            // get the answers of the quiz
+            return res.json({
+                success: true,
+                data:quizes
+       
+            })
+        } else {
+            return res.json({
+                success: true,
+                data:quizAttempt,
+            })
+        }
+
+
+
+    }
+    catch (e) {
+        // console.log(e)
+        next(e)
+    }
+}

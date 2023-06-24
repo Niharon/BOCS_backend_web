@@ -1,6 +1,6 @@
 const express = require("express");
 const checkCourseAccess = require("../middlewares/checkCourseAccess");
-const { getCourseAcessDetailsById, getCourseIntroduction, getCourseMaterial, getQuizByTopicAndLessonId, submitQuiz, setQuizCorrectAnswers, checkCompletedLessonUpdate, getLessonAccessById } = require("../controller/userCourse.controller");
+const { getCourseAcessDetailsById, getCourseIntroduction, getCourseMaterial, getQuizByTopicAndLessonId, submitQuiz, setQuizCorrectAnswers, checkCompletedLessonUpdate, getLessonAccessById, getQuizAttemptDetails } = require("../controller/userCourse.controller");
 const checkCourseExpiry = require("../middlewares/checkCourseExpiry");
 const checkHalfOrFullAccess = require("../middlewares/checkHalfOrFullAccess");
 const { createDiscussionQuestion, getAllDiscussionByCourseId, postAnswer, getDiscussionDetailsById } = require("../controller/discussion.controller");
@@ -23,6 +23,7 @@ router.get("/:id/:discussionId/discussion", checkCourseAccess, getDiscussionDeta
 router.get("/:id/:topicId/:lessonId/lesson", checkCourseAccess, checkCourseExpiry, getLessonAccessById)
 router.get("/:id/:topicId/:lessonId/quiz", checkCourseAccess, checkCourseExpiry, checkHalfOrFullAccess, getQuizByTopicAndLessonId)
 router.post("/:id/:topicId/:lessonId/submit-quiz", checkCourseAccess, checkCourseExpiry, checkHalfOrFullAccess, submitQuiz)
+router.get("/:id/:topicId/:lessonId/quiz/result", checkCourseAccess, checkCourseExpiry, checkHalfOrFullAccess, getQuizAttemptDetails)
 router.post("/:id/:topicId/:lessonId/test", checkCourseAccess, checkCourseExpiry, checkCompletedLessonUpdate)
 
 

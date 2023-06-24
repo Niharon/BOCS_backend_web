@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const User = require("../models/User.model");
 
 const verifyAdmin = async (req, res, next) => {
 
@@ -14,14 +15,40 @@ const verifyAdmin = async (req, res, next) => {
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         // console.log(decoded);
-        if(decoded.role !== "admin"){
+        if (decoded.id) {
+            const user = await User.findOne({ where: { id: decoded.id } },
+                { attributes: ["id", "role", "name", "email"] });
+            if (!user) {
+                return res.status(401).json({
+                    success: false,
+                    message: "Invalid token",
+                });
+            }
+            if (user.role !== "admin") {
+                return res.status(401).json({
+                    success: false,
+                    message: "You are not authorized to access this route",
+                });
+            }
+            if (user.role === "admin") {
+                req.user = user;
+                next();
+            }
+        }
+        else {
             return res.status(401).json({
                 success: false,
-                message: "You are not authorized to access this route",
+                message: "Invalid token",
             });
         }
-        req.user = decoded;
-        next();
+        // if (decoded.role !== "admin") {
+        //     return res.status(401).json({
+        //         success: false,
+        //         message: "You are not authorized to access this route",
+        //     });
+        // }
+        // req.user = decoded;
+        // next();
 
         // here needs to call next for proceed
     }
@@ -33,7 +60,7 @@ const verifyAdmin = async (req, res, next) => {
     }
 
 
-        
+
 
 }
 

@@ -7,12 +7,15 @@ const router = express.Router();
 
 // BASE URL: /api
 
+// general settings route
+router.use("/app", require("./appsettings.routes"));
+
 // authentication routes
 router.use("/user", require("./user.routes"));
 // course related all routes
 router.use("/courses", require("./course.routes"));
 // course access related all routes
-router.use("/user-course", verifyToken, require("./userCourse.route"));
+router.use("/user-course", verifyToken, require("./userCourse.routes"));
 // admin routes
 router.use("/admin", verifyAdmin, require("./admin/admin.routes"));
 
