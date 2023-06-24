@@ -14,7 +14,8 @@ router.get("/version", async (req, res, next) => {
             order: [['id', 'DESC']] // Assuming 'id' is the primary key column
         });
         res.json({
-            version: settings?.version || "1.0.0"
+            android_version: settings?.android_version || "1.0.0",
+            ios_version: settings?.ios_version || "1.0.0"
         })
 
     } catch (e) {

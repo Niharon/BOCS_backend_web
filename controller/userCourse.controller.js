@@ -470,6 +470,7 @@ exports.getQuizAttemptDetails = async (req, res, next) => {
                 user_id: req.user.id,
                 lesson_id: req.params.lessonId,
             },
+            raw: true,
             attributes: ["id", "lesson_id", "marks", "userAnswers", "totalMarks"]
         })
 
@@ -526,17 +527,25 @@ exports.getQuizAttemptDetails = async (req, res, next) => {
             });
             
 
+
             // quizes = updatedQuizes;
             // get the answers of the quiz
             return res.json({
                 success: true,
-                data:quizes
+                data:quizes,
+                quizAttempt:{
+                    ...quizAttempt,
+                    userAnswers
+                }
        
             })
         } else {
             return res.json({
                 success: true,
-                data:quizAttempt,
+                data:{
+                    ...quizAttempt,
+                    userAnswers: JSON.parse(quizAttempt.userAnswers)
+                },
             })
         }
 

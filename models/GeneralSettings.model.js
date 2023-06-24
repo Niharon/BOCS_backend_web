@@ -7,9 +7,12 @@ const GeneralSettings = sequelize.define('general_settings', {
         primaryKey: true,
         autoIncrement: true
     },
-    app_version: {
+    android_version: {
         type: DataTypes.STRING,
     },
+    ios_version:{
+        type: DataTypes.STRING,
+    }
 },{
     timestamps: true,
     createdAt: 'created_at',
