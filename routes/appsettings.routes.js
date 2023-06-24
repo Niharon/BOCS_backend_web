@@ -10,7 +10,9 @@ router.get("/version", async (req, res, next) => {
     try {
 
         // get the last object from GeneralSettings
-        const settings = await GeneralSettings.findOne({}).sort({ created_at: -1 }).limit(1);
+        const settings = await GeneralSettings.findOne({
+            order: [['id', 'DESC']] // Assuming 'id' is the primary key column
+        });
         res.json({
             version: settings?.version || "1.0.0"
         })
