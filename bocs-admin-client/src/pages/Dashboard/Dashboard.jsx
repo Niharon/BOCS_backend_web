@@ -7,7 +7,7 @@ const Dashboard = () => {
 
       <div>Dashboard
 
-        <h1 className="text-meta-1">hi</h1>
+        <h1 className="text-center">Welcome to BOCS Admin Panel</h1>
       </div>
     </DefaultLayout>
   )
