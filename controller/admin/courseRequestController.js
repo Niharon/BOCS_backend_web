@@ -43,7 +43,7 @@ const courseRequestController = {
         success: true,
         count: courseRequests.count,
 
-        courseRequests:courseRequests.rows
+        courseRequests: courseRequests.rows
       })
     } catch (error) {
       // console.error(error);
@@ -131,21 +131,39 @@ const courseRequestController = {
         // create a new usercourse entry
         const course = await Courses.findByPk(courseRequest.course_id);
 
-        const newCourse = await UserCourse.create({
-          course_id: courseRequest.course_id,
-          user_id: courseRequest.user_id,
-          access: courseRequest.access,
-          access_start: new Date(),
-          access_end: new Date(new Date().getTime() + (course.access_duration * 24 * 60 * 60 * 1000)),
-          status: 'in-progress'
-        });
+        // if courseRequest access is rest update the UserCourse access to full
+        if (courseRequest.access === 'rest') {
+          const userCourse = await UserCourse.findOne({
+            where: {
+              user_id: courseRequest.user_id,
+              course_id: courseRequest.course_id
+            }
+          });
+          userCourse.access = 'full';
+          await userCourse.save();
+          await createNotification(courseRequest.user_id, `Your Rest course request for ${course?.title} has been confirmed`);
+        }
+        else {
 
 
-        await newCourse.save();
+          const newCourse = await UserCourse.create({
+            course_id: courseRequest.course_id,
+            user_id: courseRequest.user_id,
+            access: courseRequest.access,
+            access_start: new Date(),
+            access_end: new Date(new Date().getTime() + (course.access_duration * 24 * 60 * 60 * 1000)),
+            status: 'in-progress'
+          });
 
-        // covert access end date to string
-        const expiry_date = new Date(newCourse.access_end).toDateString()
-        await createNotification(courseRequest.user_id, `Your course request for ${course?.title} has been confirmed. You need to complete the course within ${expiry_date}`)
+
+          await newCourse.save();
+
+          // covert access end date to string
+          const expiry_date = new Date(newCourse.access_end).toDateString()
+          await createNotification(courseRequest.user_id, `Your course request for ${course?.title} has been confirmed. You need to complete the course within ${expiry_date}`);
+        }
+
+
       }
 
       else {

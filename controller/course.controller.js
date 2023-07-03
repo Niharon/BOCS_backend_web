@@ -115,7 +115,7 @@ const requestCourse = async (req, res, next) => {
       }
     })
 
-    if (courseRequestExists) {
+    if (courseRequestExists && access !== 'rest') {
 
       return next(new Error('You already requested this course'))
     }
@@ -131,6 +131,19 @@ const requestCourse = async (req, res, next) => {
 
     if (user) {
 
+      // If the access is rest, validate if the user has previously requested this course with half access
+      if (access === 'rest') {
+
+        const courseRequest = await CourseRequest.findOne({
+          where: {
+            user_id: user.id,
+            course_id: id,
+            access: 'half'
+          }
+        })
+
+        if (!courseRequest) return next(new Error('You must Have previous Half Access to request for Rest Access'))
+      }
 
 
       const courseRequest = await CourseRequest.create({

@@ -26,7 +26,7 @@ const CourseRequest = sequelize.define('courserequest', {
     },
     access:{
         type: DataTypes.ENUM,
-        values: ['half', 'full'],
+        values: ['half', 'full','rest'],
     },
     payment_id:{
         type: DataTypes.STRING,
