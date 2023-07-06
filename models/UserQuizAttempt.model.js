@@ -23,6 +23,10 @@ const UserQuizAttempt = sequelize.define('userquizattempt', {
         type: DataTypes.JSON,
         allowNull: false
     },
+    correctQuizes: {
+        type: DataTypes.JSON,
+        allowNull: false
+    },
     marks:{
         type: DataTypes.INTEGER,
 

@@ -1,5 +1,6 @@
 const { DataTypes} = require('sequelize');
 const { sequelize } = require('../sequelize');
+const encryptUrl = require('../utils/encryptUrl');
 
 const Lessons = sequelize.define('lessons', {
     id: {
@@ -23,7 +24,12 @@ const Lessons = sequelize.define('lessons', {
         type: DataTypes.STRING,
         validator:{
             isUrl: true
+        },
+        get() {
+            const url = this.getDataValue('video');
+            return url ? encryptUrl(url) : null;
         }
+
     },
     pdf:{
         type: DataTypes.STRING,
