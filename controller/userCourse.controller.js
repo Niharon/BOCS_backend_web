@@ -409,7 +409,7 @@ exports.submitQuiz = async (req, res, next) => {
 
         }
 
-        // check if the marks is greater than 50% or not
+        // check if the marks is greater than 50% or not, then update progress
 
         const isPassed = marks >= (quizes.length * .4);
         // const isPassed = true;
@@ -430,11 +430,44 @@ exports.submitQuiz = async (req, res, next) => {
 
 
 
+        const updatedQuizes = quizes.map(quiz => {
+            return {
+                id:quiz.id,
+                title:quiz.title,
+                questionType:quiz.questionType,
+                lesson_id:quiz.lesson_id,
+                options: JSON.parse(quiz.options).map(option => ({ id: option.id, text: option.text }))
+            }
+        });
+
+        // Iterate over the quizes array
+        updatedQuizes.forEach((quiz, index) => {
+            // Get the user's answer for the current quiz
+            const userAnswer = userAnswers[index];
+            //   console.log(userAnswer)
+            // Iterate over the options in the current quiz
+            quiz.options.forEach((option) => {
+                // Set isSelected property to true if the user's answer is correct for this option
+                delete option.isCorrect;
+                option.isSelected = userAnswer.includes(quiz.options.indexOf(option));
+
+            });
+            // quiz.userAnswers = userAnswer;
+            quiz.isCorrect = correctQuizes.includes(quiz.id)
+        });
+
+
+
+
+
+
+
         // filter the quizes and remove
         res.json({
             success: true,
             marks: marks,
-            totalQuizes: quizes.length
+            totalQuizes: quizes.length,
+            data:updatedQuizes
         })
 
 
@@ -471,7 +504,7 @@ exports.getQuizAttemptDetails = async (req, res, next) => {
                 lesson_id: req.params.lessonId,
             },
             raw: true,
-            attributes: ["id", "lesson_id", "marks", "userAnswers", "correctQuizes","totalMarks"]
+            attributes: ["id", "lesson_id", "marks", "userAnswers", "correctQuizes", "totalMarks"]
         })
 
         if (!quizAttempt) {
@@ -497,10 +530,10 @@ exports.getQuizAttemptDetails = async (req, res, next) => {
         }
 
         const userAnswers = JSON.parse(quizAttempt.userAnswers);
-        const correctQuizes = JSON.parse(quizAttempt.correctQuizes)
+        const correctQuizes = JSON.parse(quizAttempt.correctQuizes) || []
 
-   
-        
+
+
         quizes = quizes.map(quiz => {
             return {
                 ...quiz,
@@ -530,10 +563,10 @@ exports.getQuizAttemptDetails = async (req, res, next) => {
         // get the answers of the quiz
         return res.json({
             success: true,
-            marks:quizAttempt.marks,
-            totalMarks:quizAttempt.totalMarks,
+            marks: quizAttempt.marks,
+            totalMarks: quizAttempt.totalMarks,
             data: quizes,
-      
+
 
         })
 
