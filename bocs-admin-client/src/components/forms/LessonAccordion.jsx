@@ -16,17 +16,17 @@ import { dirtyValues } from "../../utils/dirtyFields";
 import { Link } from "react-router-dom";
 // import a icon from react-icons
 
-const LessonAccordion = ({ lesson, topics,course_id,refetch }) => {
-  
+const LessonAccordion = ({ lesson, topics, course_id, refetch }) => {
+
   const {
     register,
     handleSubmit,
-    formState: { errors,dirtyFields,isDirty },
-    
+    formState: { errors, dirtyFields, isDirty },
+
     setValue,
   } = useForm();
 
-  const {mutate:createLessonQuery,isLoading,isSuccess} = useMutation({
+  const { mutate: createLessonQuery, isLoading, isSuccess } = useMutation({
     mutationKey: "createLesson",
 
     mutationFn: createLessonApi,
@@ -35,7 +35,7 @@ const LessonAccordion = ({ lesson, topics,course_id,refetch }) => {
       toast.success("Lesson Created Successfully");
       refetch()
     },
-    
+
     onError(error, variables, context) {
       console.log(error);
 
@@ -43,22 +43,31 @@ const LessonAccordion = ({ lesson, topics,course_id,refetch }) => {
   })
 
   const updateLessonQuery = useMutation({
-    mutationFn:updateLessonApi,
-    onSuccess:(data)=>{
+    mutationFn: updateLessonApi,
+    onSuccess: (data) => {
       refetch()
       toast.dismiss();
       toast.success("Updated Successfully");
     },
-    onError:(error)=>{
+    onError: (error) => {
       console.log(error)
     },
-    onMutate:()=>{
+    onMutate: () => {
       toast.loading("updating..")
     }
 
   })
 
   const onSubmit = (data) => {
+
+    const regex = /^https:\/\/youtu.be\/[A-Za-z0-9_\-]{11}$/;
+
+    // Check if the input value matches the pattern
+    const isValidURL = regex.test(data.video)
+    if (!isValidURL) {
+      toast.error("Please enter valid video URL, according to format");
+      return
+    }
 
     console.log(data.pdf[0]);
     // convert to formData
@@ -75,31 +84,50 @@ const LessonAccordion = ({ lesson, topics,course_id,refetch }) => {
 
   const onUpdate = (data) => {
 
-    if(Object.keys(dirtyFields).length>0){
+    if (dirtyFields.video) {
+ 
+      if (data.video) {
+        const regex = /^https:\/\/youtu.be\/[A-Za-z0-9_\-]{11}$/;
 
-      const modifiedData = dirtyValues(dirtyFields,data)
+        // Check if the input value matches the pattern
+        const isValidURL = regex.test(data.video)
+        if (!isValidURL) {
+          toast.error("Please enter valid video URL, according to format");
+          return
+        }
+
+      } else {
+        toast.error("You must enter video url");
+        return
+      }
+
+    }
+
+    if (Object.keys(dirtyFields).length > 0) {
+
+      const modifiedData = dirtyValues(dirtyFields, data)
       // covert to form data dynamically
       // console.log(modifiedData)
       const formData = new FormData();
       for (const key in modifiedData) {
-        if(key==="pdf" && modifiedData[key][0] instanceof File){
-          formData.append(key,modifiedData[key][0])
+        if (key === "pdf" && modifiedData[key][0] instanceof File) {
+          formData.append(key, modifiedData[key][0])
         }
-        else{
-          formData.append(key,modifiedData[key])
+        else {
+          formData.append(key, modifiedData[key])
         }
       }
 
-      
-      updateLessonQuery.mutate({id:lesson.id,data:formData});
-    }else{
+
+      updateLessonQuery.mutate({ id: lesson.id, data: formData });
+    } else {
       toast.error("Change something first to update");
     }
 
   }
 
-  useEffect(()=>{
-    function updateInputField(){
+  useEffect(() => {
+    function updateInputField() {
       setValue("id", lesson?.id);
       setValue("title", lesson?.title);
       setValue("description", lesson?.description);
@@ -107,19 +135,19 @@ const LessonAccordion = ({ lesson, topics,course_id,refetch }) => {
       setValue("topic_id", lesson?.topic_id);
     }
     updateInputField();
-  },[])
+  }, [])
 
-  useEffect(()=>{
-    if(isLoading){
+  useEffect(() => {
+    if (isLoading) {
       toast.loading("Creating Lesson");
     }
-    if(isSuccess){
+    if (isSuccess) {
       toast.dismiss();
       toast.success("Lesson Created Successfully")
     }
-  },[isLoading,isSuccess])
+  }, [isLoading, isSuccess])
 
-  
+
   return (
     <Accordion>
       <AccordionSummary
@@ -159,7 +187,7 @@ const LessonAccordion = ({ lesson, topics,course_id,refetch }) => {
                       <option
                         key={index}
                         value={topic.id}
-               
+
                       >
                         {topic.title}
                       </option>
@@ -180,13 +208,14 @@ const LessonAccordion = ({ lesson, topics,course_id,refetch }) => {
             <div className="block w-full md:gap-5 md:flex">
               <div className="mb-2 w-full">
                 <Input
+                  helperText="url format: https://youtu.be/xxxxxxxxxx"
                   label="Video Link"
                   register={register}
                   registerText="video"
                 />
               </div>
               <div className="mb-2 w-full">
-            
+
                 <Input
                   label="Pdf Link"
                   register={register}
@@ -210,11 +239,11 @@ const LessonAccordion = ({ lesson, topics,course_id,refetch }) => {
             <div className="flex justify-end gap-3">
               {
                 lesson.id ? <>
-                <Link to={`/courses/edit/${course_id}/lesson/${lesson.id}`} className="rounded bg-secondary p-2 px-5 font-medium text-gray">Add Quiz</Link>
-                <button role="update" onClick={handleSubmit(onUpdate)} className="rounded bg-success p-2 px-5 font-medium text-gray">Update</button>
+                  <Link to={`/courses/edit/${course_id}/lesson/${lesson.id}`} className="rounded bg-secondary p-2 px-5 font-medium text-gray">Add Quiz</Link>
+                  <button role="update" onClick={handleSubmit(onUpdate)} className="rounded bg-success p-2 px-5 font-medium text-gray">Update</button>
                 </> : <button type="submit" className="rounded bg-primary p-2 px-5 font-medium text-gray">
-                Save
-              </button>
+                  Save
+                </button>
               }
             </div>
           </form>

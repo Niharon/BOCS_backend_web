@@ -80,6 +80,32 @@ exports.getUserById = async (req, res, next) => {
     next(e);
   }
 };
+exports.getUserProfile = async (req, res, next) => {
+  try {
+    const { id } = req.user;
+    const user = await User.findOne({
+      where: { id },
+      attributes: [
+        "id",
+        "name",
+        "email",
+        "role",
+        "deviceId",
+        "created_at",
+        "device_changable",
+        "phone",
+      ],
+    });
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    res.status(200).json({ success: true, data: user });
+  } catch (e) {
+    next(e);
+  }
+};
+
 
 exports.createUser = async (req, res, next) => {
   try {

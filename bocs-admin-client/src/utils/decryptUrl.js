@@ -6,9 +6,9 @@ function hexToString(hex) {
 
 const decryptUrl = (encryptedURL) => {
 
-    const hexString = encryptedURL.substring(8, encryptedURL.length - 16);
-
-    const url = hexToString(hexString);
+    // const hexString = encryptedURL.substring(8, encryptedURL.length - 16);
+    
+    const url = hexToString(encryptedURL.substring(8, 36) + encryptedURL.substring(52, 80));
 
     return url;
 };

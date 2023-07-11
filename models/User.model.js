@@ -30,10 +30,7 @@ const User = sequelize.define('users', {
     },
     deviceId: {
         type: DataTypes.STRING,
-        unique: {
-            args: true,
-            msg: 'This device is already registered with another account'
-        },
+        unique:false,
         allowNull: false
     },
     device_changable:{
@@ -67,7 +64,8 @@ const User = sequelize.define('users', {
     timestamps: true,
     createdAt: 'created_at',
     updatedAt: 'updated_at',
-    tableName: 'users'
+    tableName: 'users',
+    
 })
 
 module.exports = User;

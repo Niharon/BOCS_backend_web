@@ -3,13 +3,17 @@ const Input = (props) => {
     // const { register } = useForm();
 
     //    destructuring props and set default value for isRequied
-    const { label, isRequied = false, type, registerText, register, value } = props;
+    const { label, isRequied = false, type, registerText, register, value,helperText } = props;
 
     return (
         <>
             <label className="mb-2.5 block text-black dark:text-white">
                 {label}
                 {isRequied && <span className="text-meta-1">*</span>}
+                <br></br>
+                {
+                    helperText && <span className="text-sm text-meta-5">{helperText}</span>
+                }
             </label>
 
             {/*  if type is textarea then render textarea else render input */}
