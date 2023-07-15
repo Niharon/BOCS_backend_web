@@ -11,6 +11,11 @@ const Quizes = sequelize.define('quizes', {
         type: DataTypes.STRING,
    
     },
+    question_image:{
+        type: DataTypes.STRING,
+        allowNull: true,
+        default: null
+    },
     numOptions:{
         type: DataTypes.INTEGER,
     },

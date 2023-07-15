@@ -25,4 +25,30 @@ router.get("/version", async (req, res, next) => {
 
 })
 
+router.patch("/version/update", async (req, res, next) => {
+    try {
+        const { android_version, ios_version } = req.body;
+        const settings = await GeneralSettings.findOne({
+            order: [['id', 'DESC']] // Assuming 'id' is the primary key column
+        });
+        if (settings) {
+            settings.android_version = android_version;
+            settings.ios_version = ios_version;
+            await settings.save();
+        }
+        else {
+            await GeneralSettings.create({
+                android_version,
+                ios_version
+            })
+        }
+        res.json({
+            message: "Version Updated Successfully"
+        })
+    }
+    catch (e) {
+        next(e)
+    }
+})
+
 module.exports = router;

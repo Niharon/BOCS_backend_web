@@ -23,7 +23,8 @@ exports.getAllNotificationsByUser = async (user_id) => {
             where: {
                 user_id
             },
-            attributes: ["id", "message", "is_read"]
+            attributes: ["id", "message", "is_read"],
+            order:[['created_at','DESC']]
         });
         return notifications;
 

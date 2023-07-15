@@ -9,7 +9,7 @@ import CourseRequest from "./pages/CourseRequest/CourseRequest";
 import CourseRequestEdit from "./pages/CourseRequest/CourseRequestEdit";
 import Users from "./pages/users/Users";
 import NotFoundPage from "./pages/NotFoundPage";
-import AddQuizes from "./pages/Courses/AddQuizes";
+import AddQuizes from "./pages/Courses/AllQuizes";
 import Login from "./pages/Login/Login";
 import RequireAuth from "./auth/RequireAuth";
 import Instructors from "./pages/Instructors/Instructors";
@@ -17,6 +17,9 @@ import EditInstructor from "./pages/Instructors/EditInstructor";
 import AddInstructor from "./pages/Instructors/AddInstructor";
 import EditUser from "./pages/users/EditUser";
 import AllUsers from "./pages/users/AllUsers";
+import AllQuizes from "./pages/Courses/AllQuizes";
+import AddQuiz from "./pages/Courses/AddQuiz";
+import AppSettings from "./pages/AppSettings/AppSettings";
 
 
 function App() {
@@ -72,7 +75,8 @@ function App() {
 
           {/* Quiz route */}
 
-          <Route path="/courses/edit/:id/lesson/:lessonid" element={<AddQuizes />} />
+          <Route path="/courses/edit/:id/lesson/:lessonid" element={<AllQuizes />} />
+          <Route path="/courses/edit/:id/lesson/:lessonid/add-quiz" element={<AddQuiz />} />
 
           <Route path="/course-request" element={<CourseRequest />} />
           <Route path="/course-request/edit/:id" element={<CourseRequestEdit />} />
@@ -88,6 +92,9 @@ function App() {
           <Route path="/instructors" element={<Instructors />} />
           <Route path="/instructors/add" element={<AddInstructor />} />
           <Route path="/instructors/edit/:id" element={<EditInstructor />} />
+
+          {/* Settings */}
+          <Route path="/settings" element={<AppSettings />} />
 
         </Route>
 

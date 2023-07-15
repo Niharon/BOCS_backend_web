@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const sendMail = require("../utils/sendMail");
 const mailTemplates = require("../utils/mailTemplates");
 const { getAllNotificationsByUser } = require("./usernotification.controller");
+const UserNotification = require("../models/UserNotification.model");
 
 // Generate a random 256-bit (32-byte) secret key
 
@@ -193,7 +194,7 @@ exports.updateUserProfile = async (req, res, next) => {
 };
 
 exports.updatePassword = async (req, res, next) => {
-  try{
+  try {
 
     const { oldPassword, newPassword } = req.body;
     const { id } = req.user;
@@ -203,7 +204,7 @@ exports.updatePassword = async (req, res, next) => {
     if (!user) {
       throw new Error("User not found");
     }
-   
+
     const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
     if (!isPasswordValid) {
       throw new Error("Invalid Old Password");
@@ -217,7 +218,7 @@ exports.updatePassword = async (req, res, next) => {
 
     res.status(200).json({ success: true, message: "Password updated successfully" });
 
-  }catch(e){
+  } catch (e) {
     next(e);
   }
 }
@@ -382,11 +383,37 @@ exports.resetPassword = async (req, res, next) => {
 exports.getUserNotifications = async (req, res, next) => {
   try {
     const notifications = await getAllNotificationsByUser(req.user.id);
+    // count the number of unread notifications
+    const unreadCount = notifications.filter((n) => !n.is_read).length;
     return res.status(200).json({
       success: true,
       notifications,
+      unreadCount:unreadCount
+
     });
   } catch (e) {
     next(e);
   }
 };
+
+
+exports.markNotificationAsRead = async (req, res, next) => {
+  try {
+
+    const { id } = req.params;
+    const notification = await UserNotification.findOne({ where: { id } });
+    if (!notification) {
+      throw new Error("Notification not found");
+    }
+    notification.is_read = true;
+    await notification.save();
+    res.status(200).json({
+      success: true,
+      message: "notification status updated"
+    })
+
+
+  } catch (e) {
+    next(e)
+  }
+}

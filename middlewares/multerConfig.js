@@ -8,6 +8,7 @@ let instructorPhoto;
 courseThumbnail = 'uploads/courses/thumbnail'
 instructorPhoto = 'uploads/instructors/'
 lessonPdf = 'uploads/lessons/pdf'
+quizeImages = 'uploads/quizes/images'
 
 
 
@@ -60,14 +61,14 @@ const lessonPdfStorage = multer.diskStorage({
 
         // get the file name and slugify it
         // console.log(file)
-   
+
         let sluggedName = "lesson-pdf";
         const fileName = file.originalname.split(".pdf")[0];
         if (fileName) {
 
             sluggedName = fileName.split(" ").join("-").toLowerCase();
         }
-        else{
+        else {
             sluggedName = req.body.title.split(" ").join("-").toLowerCase();
         }
 
@@ -75,14 +76,33 @@ const lessonPdfStorage = multer.diskStorage({
     },
 });
 
+
+const quizImageStorage = multer.diskStorage({
+    destination: quizeImages,
+    filename: function (req, file, cb) {
         
+        const extension = path.extname(file.originalname);
+
+        // get the file name and slugify it
+        // console.log(file)
+
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E7);
+
+        cb(null, file.fieldname + '-' + uniqueSuffix + extension);
+    },
+});
+
+
 
 
 const courseThumbnailUpload = multer({ storage: courseThumbnailStorate });
 const instructorPhotoUpload = multer({ storage: instructorPhotoStorage });
 const lessonPdfUpload = multer({ storage: lessonPdfStorage });
+const quizImageUpload = multer({ storage: quizImageStorage });
+
 module.exports = {
     courseThumbnailUpload,
     instructorPhotoUpload,
-    lessonPdfUpload
+    lessonPdfUpload,
+    quizImageUpload
 }

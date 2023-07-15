@@ -85,7 +85,7 @@ const LessonAccordion = ({ lesson, topics, course_id, refetch }) => {
   const onUpdate = (data) => {
 
     if (dirtyFields.video) {
- 
+      
       if (data.video) {
         const regex = /^https:\/\/youtu.be\/[A-Za-z0-9_\-]{11}$/;
 

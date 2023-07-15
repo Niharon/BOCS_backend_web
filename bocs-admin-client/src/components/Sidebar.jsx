@@ -2,7 +2,7 @@ import  { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 // import Logo from '../images/logo/logo.svg';
 import SidebarLinkGroup from './SidebarLinkGroup';
-import { AiOutlineBars } from 'react-icons/ai';
+import { AiFillSetting, AiOutlineBars } from 'react-icons/ai';
 import { IoBookSharp } from 'react-icons/io5';
 import { FaUserGraduate, FaUsers } from 'react-icons/fa';
 import { TbStatusChange } from 'react-icons/tb';
@@ -50,6 +50,11 @@ const sidebarMenuItems = [
     title: 'Instructors',
     icon: <FaUserGraduate/>,
     path: '/instructors',
+  },
+  {
+    title: 'App Settings',
+    icon: <AiFillSetting/>,
+    path: '/settings',
   },
  
   // {

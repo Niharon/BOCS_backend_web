@@ -9,6 +9,9 @@
 }
 
 @layer components {
+  .file-input-style{
+    @apply cursor-pointer   border-stroke font-medium outline-none
+  }
 }
 
 @layer utilities {

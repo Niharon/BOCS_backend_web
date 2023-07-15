@@ -8,7 +8,7 @@ import { AuthProvider } from "./context/AuthProvider.jsx";
 import { CourseProvider } from "./context/CourseProvider.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
         <CourseProvider>
@@ -19,5 +19,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
       </AuthProvider>
     </BrowserRouter>
-  </React.StrictMode>
+  // </React.StrictMode>
 );

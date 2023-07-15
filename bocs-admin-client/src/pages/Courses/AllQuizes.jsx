@@ -9,18 +9,19 @@ import { getLessonByIdApi } from "../../api/lessonApi";
 import LoadingScreen from "../../components/LoadingScreen";
 
 const questionData = {
-  title : "Question Text",
-  questionType : "single",
-  numOptions : 4,
-  options : [
-    {text:"",isCorrect:false},
-    {text:"",isCorrect:false},
-    {text:"",isCorrect:false},
-    {text:"",isCorrect:false}
+  title: "Question Text",
+  question_image: null,
+  questionType: "single",
+  numOptions: 4,
+  options: [
+      { text: "", option_image: null, isCorrect: false },
+      { text: "", option_image: null, isCorrect: false },
+      { text: "", option_image: null, isCorrect: false },
+      { text: "", option_image: null, isCorrect: false }
   ],
-  correct_indexes : []
+  correct_indexes: []
 }
-function QuizForm() {
+function AllQuizes() {
  
   const [questions, setQuestions] = useState([]);
   const {lessonid} = useParams();
@@ -86,4 +87,4 @@ function QuizForm() {
     </DefaultLayout>
   );
 }
-export default QuizForm;
+export default AllQuizes;

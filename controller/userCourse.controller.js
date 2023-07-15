@@ -132,6 +132,7 @@ exports.getCourseMaterial = async (req, res, next) => {
 
         res.json({
             success: true,
+            access: req.course_access.access,
             topics: filteredTopics,
             expired: course_access.course.isExpired
         })
@@ -432,10 +433,10 @@ exports.submitQuiz = async (req, res, next) => {
 
         const updatedQuizes = quizes.map(quiz => {
             return {
-                id:quiz.id,
-                title:quiz.title,
-                questionType:quiz.questionType,
-                lesson_id:quiz.lesson_id,
+                id: quiz.id,
+                title: quiz.title,
+                questionType: quiz.questionType,
+                lesson_id: quiz.lesson_id,
                 options: JSON.parse(quiz.options).map(option => ({ id: option.id, text: option.text }))
             }
         });
@@ -467,7 +468,7 @@ exports.submitQuiz = async (req, res, next) => {
             success: true,
             marks: marks,
             totalQuizes: quizes.length,
-            data:updatedQuizes
+            data: updatedQuizes
         })
 
 
