@@ -209,7 +209,7 @@ exports.getQuizByTopicAndLessonId = async (req, res, next) => {
                 course_id: req.params.id,
 
             },
-            attributes: ['id', 'title', 'options', 'questionType', 'numOptions']
+            attributes: ['id', 'title', 'options', 'questionType', 'numOptions','question_image']
 
         })
 
@@ -217,7 +217,7 @@ exports.getQuizByTopicAndLessonId = async (req, res, next) => {
         const filteredQuizes = quizes.map(quiz => {
             return {
                 ...quiz.dataValues,
-                options: JSON.parse(quiz.options).map(option => ({ id: option.id, text: option.text }))
+                options: JSON.parse(quiz.options).map(option => ({ id: option.id, text: option.text, option_image: option.option_image }))
             }
         })
 
@@ -436,8 +436,9 @@ exports.submitQuiz = async (req, res, next) => {
                 id: quiz.id,
                 title: quiz.title,
                 questionType: quiz.questionType,
+                question_image: quiz.question_image,
                 lesson_id: quiz.lesson_id,
-                options: JSON.parse(quiz.options).map(option => ({ id: option.id, text: option.text }))
+                options: JSON.parse(quiz.options).map(option => ({ id: option.id, text: option.text,option_image:option.option_image }))
             }
         });
 
@@ -523,6 +524,7 @@ exports.getQuizAttemptDetails = async (req, res, next) => {
 
             attributes: [
                 "id", "lesson_id", "course_id", "title", "options", "questionType",
+                "question_image"
             ]
         });
 
@@ -538,7 +540,7 @@ exports.getQuizAttemptDetails = async (req, res, next) => {
         quizes = quizes.map(quiz => {
             return {
                 ...quiz,
-                options: JSON.parse(quiz.options).map(option => ({ id: option.id, text: option.text }))
+                options: JSON.parse(quiz.options).map(option => ({ id: option.id, text: option.text, option_image: option.option_image }))
             }
         });
 
