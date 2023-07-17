@@ -24,9 +24,19 @@ const quizController = {
             });
 
             // update option_images in options
-            optionImageIndex.forEach((optionImage) => {
-                parsedOptions[optionImage.index].option_image = optionImage.path;
+            // optionImageIndex.forEach((optionImage) => {
+            //     parsedOptions[optionImage.index].option_image = optionImage.path;
+            // });
+            // add option_image in each option object , if not in optionImageIndex, add as null
+            parsedOptions.forEach((option, index) => {
+                const optionImage = optionImageIndex.find((optionImage) => optionImage.index === index);
+                if (optionImage) {
+                    option.option_image = optionImage.path;
+                } else {
+                    option.option_image = null;
+                }
             });
+
 
             // console.log('option_images:', optionImageIndex);
             // console.log('options:', parsedOptions);
