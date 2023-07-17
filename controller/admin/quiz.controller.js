@@ -28,12 +28,16 @@ const quizController = {
             //     parsedOptions[optionImage.index].option_image = optionImage.path;
             // });
             // add option_image in each option object , if not in optionImageIndex, add as null
+            const correctAnswers = [];
             parsedOptions.forEach((option, index) => {
                 const optionImage = optionImageIndex.find((optionImage) => optionImage.index === index);
                 if (optionImage) {
                     option.option_image = optionImage.path;
                 } else {
                     option.option_image = null;
+                }
+                if (option.isCorrect) {
+                    correctAnswers.push(index);
                 }
             });
 
@@ -51,12 +55,12 @@ const quizController = {
 
 
             // Create the question object with the file paths
-            const correctAnswers = [];
-            JSON.parse(options).forEach((option, index) => {
-                if (option.isCorrect) {
-                    correctAnswers.push(index);
-                }
-            });
+
+            // JSON.parse(options).forEach((option, index) => {
+            //     if (option.isCorrect) {
+            //         correctAnswers.push(index);
+            //     }
+            // });
             const question = {
                 title,
                 question_image: questionImagePath,
@@ -128,12 +132,25 @@ const quizController = {
             });
 
             // update option_images in options
-            optionImageIndex.forEach((optionImage) => {
-                parsedOptions[optionImage.index].option_image = optionImage.path;
-            });
+            // optionImageIndex.forEach((optionImage) => {
+            //     parsedOptions[optionImage.index].option_image = optionImage.path;
+            // });
+
+            // const correctAnswers = [];
+            // parsedOptions.forEach((option, index) => {
+            //     if (option.isCorrect) {
+            //         correctAnswers.push(index);
+            //     }
+            // });
 
             const correctAnswers = [];
             parsedOptions.forEach((option, index) => {
+                const optionImage = optionImageIndex.find((optionImage) => optionImage.index === index);
+                if (optionImage) {
+                    option.option_image = optionImage.path;
+                } else {
+                    option.option_image = null;
+                }
                 if (option.isCorrect) {
                     correctAnswers.push(index);
                 }
