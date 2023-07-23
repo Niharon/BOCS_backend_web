@@ -1,5 +1,6 @@
 const Lessons = require("../models/Lesson.model");
 const Topics = require("../models/Topic.model");
+const encryptUrl = require("../utils/encryptUrl");
 
 const checkHalfOrFullAccess = async (req, res, next) => {
 
@@ -35,7 +36,7 @@ const checkHalfOrFullAccess = async (req, res, next) => {
         if (index >= topicLimit) {
             return {
                 ...topic.dataValues,
-                lessons: topic.lessons.map(lesson => ({ id: lesson.id, title: lesson.title })),
+                lessons: topic.lessons.map(lesson => ({ id: lesson.id, title: lesson.title, completed: course_access.completed_lessons?.includes(lesson.id) ? true : false })),
                 locked: true
 
             }
@@ -43,6 +44,7 @@ const checkHalfOrFullAccess = async (req, res, next) => {
         return {
 
             ...topic.dataValues,
+            lessons: topic.lessons.map(lesson => ({ ...lesson.dataValues, video: encryptUrl(lesson.dataValues.video), pdf: "public/lessons/pdf/" + lesson.dataValues.pdf, completed: course_access.completed_lessons?.includes(lesson.id) ? true : false })),
             locked: false
         }
     })
@@ -56,7 +58,7 @@ const checkHalfOrFullAccess = async (req, res, next) => {
                     message: "Topic is Locked, Access Full Course to get Access to this topic"
                 })
             }
-        
+
             req.filteredTopics = filteredTopics;
             next();
 

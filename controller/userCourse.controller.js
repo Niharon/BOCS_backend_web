@@ -123,9 +123,16 @@ exports.getCourseMaterial = async (req, res, next) => {
         //         locked: false
         //     }
         // })
+        
+
 
         const filteredTopics = req.filteredTopics
 
+        // filteredTopics.map(topic => {
+        //     topic.lessons.map(lesson => {
+        //         console.log(lesson)
+        //     })
+        // })
 
 
         // course.dataValues.total_topics = topicLimit;

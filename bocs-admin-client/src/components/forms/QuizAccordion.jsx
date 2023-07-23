@@ -32,7 +32,7 @@ const QuizAccordion = ({ question, index, refetch, course_id, lesson_id }) => {
     onSuccess: (data) => {
       console.log("success");
       toast.success("Quiz Created Successfully");
-      // refetch()
+      refetch()
     },
     onError: (error) => { },
   })
