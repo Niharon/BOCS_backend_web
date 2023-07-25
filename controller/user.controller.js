@@ -237,6 +237,7 @@ exports.login = async (req, res, next) => {
     if (user.role === "user" && user.deviceId !== deviceId) {
       if (user.device_changable) {
         user.deviceId = deviceId;
+        user.device_changable = false;
         await user.save();
       } else {
         throw new Error("Device not matched or deviceId not provided");

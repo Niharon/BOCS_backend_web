@@ -239,7 +239,7 @@ const LessonAccordion = ({ lesson, topics, course_id, refetch }) => {
             <div className="flex justify-end gap-3">
               {
                 lesson.id ? <>
-                  <Link to={`/courses/edit/${course_id}/lesson/${lesson.id}`} className="rounded bg-secondary p-2 px-5 font-medium text-gray">Add Quiz</Link>
+                  <Link to={`/courses/edit/${course_id}/lesson/${lesson.id}`} className="rounded bg-primary p-2 px-5 font-medium text-gray">Quiz</Link>
                   <button role="update" onClick={handleSubmit(onUpdate)} className="rounded bg-success p-2 px-5 font-medium text-gray">Update</button>
                 </> : <button type="submit" className="rounded bg-primary p-2 px-5 font-medium text-gray">
                   Save

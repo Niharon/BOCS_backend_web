@@ -59,14 +59,14 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            Thomas Anree
+            Welcome Admin
           </span>
-          <span className="block text-xs">UX Designer</span>
+          <span className="block text-xs"></span>
         </span>
-
+{/* 
         <span className="h-12 w-12 rounded-full">
           <img src={UserOne} alt="User" />
-        </span>
+        </span> */}
 
         <svg
           className={`hidden fill-current sm:block ${
@@ -165,7 +165,7 @@ const DropdownUser = () => {
                   fill=""
                 />
               </svg>
-              Account Settings
+              App Settings
             </Link>
           </li>
         </ul>
