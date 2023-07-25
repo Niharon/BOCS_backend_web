@@ -29,7 +29,7 @@ exports.verifyCourse = async (req, res, next) => {
         }
         // Render the EJS template and pass the data as an object
         // return res.send(courseData)
-        res.render('verify', {courseData:courseData});
+        res.render('verify', {courseData:courseData,date: new Date(courseData.updated_at).toDateString()});
     }
     catch (e) {
         next(e)
