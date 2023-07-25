@@ -146,6 +146,10 @@ UserCourse.belongsTo(Courses, {
     foreignKey: 'course_id'
 })
 
+UserCourse.belongsTo(User, {
+    foreignKey: 'user_id'
+});
+
 // Discussion Association
 Courses.hasMany(Discussion, {
     as: 'discussions',

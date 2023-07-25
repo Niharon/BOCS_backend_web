@@ -6,18 +6,22 @@ const verifyAdmin = require("./middlewares/verifyAdmin");
 require("dotenv").config();
 const app = express();
 const path = require('path');
+const { verifyCourse } = require("./controller/verifyCourse.controller");
 // middlewares
 
 app.use(express.json());
 app.use(cors());
 
+// Set the view engine to EJS
+app.set('view engine', 'ejs');
+app.set('views', __dirname + '/templates');
 
 if (process.env.NODE_ENV === 'development') {
 
   app.use('/public', express.static(path.join(__dirname, 'uploads')));
   app.use(express.static(path.join(__dirname, 'templates')));
 } else {
-  
+
   app.use('/public', express.static(path.join(__dirname, 'uploads')));
   app.use(express.static(path.join(__dirname, 'templates')));
 }
@@ -55,6 +59,9 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, 'templates/landing.html'))
 
 });
+
+
+app.get("/verify/:id", verifyCourse);
 
 // global error handler
 app.use(ErrorHandler);

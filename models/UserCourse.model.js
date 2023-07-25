@@ -1,6 +1,5 @@
 const { DataTypes} = require('sequelize');
 const { sequelize } = require('../sequelize');
-const Courses = require('./Course.model');
 
 
 
