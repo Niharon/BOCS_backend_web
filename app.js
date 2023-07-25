@@ -17,8 +17,9 @@ if (process.env.NODE_ENV === 'development') {
   app.use('/public', express.static(path.join(__dirname, 'uploads')));
   app.use(express.static(path.join(__dirname, 'templates')));
 } else {
-
+  
   app.use('/public', express.static(path.join(__dirname, 'uploads')));
+  app.use(express.static(path.join(__dirname, 'templates')));
 }
 
 // connect DB
