@@ -6,11 +6,11 @@ exports.verifyCourse = async (req, res, next) => {
     try {
 
         const { id } = req.params;
-
+        let found = true;
         const courseData = await UserCourse.findOne({
             where: {
                 id: id,
-                progress:100
+
             },
             include: [
                 {
@@ -20,16 +20,17 @@ exports.verifyCourse = async (req, res, next) => {
                 {
                     model: User,
                     as: 'user',
-                    attributes: ['id','name', 'email']
+                    attributes: ['id', 'name', 'email']
                 }
             ]
         })
-        if(!courseData){
-            return res.redirect('/')
+        if (!courseData || courseData.progress != 100) {
+            found = false;
         }
         // Render the EJS template and pass the data as an object
         // return res.send(courseData)
-        res.render('verify', {courseData:courseData,date: new Date(courseData.updated_at).toDateString()});
+
+        res.render('verify', { courseData: courseData, date: new Date(courseData?.updated_at).toDateString(), found: found });
     }
     catch (e) {
         next(e)
