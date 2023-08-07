@@ -129,7 +129,8 @@ CourseRequest.belongsTo(Courses, {
 
 User.hasMany(CourseRequest, {
     foreignKey: 'user_id',
-    onDelete: 'CASCADE'
+    onDelete: 'SET NULL'
+
 });
 CourseRequest.belongsTo(User, {
     foreignKey: 'user_id'
@@ -145,9 +146,14 @@ UserCourse.belongsTo(Courses, {
 
     foreignKey: 'course_id'
 })
-
+User.hasMany(UserCourse, {
+    foreignKey: 'user_id',
+    onDelete: 'CASCADE'
+});
 UserCourse.belongsTo(User, {
-    foreignKey: 'user_id'
+    foreignKey: 'user_id',
+
+
 });
 
 // Discussion Association

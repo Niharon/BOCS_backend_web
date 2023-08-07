@@ -37,7 +37,10 @@ const getAllTopics = async (req, res) => {
 const getTopicById = async (req, res) => {
   const { id } = req.params;
   try {
-    const topic = await Topics.findByPk(id);
+    const topic = await Topics.findByPk(id,{
+      include: "lessons",
+      
+    });
     if (!topic) throw new Error('Topic not found');
     res.status(200).json(topic);
   } catch (error) {

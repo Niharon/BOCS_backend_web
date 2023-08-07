@@ -20,6 +20,7 @@ import AllUsers from "./pages/users/AllUsers";
 import AllQuizes from "./pages/Courses/AllQuizes";
 import AddQuiz from "./pages/Courses/AddQuiz";
 import AppSettings from "./pages/AppSettings/AppSettings";
+import AddLesson from "./pages/Courses/AddLesson";
 
 
 function App() {
@@ -72,6 +73,7 @@ function App() {
           <Route path="/courses/all" element={<AllCourses />} />
           <Route path="/courses/add" element={<AddNewCourse />} />
           <Route path="/courses/edit/:id" element={<EditCourse />} />
+          <Route path="/courses/edit/:courseid/topic/:topicid/add-lesson" element={<AddLesson />} />
 
           {/* Quiz route */}
 

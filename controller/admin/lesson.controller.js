@@ -33,24 +33,25 @@ async function getAllLessons(req, res) {
   }
 }
 
+
 // Controller for retrieving a single lesson by ID
-async function getLessonById(req, res,next) {
+async function getLessonById(req, res, next) {
   try {
-    const lesson = await Lessons.findByPk(req.params.id,{
+    const lesson = await Lessons.findByPk(req.params.id, {
       include: "quizes",
-      
+
     });
 
     if (lesson) {
       let data = lesson.toJSON();
-      if(data.quizes.length>0){
+      if (data.quizes.length > 0) {
         for (let i = 0; i < data.quizes.length; i++) {
           data.quizes[i].options = JSON.parse(data.quizes[i].options)
         }
       }
       // console.log(data)
       // const parsedLesson = {...data,quizes:JSON.parse(data.quizes)}
-      res.status(200).json({ success: true, lesson:data, message: 'Lesson retrieved successfully' });
+      res.status(200).json({ success: true, lesson: data, message: 'Lesson retrieved successfully' });
     } else {
       next(new Error("Lesson not found"))
     }
@@ -64,7 +65,7 @@ async function updateLessonById(req, res) {
   try {
 
     const lesson = await Lessons.findByPk(req.params.id);
-    if(req.file){
+    if (req.file) {
       req.body.pdf = req.file.filename
     }
     if (lesson) {

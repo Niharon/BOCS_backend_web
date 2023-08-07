@@ -10,8 +10,7 @@ const quizController = require("../../controller/admin/quiz.controller");
 const verifyPrevToken = require("../../middlewares/verifyPrevToken");
 const instructorController = require("../../controller/admin/instructor.controller");
 const { courseThumbnailUpload, instructorPhotoUpload, lessonPdfUpload, quizImageUpload } = require("../../middlewares/multerConfig");
-const User = require("../../models/User.model");
-const { getAllUsers, getUserById, updateUser } = require("../../controller/user.controller");
+const { getAllUsers, getUserById, updateUser, deleteUser } = require("../../controller/user.controller");
 const { getGeneralSettings, updateGeneralSettings } = require("../../controller/admin/generalSettings.controller");
 
 // verifytoken
@@ -25,6 +24,7 @@ router.use("/app", require("../appsettings.routes"));
 router.get("/users", getAllUsers)
 router.get("/users/:id", getUserById)
 router.patch("/users/:id", updateUser)
+router.delete("/users/:id", deleteUser)
 
  
 //course

@@ -40,6 +40,7 @@ exports.getAllUsers = async (req, res, next) => {
 
     const users = await User.findAndCountAll({
       attributes: { exclude: ["password", "resetPasswordOTP", "fb", "google"] },
+      order: [["created_at", "DESC"]],
       limit: +limit,
       offset: +offset,
     });
@@ -107,6 +108,22 @@ exports.getUserProfile = async (req, res, next) => {
   }
 };
 
+exports.deleteUser = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const user = await User.destroy({
+      where: { id },
+      cascade: false
+    });
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    res.status(200).json({ success: true, message: "User deleted successfully" });
+  } catch (e) {
+    next(e);
+  }
+};
 
 exports.createUser = async (req, res, next) => {
   try {
@@ -389,7 +406,7 @@ exports.getUserNotifications = async (req, res, next) => {
     return res.status(200).json({
       success: true,
       notifications,
-      unreadCount:unreadCount
+      unreadCount: unreadCount
 
     });
   } catch (e) {

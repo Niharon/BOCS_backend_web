@@ -44,6 +44,9 @@ const Lessons = sequelize.define('lessons', {
     description:{
         type: DataTypes.STRING,
     },
+    order:{
+        type: DataTypes.INTEGER,
+    }
   
    
 

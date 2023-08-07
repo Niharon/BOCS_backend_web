@@ -14,11 +14,7 @@ const CourseRequest = sequelize.define('courserequest', {
         allowNull: false,
    
     },
-    user_id:{
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      
-    },
+   
     status:{
         type: DataTypes.ENUM,
         values: ['pending','cancelled','confirmed'],

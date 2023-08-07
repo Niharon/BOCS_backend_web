@@ -1,5 +1,5 @@
 import React, {  useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   useMutation,
 } from "@tanstack/react-query";
@@ -115,7 +115,7 @@ const CourseTopicForm = ({ refetch }) => {
                             }}
                             type="text"
                             placeholder="Topic Title"
-                            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-2 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                            className="w-full rounded border-[1.5px] border-stroke bg-transparent px-5 py-2 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary mr-2"
                           />
 
                           {topic.id ? (
@@ -126,6 +126,12 @@ const CourseTopicForm = ({ refetch }) => {
                               >
                                 Update
                               </button>
+                              <Link
+                                to={`topic/${topic?.id}/add-lesson`}
+                                className="flex  items-center justify-center rounded bg-success p-2 font-medium text-gray"
+                              >
+                                Lessons
+                              </Link>
                               <button
                                 onClick={() => deleteTopic(topic?.id)}
                                 className="flex  items-center justify-center rounded bg-danger p-2 font-medium text-gray"
