@@ -111,7 +111,11 @@ const requestCourse = async (req, res, next) => {
     const courseRequestExists = await CourseRequest.findOne({
       where: {
         user_id: user.id,
-        course_id: id
+        course_id: id,
+        status: {
+          [Sequelize.Op.not]: 'cancelled'
+        }
+        
       }
     })
 
