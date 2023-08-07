@@ -76,7 +76,10 @@ const getCourseDetailsById = async (req, res, next) => {
         const courseRequest = await CourseRequest.findOne({
           where: {
             user_id: req.user.id,
-            course_id: req.params.id
+            course_id: req.params.id,
+            status: {
+              [Sequelize.Op.not]: 'cancelled'
+            }
 
           }
         })
