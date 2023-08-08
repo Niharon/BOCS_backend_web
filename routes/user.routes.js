@@ -1,5 +1,5 @@
 const express = require("express");
-const { createUser, login, forgetPass, checkOtp, resetPassword, getUserNotifications, createRandomUsers, updateUserProfile, updatePassword, getUserProfile, markNotificationAsRead } = require("../controller/user.controller");
+const { createUser, login, forgetPass, checkOtp, resetPassword, getUserNotifications, createRandomUsers, updateUserProfile, updatePassword, getUserProfile, markNotificationAsRead, deleteUserAccount } = require("../controller/user.controller");
 const verifyPrevToken = require("../middlewares/verifyPrevToken");
 const verifyToken = require("../middlewares/verifyToken");
 const router = express.Router();
@@ -26,6 +26,7 @@ router.post("/notifications/:id",verifyToken,markNotificationAsRead)
 router.patch("/update-profile",verifyToken,updateUserProfile)
 router.patch("/update-password",verifyToken,updatePassword)
 router.get("/profile",verifyToken,getUserProfile)
+router.delete("/delete-account",verifyToken,deleteUserAccount)
 
 // router.post("/verifyToken",verifyPrevToken)
 

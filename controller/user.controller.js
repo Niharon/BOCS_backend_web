@@ -125,6 +125,23 @@ exports.deleteUser = async (req, res, next) => {
   }
 };
 
+exports.deleteUserAccount = async (req, res, next) => {
+  try {
+    const { id } = req.user;
+    const user = await User.destroy({
+      where: { id },
+      cascade: false
+    });
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    res.status(200).json({ success: true, message: "User deleted successfully" });
+  } catch (e) {
+    next(e);
+  }
+};
+
 exports.createUser = async (req, res, next) => {
   try {
     const { email, deviceId, password, name } = req.body;

@@ -5,11 +5,35 @@ import DefaultLayout from '../../layout/DefaultLayout';
 import Breadcrumb from '../../components/Breadcrumb';
 import { FaCheck, FaEdit, FaTimes } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import axiosInstance from '../../axiosInstance/axiosInstance';
-import LoadingScreen from '../../components/LoadingScreen';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { deleteUserApi, getAllUsersApi } from '../../api/userApi';
+import { toast } from 'react-hot-toast';
 
 
 const UserTableActions = ({ userId }) => {
+
+    const queryClient = useQueryClient();
+    // console.log()
+
+
+    const userDeleteQuery = useMutation((id) => deleteUserApi(id), {
+        onSuccess: (data) => {
+            // console.log(data);
+            toast.success("User Deleted Successfully");
+            queryClient.refetchQueries("getAllUsers")
+        },
+    });
+
+
+    const handleUserDelete = (id) => {
+
+        const yes = window.confirm("Are you sure you want to delete this course?")
+        if (yes) {
+            userDeleteQuery.mutate(id);
+
+        }
+
+    }
 
     return (
         <div className="flex items-center space-x-3.5">
@@ -35,7 +59,7 @@ const UserTableActions = ({ userId }) => {
             <Link to={`/users/${userId}`} className="hover:text-primary">
                 <FaEdit />
             </Link>
-            <button className="hover:text-primary">
+            <button onClick={() => handleUserDelete(userId)} className="hover:text-primary">
                 <svg
                     className="fill-current"
                     width="18"
@@ -134,18 +158,26 @@ const AllUsers = () => {
         setPage(params.page);
     }
 
-    useEffect(() => {
-        setLoading(true)
-        const fetchusers = async () => {
-            const res = await axiosInstance(`/users?page=${page + 1}`);
-            // console.log(res);
-            if (res.data.success) {
-                setUsers(res.data?.data?.rows);
-                setTotalUsers(res.data?.data?.count)
-            }
+    const getAllUserQuery = useQuery({
+        queryKey: ["getAllUsers", page+1],
+        queryFn: (page) => getAllUsersApi(page),
+        onSuccess: (data) => {
+            // console.log(data);
+            setUsers(data?.data?.rows);
+            setTotalUsers(data?.data?.count);
+            setLoading(false)
+        },
+        onError: (error) => {
+            // console.log(error);
             setLoading(false)
         }
-        fetchusers()
+    })
+
+
+    useEffect(() => {
+        
+        setLoading(true)
+        
     }, [page])
 
     // console.log(users)
@@ -181,6 +213,7 @@ const AllUsers = () => {
                     pageSizeOptions={[10]}
                     paginationMode="server"
                     onPaginationModelChange={handlePageChange}
+                
                 />
             </div>
         </DefaultLayout>
