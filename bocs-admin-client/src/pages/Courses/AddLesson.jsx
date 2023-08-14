@@ -5,13 +5,14 @@ import useCourses from '../../hooks/useCourse';
 import { Box } from '@mui/material';
 import LessonAccordion from '../../components/forms/LessonAccordion';
 import { useParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { getCourseById } from '../../api/courseApi';
 import { getTopicById } from '../../api/topicApi';
 import decryptUrl from '../../utils/decryptUrl';
 import LoadingScreen from '../../components/LoadingScreen';
 import LessonAccordionByTopic from '../../components/forms/LessonAccordionByTopic';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { updateLessonOrderApi } from '../../api/lessonApi';
 
 const AddLesson = () => {
 
@@ -22,6 +23,14 @@ const AddLesson = () => {
 
     const { currentCourse } = courseContext;
 
+    const updateLessonOrderQuery = useMutation({
+        mutationFn: updateLessonOrderApi,
+        onSuccess: (data) => {
+        },
+        onError: (error) => {
+            console.log(error)
+        },
+    })
     const { data, isLoading, isSuccess, isError, refetch } = useQuery(
         ["currentCourse", courseid],
         () => getCourseById(courseid),
@@ -64,6 +73,7 @@ const AddLesson = () => {
                     currentCourse: encryptedCourse,
                 })
                 const lessonsOftheTopic = encryptedCourse.lessons.filter(lesson => lesson.topic_id == topicid)
+                
                 setAllLessons(lessonsOftheTopic);
             }
 
@@ -80,11 +90,26 @@ const AddLesson = () => {
         const reorderedLessons = Array.from(allLessons);
         const [reorderedLesson] = reorderedLessons.splice(startIndex, 1);
         reorderedLessons.splice(endIndex, 0, reorderedLesson);
-        
-        setAllLessons(reorderedLessons);
-     
 
-        console.log(startIndex, endIndex)
+        const reorderedLessonsWithOrder = reorderedLessons.map((lesson, index) => ({
+            ...lesson,
+            order: index,
+        }));
+
+        const lessonOrder = {};
+        reorderedLessonsWithOrder.forEach((lesson) => {
+            if(lesson?.id){
+                lessonOrder[lesson.id] = lesson.order;
+            }
+        });
+        // console.log(lessonOrder)
+        setAllLessons(reorderedLessonsWithOrder);
+        // setAllLessons(reorderedLessons);
+        updateLessonOrderQuery.mutate(lessonOrder)
+
+
+
+        // console.log(startIndex, endIndex)
 
 
         // Update the order in the database
@@ -95,9 +120,15 @@ const AddLesson = () => {
     };
 
     const onDragEnd = (result) => {
+        // console.log(result)
         if (!result.destination) return;
         handleReorder(result.source.index, result.destination.index);
+
     };
+
+    // useEffect(() => {
+    //     console.table(allLessons)
+    // }, [allLessons])
 
     // console.log(allLessons);
     // console.log(currentCourse);

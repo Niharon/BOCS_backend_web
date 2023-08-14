@@ -25,8 +25,12 @@ const checkHalfOrFullAccess = async (req, res, next) => {
             {
                 model: Lessons,
                 as: 'lessons',
+             
 
             }
+        ],
+        order: [
+            [Lessons, "order", "ASC"]
         ]
     })
 

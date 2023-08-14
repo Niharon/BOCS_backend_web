@@ -15,3 +15,8 @@ export const updateLessonApi = async ({id,data})=>{
     const res = await axiosInstance.patch(`/lesson/${id}`, data);
     return res;
 }
+
+export const updateLessonOrderApi = async (data)=>{
+    const res = await axiosInstance.post(`/lesson/update-order`, data);
+    return res;
+}

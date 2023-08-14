@@ -10,6 +10,8 @@ import { deleteUserApi, getAllUsersApi } from '../../api/userApi';
 import { toast } from 'react-hot-toast';
 
 
+
+
 const UserTableActions = ({ userId }) => {
 
     const queryClient = useQueryClient();
@@ -149,6 +151,7 @@ const columns = [
 
 const AllUsers = () => {
 
+    const [searchText, setSearchText] = useState("");
     const [users, setUsers] = useState([])
     const [page, setPage] = useState(0);
     const [totalUsers, setTotalUsers] = useState(0);
@@ -159,7 +162,7 @@ const AllUsers = () => {
     }
 
     const getAllUserQuery = useQuery({
-        queryKey: ["getAllUsers", page+1],
+        queryKey: ["getAllUsers", page+1, searchText],
         queryFn: (page) => getAllUsersApi(page),
         onSuccess: (data) => {
             // console.log(data);
@@ -179,6 +182,8 @@ const AllUsers = () => {
         setLoading(true)
         
     }, [page])
+
+  
 
     // console.log(users)
     // if (loading) {
@@ -202,12 +207,19 @@ const AllUsers = () => {
                         },
                     }}
 
-                    slots={{ toolbar: GridToolbar }}
+                    slots={{ toolbar: GridToolbar
+                    }}
+                    
+                    
                     slotProps={{
                         toolbar: {
                             showQuickFilter: true,
+                            onChange: (e) => setSearchText(e?.target?.value.trim()),
+                            onAbort: (e) => setSearchText(""),
+                            
                         },
                     }}
+                    filterMode='server'
                     pagination
                     loading={loading}
                     pageSizeOptions={[10]}

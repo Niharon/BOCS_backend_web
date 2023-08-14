@@ -1,8 +1,8 @@
 import axiosInstance from "../axiosInstance/axiosInstance";
 
-export const getAllUsersApi = async (page) => {
-    // console.log(page.queryKey[1])
-    const res = await axiosInstance.get(`/users?page=${page.queryKey[1]}`);
+export const getAllUsersApi = async (query) => {
+    console.log(query)
+    const res = await axiosInstance.get(`/users?page=${query.queryKey[1]}&search=${query.queryKey[2]}`);
     return res.data;
 }
 export const updateUserApi = async ({ id, data }) => {

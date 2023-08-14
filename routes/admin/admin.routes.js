@@ -16,7 +16,7 @@ const { getGeneralSettings, updateGeneralSettings } = require("../../controller/
 // verifytoken
 const router = express.Router();
 
-router.post("/verifyToken",verifyPrevToken)
+router.post("/verifyToken", verifyPrevToken)
 
 router.use("/app", require("../appsettings.routes"));
 
@@ -26,12 +26,12 @@ router.get("/users/:id", getUserById)
 router.patch("/users/:id", updateUser)
 router.delete("/users/:id", deleteUser)
 
- 
+
 //course
 router.get("/courses", adminCourseController.getAllCourse);
 router.get("/course/:id", adminCourseController.getCourseDetailsByID);
-router.post("/course",courseThumbnailUpload.single('course_thumbnail'), adminCourseController.create);
-router.patch("/course/:id",courseThumbnailUpload.single('course_thumbnail'), adminCourseController.update);
+router.post("/course", courseThumbnailUpload.single('course_thumbnail'), adminCourseController.create);
+router.patch("/course/:id", courseThumbnailUpload.single('course_thumbnail'), adminCourseController.update);
 router.delete("/course/:id", adminCourseController.delete);
 
 
@@ -44,17 +44,18 @@ router.patch('/topic/:id', topicsController.updateTopicById);
 router.delete('/topic/:id', topicsController.deleteTopicById);
 
 //lesson
-router.post('/lesson',lessonPdfUpload.single('pdf'), lessonController.createLesson);
+router.post('/lesson', lessonPdfUpload.single('pdf'), lessonController.createLesson);
+router.post('/lesson/update-order', lessonController.updateLessonOrder)
 router.get('/lesson/total-lessions', lessonController.getAllLessons);
 router.get('/lesson/:id', lessonController.getLessonById);
-router.patch('/lesson/:id',lessonPdfUpload.single('pdf'), lessonController.updateLessonById);
+router.patch('/lesson/:id', lessonPdfUpload.single('pdf'), lessonController.updateLessonById);
 router.delete('/lesson/:id', lessonController.deleteLessonById);
 
 
 
 //quizes
-router.post('/quiz', quizImageUpload.any(),quizController.createQuiz);
-router.patch('/quiz/:id',quizImageUpload.any(),quizController.updateQuiz);
+router.post('/quiz', quizImageUpload.any(), quizController.createQuiz);
+router.patch('/quiz/:id', quizImageUpload.any(), quizController.updateQuiz);
 
 
 //course-requests
@@ -73,8 +74,8 @@ router.patch('/course-requests/:id', courseRequestController.updateCourseRequest
 // instructors
 router.get('/instructors', instructorController.getAllInstructors);
 router.get('/instructors/:id', instructorController.getInstructorById);
-router.post('/instructors/',instructorPhotoUpload.single("photo"), instructorController.createInstructor);
-router.patch('/instructors/:id',instructorPhotoUpload.single("photo"), instructorController.updateInstructor);
+router.post('/instructors/', instructorPhotoUpload.single("photo"), instructorController.createInstructor);
+router.patch('/instructors/:id', instructorPhotoUpload.single("photo"), instructorController.updateInstructor);
 router.delete('/instructors/:id', instructorController.deleteInstructor);
 
 

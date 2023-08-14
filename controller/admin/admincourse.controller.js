@@ -40,15 +40,25 @@ const courseController = {
           {
             model: Topics,
             as: "topics",
-            include: ["lessons"],
+            include: {
+              model: Lessons,
+              as: "lessons",
+
+            },
+
           },
           {
             model: Lessons,
             as: "lessons",
-          
+
+
           },
-        
+
         ],
+        order: [
+          ["lessons", "order", "ASC"],
+          [Topics, Lessons, "order", "ASC"]
+        ]
       });
       if (course) {
         res
@@ -66,11 +76,11 @@ const courseController = {
     }
   },
   create: async (req, res, next) => {
-    
+
     try {
       const course = await Courses.create({
 
-        ...req.body,course_thumbnail:req.file.filename
+        ...req.body, course_thumbnail: req.file.filename
 
       });
       res.status(201).json({ message: "Course created successfully", course });
@@ -84,7 +94,7 @@ const courseController = {
     // console.log(req.file.path)
     const { id } = req.params;
     try {
-  
+
       const course = await Courses.findByPk(id);
 
       // If the course doesn't exist, return a 404 response
@@ -92,7 +102,7 @@ const courseController = {
         return res.status(404).json({ error: 'Course not found' });
       }
 
-      if(req.file){
+      if (req.file) {
         req.body.course_thumbnail = req.file.filename;
       }
       await course.update(req.body);

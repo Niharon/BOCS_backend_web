@@ -3,7 +3,7 @@ const Lessons = require("../../models/Lesson.model");
 // Controller for creating a new lesson
 async function createLesson(req, res) {
   try {
-    const { title, course_id, topic_id, video, description } = req.body;
+    const { title, course_id, topic_id, video, description, order } = req.body;
     // check if there is any file in req.file or not if there then assign it to pdf
     // console.log("file from controller ",req.file)
     let pdf = req.file ? req.file.filename : null;
@@ -13,7 +13,8 @@ async function createLesson(req, res) {
       topic_id,
       video,
       pdf,
-      description
+      description,
+      order
     });
     res.status(201).json({ message: 'Lesson created successfully', lesson });
   } catch (error) {
@@ -21,6 +22,8 @@ async function createLesson(req, res) {
     res.status(500).json({ message: 'Internal server error' });
   }
 }
+
+
 
 // Controller for retrieving all lessons
 async function getAllLessons(req, res) {
@@ -98,12 +101,41 @@ async function deleteLessonById(req, res) {
   }
 }
 
+// update order of the lessons in the object according to the lesson id
+
+async function updateLessonOrder(req,res,next){
+  try{
+
+    // const {lessonOrder} = req.body;
+    // console.log(lessonOrder)
+    // lessonOrder = {
+    //   lessonId:order,
+    //   lessonId:order,
+    // }
+    // console.log(lessonOrder)
+    const lessonUpdates = Object.entries(req.body).map(([lessonId, newOrder]) => ({
+      id: lessonId,
+      order: newOrder,
+    }));
+    await Lessons.bulkCreate(lessonUpdates, { updateOnDuplicate: ['order'] });
+
+
+    res.status(200).json({message:"Lesson order updated successfully"})
+
+
+  }
+  catch(error){
+    next(error)
+  }
+}
+
 module.exports = {
   createLesson,
   getAllLessons,
   getLessonById,
   updateLessonById,
-  deleteLessonById
+  deleteLessonById,
+  updateLessonOrder
 };
 
 

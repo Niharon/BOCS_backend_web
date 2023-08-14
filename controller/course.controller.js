@@ -22,6 +22,7 @@ const getAllCourses = async (req, res, next) => {
             model: Lessons,
             as: "lessons",
             attributes: ["id", "title"],
+            order: [["order", "ASC"]],
           }],
           attributes: ["id", "title"],
         }
@@ -108,7 +109,7 @@ const requestCourse = async (req, res, next) => {
 
     const { id } = req.params;
     const user = req.user;
-    const { payment_amount, payment_method, sender_number, payment_id, access } = req.body;
+    const { payment_amount, payment_method, sender_number, payment_id, access,contact_no } = req.body;
 
     // check if user already requested this course
     const courseRequestExists = await CourseRequest.findOne({
@@ -162,7 +163,8 @@ const requestCourse = async (req, res, next) => {
         payment_status: 'pending',
         payment_method: payment_method,
         payment_amount: payment_amount,
-        sender_number: sender_number
+        sender_number: sender_number,
+        contact_no:contact_no
 
       })
 

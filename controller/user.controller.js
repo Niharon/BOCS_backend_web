@@ -5,6 +5,7 @@ const sendMail = require("../utils/sendMail");
 const mailTemplates = require("../utils/mailTemplates");
 const { getAllNotificationsByUser } = require("./usernotification.controller");
 const UserNotification = require("../models/UserNotification.model");
+const { Op } = require('sequelize');
 
 // Generate a random 256-bit (32-byte) secret key
 
@@ -33,12 +34,28 @@ const UserNotification = require("../models/UserNotification.model");
 exports.getAllUsers = async (req, res, next) => {
   try {
     // implement pagination
-    const { page = 1, limit = 10 } = req.query;
+    const { page = 1, limit = 10, search = "" } = req.query;
 
     // console.log("limit ", limit)
     const offset = (page - 1) * limit;
+    const whereConditions = {};
+    if (search) {
+      whereConditions[Op.or] = [
+        {
+          name: {
+            [Op.like]: `%${search}%`,
+          },
+        },
+        {
+          email: {
+            [Op.like]: `%${search}%`,
+          },
+        },
+      ];
+    }
 
     const users = await User.findAndCountAll({
+      where: whereConditions,
       attributes: { exclude: ["password", "resetPasswordOTP", "fb", "google"] },
       order: [["created_at", "DESC"]],
       limit: +limit,

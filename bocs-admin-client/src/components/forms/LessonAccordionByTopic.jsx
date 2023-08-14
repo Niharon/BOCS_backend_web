@@ -26,6 +26,8 @@ const LessonAccordionByTopic = ({ lesson, topicid, course_id, refetch }) => {
         setValue,
     } = useForm();
 
+   
+
     const { mutate: createLessonQuery, isLoading, isSuccess } = useMutation({
         mutationKey: "createLesson",
 
@@ -78,6 +80,7 @@ const LessonAccordionByTopic = ({ lesson, topicid, course_id, refetch }) => {
         formData.append("pdf", data.pdf[0]);
         formData.append("topic_id", topicid);
         formData.append("course_id", course_id);
+        formData.append("order", lesson?.order);
         // console.log(formData);
         createLessonQuery(formData);
     };
@@ -160,7 +163,7 @@ const LessonAccordionByTopic = ({ lesson, topicid, course_id, refetch }) => {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
             >
-                <Typography>{lesson?.title}</Typography>
+                <Typography>{lesson?.id}-{lesson?.title}</Typography>
             </AccordionSummary>
             <AccordionDetails>
                 <Box
