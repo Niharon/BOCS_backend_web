@@ -163,7 +163,7 @@ const LessonAccordionByTopic = ({ lesson, topicid, course_id, refetch }) => {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
             >
-                <Typography>{lesson?.id}-{lesson?.title}</Typography>
+                <Typography>{lesson?.title}</Typography>
             </AccordionSummary>
             <AccordionDetails>
                 <Box

@@ -25,13 +25,15 @@ const checkHalfOrFullAccess = async (req, res, next) => {
             {
                 model: Lessons,
                 as: 'lessons',
-             
 
             }
         ],
         order: [
-            [Lessons, "order", "ASC"]
-        ]
+       
+           ['created_at', 'ASC'],
+           ['lessons', 'order', 'ASC']
+        ],
+    
     })
 
     // remove other information from topics.lessons if access is half
@@ -40,7 +42,7 @@ const checkHalfOrFullAccess = async (req, res, next) => {
         if (index >= topicLimit) {
             return {
                 ...topic.dataValues,
-                lessons: topic.lessons.map(lesson => ({ id: lesson.id, title: lesson.title, completed: course_access.completed_lessons?.includes(lesson.id) ? true : false })),
+                lessons: topic.lessons.map(lesson => ({ order: lesson.order, id: lesson.id, title: lesson.title, completed: course_access.completed_lessons?.includes(lesson.id) ? true : false })),
                 locked: true
 
             }

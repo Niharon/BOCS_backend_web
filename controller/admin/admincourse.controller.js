@@ -18,7 +18,11 @@ const courseController = {
 
           },
         ],
-        order: [["created_at", "DESC"]],
+        order: [
+          ["created_at", "DESC"],
+          ["topics", "created_at", "ASC"],
+          ["topics","lessons", "order", "ASC"]
+        ],
       });
       res
         .status(200)
@@ -56,9 +60,11 @@ const courseController = {
 
         ],
         order: [
-          ["lessons", "order", "ASC"],
-          [Topics, Lessons, "order", "ASC"]
-        ]
+       
+          ["topics", "created_at", "ASC"],
+          ['topics','lessons', 'order', 'ASC']
+       ],
+   
       });
       if (course) {
         res

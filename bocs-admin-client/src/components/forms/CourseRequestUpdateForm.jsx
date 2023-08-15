@@ -51,7 +51,7 @@ const CourseRequestUpdateForm = () => {
     return <LoadingSpinner />
   }
 
-  const { user, course, created_at, sender_number, payment_id, payment_method, payment_status, status, payment_amount, access } = getCourseRequestDetailsQuery?.data?.data;
+  const { user, course, created_at, sender_number, payment_id, payment_method, payment_status, status, payment_amount, access,contact_no } = getCourseRequestDetailsQuery?.data?.data;
 
   const updateStatus = (e) => {
     e.preventDefault();
@@ -86,11 +86,11 @@ const CourseRequestUpdateForm = () => {
         }}
       >
 
-        <div className="flex flex-col w-full  md:gap-5 md:flex">
+        <div className="flex flex-col w-full gap-y-3  md:gap-5 md:flex">
           <Typography variant="p" fontWeight={"bold"} className="mb-2.5">
             Reuqested on : {new Date(created_at).toDateString()}
           </Typography>
-          <div className="block md:gap-5 md:flex">
+          <div className="block md:gap-5 md:flex bg-white p-5 shadow-5">
             <div className="mb-2 w-full">
               <label className="mb-2.5 block text-black dark:text-white">User Name</label>
               <input type="text"
@@ -116,9 +116,17 @@ const CourseRequestUpdateForm = () => {
 
                 value={user?.email} readOnly />
             </div>
+            <div className="mb-2 w-full">
+              <label className="mb-2.5 block text-black dark:text-white">Contact No.</label>
+              <input type="email"
+
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-2 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+
+                value={contact_no} readOnly />
+            </div>
           </div>
 
-          <div className="block md:gap-5 md:flex">
+          <div className="block md:gap-5 md:flex bg-white p-5 shadow-5">
             <div className="mb-2 w-full">
               <label className="mb-2.5 block text-black dark:text-white">Sender Number</label>
               <input type="text"
@@ -145,7 +153,7 @@ const CourseRequestUpdateForm = () => {
             </div>
 
           </div>
-          <div className="block md:gap-5 md:flex">
+          <div className="block md:gap-5 md:flex bg-white p-5 shadow-5">
             <div className="mb-2 w-full">
               <label className="mb-2.5 block text-black dark:text-white">Amount</label>
               <input type="text"
