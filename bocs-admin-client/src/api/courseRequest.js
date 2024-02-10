@@ -1,5 +1,10 @@
 import axiosInstance from "../axiosInstance/axiosInstance"
 
+
+export const createCourseRequestApi = async (data) => {
+    const res = await axiosInstance.post(`/course-requests`, data);
+    return res;
+};
 export const getAllCourseRequestsApi = async (param) => {
     // console.log(param.queryKey[1])
     const res = await axiosInstance.get(`/course-requests?page=${param.queryKey[1]+1}`,);

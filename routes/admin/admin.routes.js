@@ -10,7 +10,7 @@ const quizController = require("../../controller/admin/quiz.controller");
 const verifyPrevToken = require("../../middlewares/verifyPrevToken");
 const instructorController = require("../../controller/admin/instructor.controller");
 const { courseThumbnailUpload, instructorPhotoUpload, lessonPdfUpload, quizImageUpload } = require("../../middlewares/multerConfig");
-const { getAllUsers, getUserById, updateUser, deleteUser } = require("../../controller/user.controller");
+const { getAllUsers, getUserById, updateUser, deleteUser, createUserByAdmin } = require("../../controller/user.controller");
 const { getGeneralSettings, updateGeneralSettings } = require("../../controller/admin/generalSettings.controller");
 
 // verifytoken
@@ -21,6 +21,7 @@ router.post("/verifyToken", verifyPrevToken)
 router.use("/app", require("../appsettings.routes"));
 
 // All users API
+router.post("/users", createUserByAdmin)
 router.get("/users", getAllUsers)
 router.get("/users/:id", getUserById)
 router.patch("/users/:id", updateUser)
@@ -59,6 +60,7 @@ router.patch('/quiz/:id', quizImageUpload.any(), quizController.updateQuiz);
 
 
 //course-requests
+router.post('/course-requests', courseRequestController.createCourseRequest);
 router.get('/course-requests', courseRequestController.getAllCourseRequests);
 router.get('/course-requests/:id', courseRequestController.getCourseReuquestDetailsById);
 router.patch('/course-requests/:id', courseRequestController.updateCourseRequest);

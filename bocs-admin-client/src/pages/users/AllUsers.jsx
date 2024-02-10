@@ -29,7 +29,7 @@ const UserTableActions = ({ userId }) => {
 
     const handleUserDelete = (id) => {
 
-        const yes = window.confirm("Are you sure you want to delete this course?")
+        const yes = window.confirm("Are you sure you want to delete the user?")
         if (yes) {
             userDeleteQuery.mutate(id);
 
@@ -162,7 +162,7 @@ const AllUsers = () => {
     }
 
     const getAllUserQuery = useQuery({
-        queryKey: ["getAllUsers", page+1, searchText],
+        queryKey: ["getAllUsers", page + 1, searchText],
         queryFn: (page) => getAllUsersApi(page),
         onSuccess: (data) => {
             // console.log(data);
@@ -178,12 +178,12 @@ const AllUsers = () => {
 
 
     useEffect(() => {
-        
+
         setLoading(true)
-        
+
     }, [page])
 
-  
+
 
     // console.log(users)
     // if (loading) {
@@ -193,6 +193,9 @@ const AllUsers = () => {
         <DefaultLayout>
 
             <Breadcrumb pageName="All Users" />
+            <div className='mb-5'>
+                <Link to={'/create-user'} className="bg-primary text-white px-3 py-2 text-sm rounded">Create User</Link>
+            </div>
             <div style={{ height: "auto", width: '100%' }}>
                 <DataGrid
                     style={{ background: 'white', padding: '1rem' }}
@@ -207,16 +210,17 @@ const AllUsers = () => {
                         },
                     }}
 
-                    slots={{ toolbar: GridToolbar
+                    slots={{
+                        toolbar: GridToolbar
                     }}
-                    
-                    
+
+
                     slotProps={{
                         toolbar: {
                             showQuickFilter: true,
                             onChange: (e) => setSearchText(e?.target?.value.trim()),
                             onAbort: (e) => setSearchText(""),
-                            
+
                         },
                     }}
                     filterMode='server'
@@ -225,7 +229,7 @@ const AllUsers = () => {
                     pageSizeOptions={[10]}
                     paginationMode="server"
                     onPaginationModelChange={handlePageChange}
-                
+
                 />
             </div>
         </DefaultLayout>

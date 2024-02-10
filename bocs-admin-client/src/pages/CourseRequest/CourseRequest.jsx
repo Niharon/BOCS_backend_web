@@ -106,10 +106,13 @@ const CourseRequest = () => {
   }
 
 
- 
+
   return (
     <DefaultLayout>
       <Breadcrumb pageName="Course Request" />
+      <div className='mb-5'>
+        <Link to={'/course-request/add'} className="bg-primary text-white px-3 py-2 text-sm rounded">Create Course Request</Link>
+      </div>
       <div style={{ height: "auto", width: '100%' }}>
         <DataGrid
           style={{ background: 'white', padding: '1rem' }}

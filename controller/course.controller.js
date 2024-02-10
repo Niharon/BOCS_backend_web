@@ -12,7 +12,7 @@ const getAllCourses = async (req, res, next) => {
 
     const courses = await Courses.findAll({
 
-  
+
 
       include: [
         {
@@ -61,6 +61,7 @@ const getCourseDetailsById = async (req, res, next) => {
     if (course) {
       course.dataValues.isEnrolled = false;
       course.dataValues.isRequested = false;
+      course.dataValues.isExpired = true;
     }
     if (req.user) {
 
@@ -72,6 +73,14 @@ const getCourseDetailsById = async (req, res, next) => {
       })
       if (isEnrolled) {
         course.dataValues.isEnrolled = true;
+        // add isExpired property to course by checking the access_end with today's date
+        if (new Date(isEnrolled.access_end) < new Date()) {
+          course.dataValues.isExpired = true;
+        }else{
+          course.dataValues.isExpired = false;
+        }
+     
+
       }
       else {
         const courseRequest = await CourseRequest.findOne({
@@ -87,6 +96,8 @@ const getCourseDetailsById = async (req, res, next) => {
 
         if (courseRequest) {
           course.dataValues.isRequested = true;
+
+
         }
       }
 
@@ -109,7 +120,7 @@ const requestCourse = async (req, res, next) => {
 
     const { id } = req.params;
     const user = req.user;
-    const { payment_amount, payment_method, sender_number, payment_id, access,contact_no } = req.body;
+    const { payment_amount, payment_method, sender_number, payment_id, access, contact_no } = req.body;
 
     // check if user already requested this course
     const courseRequestExists = await CourseRequest.findOne({
@@ -119,7 +130,7 @@ const requestCourse = async (req, res, next) => {
         status: {
           [Sequelize.Op.not]: 'cancelled'
         }
-        
+
       }
     })
 
@@ -164,7 +175,7 @@ const requestCourse = async (req, res, next) => {
         payment_method: payment_method,
         payment_amount: payment_amount,
         sender_number: sender_number,
-        contact_no:contact_no
+        contact_no: contact_no
 
       })
 
@@ -251,7 +262,7 @@ const getUserBoughtCourse = async (req, res, next) => {
           course.dataValues.isExpired = false;
         }
       })
-      
+
 
       res.json({
         success: true,

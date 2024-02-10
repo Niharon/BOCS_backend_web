@@ -72,7 +72,13 @@ const AddLesson = () => {
                     ...courseContext,
                     currentCourse: encryptedCourse,
                 })
-                const lessonsOftheTopic = encryptedCourse.lessons.filter(lesson => lesson.topic_id == topicid)
+                const topicById = encryptedCourse.topics.find(topic => topic.id == topicid)
+                const lessonsOftheTopic = topicById?.lessons.map(lesson => (
+                    {
+                        ...lesson,
+                        video: decryptUrl(lesson.video)
+                    }
+                ))
                 
                 setAllLessons(lessonsOftheTopic);
             }

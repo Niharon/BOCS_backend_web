@@ -17,7 +17,7 @@ const AllCourses = () => {
     queryKey: ["courses"],
     queryFn: getAllCourses,
     refetchOnWindowFocus: false,
-    refetchOnMount: false,
+    refetchOnMount: true,
     onError: (error) => {
       console.log(error);
     }

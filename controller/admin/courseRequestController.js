@@ -1,3 +1,4 @@
+const { Sequelize } = require("sequelize");
 const Courses = require("../../models/Course.model");
 const CourseRequest = require("../../models/CourseRequest.model");
 const User = require("../../models/User.model");
@@ -51,22 +52,94 @@ const courseRequestController = {
     }
   },
 
-  async createCourseRequest(req, res) {
-    const { course_id, user_id, payment_id, payment_method, payment_amount } = req.body;
+  async createCourseRequest(req, res, next) {
+    const { course_id, email, payment_amount, payment_method, sender_number, payment_id, access, contact_no,status , payment_status} = req.body;
 
     try {
-      const newCourseRequest = await CourseRequest.create({
-        course_id,
-        user_id,
-        payment_id,
-        payment_method,
-        payment_amount
-      });
 
-      res.json(newCourseRequest);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Server error' });
+      // const { id } = req.params;
+      // get the user by email or thorugh error if not found
+      
+      const user = await User.findOne({
+        where: {
+          email: email
+        }
+      })
+
+
+      if (!user) return next(new Error('User not found'))
+ 
+
+      // check if user already requested this course
+      const courseRequestExists = await CourseRequest.findOne({
+        where: {
+          user_id: user.id,
+          course_id: course_id,
+          status: {
+            [Sequelize.Op.not]: 'cancelled'
+          }
+
+        }
+      })
+
+      if (courseRequestExists && access !== 'rest') {
+
+        return next(new Error('This user already requested this course. You can not request the same course again.'))
+      }
+
+      // check if the course exists in Course table
+      const course = await Courses.findOne({
+        where: {
+          id: course_id
+        }
+      })
+
+      if (!course) return next(new Error('Course not found'))
+
+      if (user) {
+
+        // If the access is rest, validate if the user has previously requested this course with half access
+        if (access === 'rest') {
+
+          const courseRequest = await CourseRequest.findOne({
+            where: {
+              user_id: user.id,
+              course_id: course_id,
+              access: 'half'
+            }
+          })
+
+          if (!courseRequest) return next(new Error('You must Have previous Half Access to request for Rest Access'))
+        }
+
+
+        const courseRequest = await CourseRequest.create({
+          user_id: user.id,
+          course_id: course_id,
+          status: status,
+          access: access,
+          payment_id: payment_id,
+          payment_status: payment_status,
+          payment_method: payment_method,
+          payment_amount: payment_amount,
+          sender_number: sender_number,
+          contact_no: contact_no
+
+        })
+
+        res.json({
+          success: true,
+          message: "Course request created successfully",
+          courseRequest,
+        });
+      }
+      else {
+        next(new Error('User not found'))
+      }
+
+
+    } catch (err) {
+      next(err)
     }
   },
 

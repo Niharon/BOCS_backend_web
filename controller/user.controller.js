@@ -159,6 +159,48 @@ exports.deleteUserAccount = async (req, res, next) => {
   }
 };
 
+
+exports.createUserByAdmin = async (req, res, next) => {
+
+  try {
+    const { email, deviceId, password, name } = req.body;
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPass = await bcrypt.hash(password, salt);
+
+    const user = await User.create({
+      email,
+      password: hashedPass,
+      deviceId: deviceId || Math.random().toString(36).substring(2, 15),
+      name,
+      device_changable: true,
+    });
+
+    const token = jwt.sign(
+      { id: user.id, role: user.role, name: user.name },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    res
+      .status(201)
+      .json({
+        message: "User created successfully",
+        token: token,
+        role: "user",
+        name: user.name,
+      });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error?.message,
+      stack : process.env.NODE_ENV === "development" ? error?.stack : "stack trace not available"
+
+    });
+  }
+
+}
+
 exports.createUser = async (req, res, next) => {
   try {
     const { email, deviceId, password, name } = req.body;

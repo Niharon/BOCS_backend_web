@@ -21,6 +21,8 @@ import AllQuizes from "./pages/Courses/AllQuizes";
 import AddQuiz from "./pages/Courses/AddQuiz";
 import AppSettings from "./pages/AppSettings/AppSettings";
 import AddLesson from "./pages/Courses/AddLesson";
+import CreateUser from "./pages/users/CreateUser";
+import CreateCourseRequest from "./pages/CourseRequest/CreateCourseRequest";
 
 
 function App() {
@@ -81,10 +83,12 @@ function App() {
           <Route path="/courses/edit/:id/lesson/:lessonid/add-quiz" element={<AddQuiz />} />
 
           <Route path="/course-request" element={<CourseRequest />} />
+          <Route path="/course-request/add" element={<CreateCourseRequest />} />
           <Route path="/course-request/edit/:id" element={<CourseRequestEdit />} />
 
           {/* user routes */}
           <Route path="/users" element={<AllUsers />} />
+          <Route path="/create-user" element={<CreateUser />} />
           <Route path="/new-users" element={<AllUsers />} />
           <Route path="/users/:id" element={<EditUser />} />
 
